@@ -1,5 +1,5 @@
 {
-  "name": "@worktile/wpm",
+  "name": "@worktile/pm",
   "version": "0.0.1-beta.0",
   "description": "",
   "main": "lib/index.js",

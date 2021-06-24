@@ -11,9 +11,9 @@ Generic CLI tool to automate versioning and package publishing related tasks:
 ## Installation
 
 ```bash
-$ npm i @worktile/wpm --save
+$ npm i @worktile/pm --save
 // or
-$ yarn add @worktile/wpm
+$ yarn add @worktile/pm
 ```
 
 ### Release
