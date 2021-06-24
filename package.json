@@ -11,10 +11,11 @@
     "bin"
   ],
   "bin": {
-    "wpm": "bin/wpm.js"
+    "wpm": "bin/wpm.js",
+    "release": "bin/release.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build --clean && tsc --build",
     "prerelease": "yarn build",
     "release-only": "ts-node ./src/commands/index.ts release",
     "release": "yarn release-only",
