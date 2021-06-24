@@ -18,10 +18,10 @@ module.exports = {
         }
     ],
     skip: {
-        changelog: true
     },
     commitAll: true,
     hooks: {
+        prepublish: 'yarn run build',
         postreleaseBranch: 'git add .'
     }
 };
