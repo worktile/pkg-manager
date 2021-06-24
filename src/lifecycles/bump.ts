@@ -1,0 +1,19 @@
+import { Lifecycle } from './lifecycle';
+import { CommandContext } from '../interface';
+import standardVersion = require('standard-version');
+
+export class BumpLifecycle extends Lifecycle {
+    async run(context: CommandContext): Promise<void> {
+        this.logger.info(`using standard-version to bumping, outputting changes and commit`);
+        const options: standardVersion.Options = Object.assign({}, context.options, {
+            releaseAs: context.versions.next
+        }) as standardVersion.Options;
+        Object.assign(options.skip, context.options.skip, {
+            tag: true
+        });
+        // 1. bump version
+        // 2. generate changelog
+        // 3. git commit
+        await standardVersion(options);
+    }
+}
