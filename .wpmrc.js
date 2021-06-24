@@ -1,5 +1,4 @@
 module.exports = {
-    defaultBranch: 'master',
     allowBranch: ['master', 'v0.*'],
     bumpFiles: [
         'package.json',
