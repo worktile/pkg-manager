@@ -21,6 +21,7 @@ module.exports = {
     commitAll: true,
     hooks: {
         prepublish: 'yarn run build',
+        postpublish: 'npm run pub-only',
         postreleaseBranch: 'git add .'
     }
 };
