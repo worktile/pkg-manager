@@ -1,0 +1,103 @@
+
+        <h3 id="使用说明" class="docs-header-link">
+          <span header-link="使用说明"></span>
+          使用说明
+        </h3>
+      <pre><code>wpm publish</code></pre>
+
+<p>运行以上命令，会执行以下步骤：</p>
+<ol>
+<li>切换到允许发布的分支</li>
+<li>创建一个和当前分支版本一样的 Tag </li>
+<li>推送 Tag 到远程分支</li>
+</ol>
+
+        <h3 id="选下过" class="docs-header-link">
+          <span header-link="选下过"></span>
+          选下过
+        </h3>
+      <ul>
+<li>  <code>--allow-branch</code></li>
+<li>  <code>--dry-run</code></li>
+<li>  <code>--skip</code></li>
+<li>  <code>--tag-prefix</code></li>
+<li>  <code>--hooks</code></li>
+</ul>
+
+        <h3 id="<code>--allow-branch-&lt;glob&gt;</code>" class="docs-header-link">
+          <span header-link="<code>--allow-branch-&lt;glob&gt;</code>"></span>
+          <code>--allow-branch &lt;glob&gt;</code>
+        </h3>
+      <p>允许执行 Publish 的分支白名单，通过 glob 规则配置，默认为：<code>[&quot;master&quot;, &quot;develop&quot;]</code>，最简单也是推荐的做法是在<code>.wpmrc.js</code>配置文件中配置，但是通过 CLI 选项可以覆盖。</p>
+<pre class="language-json"><code class="language-json"><div><span class="token punctuation">{</span>
+  <span class="token property">"allowBranch"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"master"</span><span class="token punctuation">,</span> <span class="token string">"feature/*"</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span></div></code></pre>
+
+        <h3 id="<code>--dry-run</code>" class="docs-header-link">
+          <span header-link="<code>--dry-run</code>"></span>
+          <code>--dry-run</code>
+        </h3>
+      <pre class="language-sh"><code class="language-sh"><div>wpm release <span class="token operator">-</span><span class="token operator">-</span>dry<span class="token operator">-</span>run
+wpm publish <span class="token operator">-</span><span class="token operator">-</span>dry<span class="token operator">-</span>run</div></code></pre>
+<p>通过 <code>--dry-run</code> 执行会让我们看到命令行的执行情况，但是不会修改文件和提交到 Git，主要供测试配置是否正确使用。 </p>
+
+        <h3 id="<code>--skip</code>" class="docs-header-link">
+          <span header-link="<code>--skip</code>"></span>
+          <code>--skip</code>
+        </h3>
+      <p>跳过内置的生命周期步骤 (branch, bump, changelog, commit, push, tag)，也可以通过在 package.json 和 .rc 配置文件中设置。</p>
+<p><code>release</code> 命令包含: branch, bump, changelog, commit, push
+<code>publish</code> 包含: tag, push</p>
+<p><code>--skip.branch --skip.bump</code></p>
+<pre><code><div><span class="token operator">/</span><span class="token operator">/</span> package<span class="token punctuation">.</span>json
+{
+  <span class="token string">"wpm"</span><span class="token punctuation">:</span> {
+    <span class="token string">"skip"</span><span class="token punctuation">:</span> {
+      <span class="token string">"bump"</span><span class="token punctuation">:</span> <span class="token boolean">true</span>
+    }
+  }
+}</div></code></pre><pre><code><div><span class="token operator">/</span><span class="token operator">/</span> <span class="token punctuation">.</span>wtpmrc<span class="token punctuation">.</span>js
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> {
+   <span class="token string">"skip"</span><span class="token punctuation">:</span> {
+      <span class="token string">"bump"</span><span class="token punctuation">:</span> <span class="token boolean">true</span>
+    }
+}</div></code></pre>
+        <h3 id="<code>--tag-prefix</code>" class="docs-header-link">
+          <span header-link="<code>--tag-prefix</code>"></span>
+          <code>--tag-prefix</code>
+        </h3>
+      <p>设置 Git Tag 的自定义前缀，默认为<code>v</code>.
+如果你的项目之前是不带前缀(v)创建 Tag 的，你需要手动设置为空，否则更新日志会重新生成，将会丢失之前版本的更新日志。</p>
+<p><code>--tag-prefix=</code></p>
+<pre><code><div>{
+    tagPrefix<span class="token punctuation">:</span> <span class="token string">""</span>
+}</div></code></pre>
+        <h3 id="<code>--hooks</code>" class="docs-header-link">
+          <span header-link="<code>--hooks</code>"></span>
+          <code>--hooks</code>
+        </h3>
+      <p>wpm supports lifecycle hooks. These allow you to execute your own supplementary commands during the release or publish. The following hooks are available and execute in the order documented:</p>
+<ul>
+<li>  prerelease/postrelease: executed before/after anything happens. If the prerelease script returns a non-zero exit code, versioning will be aborted, but it has no other effect on the process.</li>
+<li>  prebump/postbump: executed before and after the version is bumped. If the prebump script returns a version #, it will be used rather than the version calculated by standard-version.</li>
+<li>  prechangelog/postchangelog: executes before and after the CHANGELOG is generated.</li>
+<li>  precommit/postcommit: called before and after the commit step.</li>
+<li>  pretag/posttag: called before and after the tagging step.</li>
+</ul>
+<p>Simply add the following to your package.json or .wtpmrc file to configure lifecycle hooks:</p>
+<pre><code><div>{
+  <span class="token string">"wpm"</span><span class="token punctuation">:</span> {
+    <span class="token string">"hooks"</span><span class="token punctuation">:</span> {
+      <span class="token string">"prebump"</span><span class="token punctuation">:</span> <span class="token string">"echo 9.9.9"</span>
+    }
+  }
+}</div></code></pre><p>As an example to build artifacts before publish, publish artifacts to npm after created tag.</p>
+<pre><code><div>{
+  <span class="token string">"wpm"</span><span class="token punctuation">:</span> {
+    <span class="token string">"hooks"</span><span class="token punctuation">:</span>
+    {
+      <span class="token string">"prepublish"</span><span class="token punctuation">:</span> <span class="token string">"npm run build"</span><span class="token punctuation">,</span>
+      <span class="token string">"postpublish"</span><span class="token punctuation">:</span> <span class="token string">"cd built &amp;&amp; npm publish"</span>
+   }
+  }
+}</div></code></pre>

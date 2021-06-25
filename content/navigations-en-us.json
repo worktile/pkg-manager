@@ -1,0 +1,70 @@
+{
+  "navs": [
+    {
+      "id": "intro",
+      "path": "intro",
+      "channelPath": "",
+      "title": "介绍",
+      "order": 10,
+      "contentPath": "docs/intro.html"
+    },
+    {
+      "id": "release",
+      "path": "release",
+      "channelPath": "",
+      "title": "Release",
+      "order": 30,
+      "contentPath": "docs/release.html"
+    },
+    {
+      "id": "publish",
+      "path": "publish",
+      "channelPath": "",
+      "title": "Publish",
+      "order": 40,
+      "contentPath": "docs/publish.html"
+    },
+    {
+      "id": "git-publish",
+      "path": "git-publish",
+      "channelPath": "",
+      "title": "Git Publish",
+      "order": 50,
+      "contentPath": "docs/git-publish.html"
+    }
+  ],
+  "docs": [
+    {
+      "id": "git-publish",
+      "path": "git-publish",
+      "channelPath": "",
+      "title": "Git Publish",
+      "order": 50,
+      "contentPath": "docs/git-publish.html"
+    },
+    {
+      "id": "intro",
+      "path": "intro",
+      "channelPath": "",
+      "title": "介绍",
+      "order": 10,
+      "contentPath": "docs/intro.html"
+    },
+    {
+      "id": "publish",
+      "path": "publish",
+      "channelPath": "",
+      "title": "Publish",
+      "order": 40,
+      "contentPath": "docs/publish.html"
+    },
+    {
+      "id": "release",
+      "path": "release",
+      "channelPath": "",
+      "title": "Release",
+      "order": 30,
+      "contentPath": "docs/release.html"
+    }
+  ]
+}

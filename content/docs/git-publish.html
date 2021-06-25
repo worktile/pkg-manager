@@ -1,0 +1,66 @@
+
+        <h3 id="使用说明" class="docs-header-link">
+          <span header-link="使用说明"></span>
+          使用说明
+        </h3>
+      <pre><code><div>wpm git<span class="token operator">-</span>publish</div></code></pre><p>运行以上命令，会执行以下步骤：</p>
+<ol>
+<li>创建临时文件夹并拷贝 artifacts 到临时文件夹</li>
+<li>初始化临时文件夹的 Git 并提交到本地 Git</li>
+<li>创建一个 Release Tag</li>
+<li>推送临时文件夹和 Tag 到远程分支</li>
+</ol>
+
+        <h3 id="选项" class="docs-header-link">
+          <span header-link="选项"></span>
+          选项
+        </h3>
+      <ul>
+<li>  <a href="#--source"><code>--source</code></a></li>
+<li>  <a href="#--name"><code>--name</code></a></li>
+<li>  <a href="#--protocol"><code>--protocol</code></a></li>
+<li>  <a href="#--provider"><code>--provider</code></a></li>
+<li>  <a href="#--organization"><code>--organization</code></a></li>
+<li>  <a href="#--dry-run"><code>--dry-run</code></a></li>
+</ul>
+
+        <h3 id="<code>--source</code>" class="docs-header-link">
+          <span header-link="<code>--source</code>"></span>
+          <code>--source</code>
+        </h3>
+      <p>需要同步到 Repo 的制品文件夹，一般是 built 文件夹</p>
+
+        <h3 id="<code>--name</code>" class="docs-header-link">
+          <span header-link="<code>--name</code>"></span>
+          <code>--name</code>
+        </h3>
+      <p>发布类库在git上仓储的名称，比如你发布的仓储叫 <code>example</code> ，那么 name 就需要传 <code>example</code></p>
+
+        <h3 id="<code>--protocol</code>" class="docs-header-link">
+          <span header-link="<code>--protocol</code>"></span>
+          <code>--protocol</code>
+        </h3>
+      <p>Git 传输协议，支持 <code>https</code> 和 <code>ssh</code>, 默认是 <code>ssh</code></p>
+
+        <h3 id="<code>--provider</code>" class="docs-header-link">
+          <span header-link="<code>--provider</code>"></span>
+          <code>--provider</code>
+        </h3>
+      <p>发布仓储的目标服务，目前支持 <code>git</code>、<code>github</code>、<code>gitlab</code></p>
+
+        <h3 id="<code>--organization</code>" class="docs-header-link">
+          <span header-link="<code>--organization</code>"></span>
+          <code>--organization</code>
+        </h3>
+      <p>组织或者用户在 provider 上的名称，会根据 <code>provider</code>、<code>protocol</code>、<code>name</code> 生成 Remote URL。</p>
+<pre><code><div>provider<span class="token punctuation">:</span> github
+protocol<span class="token punctuation">:</span> ssh
+name<span class="token punctuation">:</span> example
+organization<span class="token punctuation">:</span> worktile
+
+生成的 Remote URL<span class="token punctuation">:</span> git<span class="token variable">@github</span><span class="token punctuation">.</span>com<span class="token punctuation">:</span>worktile<span class="token operator">/</span>example<span class="token punctuation">.</span>git</div></code></pre><pre><code><div>provider<span class="token punctuation">:</span> github
+protocol<span class="token punctuation">:</span> https
+name<span class="token punctuation">:</span> example
+organization<span class="token punctuation">:</span> worktile
+
+生成的 Remote URL<span class="token punctuation">:</span> https<span class="token punctuation">:</span><span class="token operator">/</span><span class="token operator">/</span>github<span class="token punctuation">.</span>com<span class="token operator">/</span>worktile<span class="token operator">/</span>example</div></code></pre>
