@@ -7,5 +7,5 @@ export class Logger extends Print {
 }
 
 export const logger = new Logger({
-  prefix: "RELEASE",
+  prefix: "WPM",
 });
