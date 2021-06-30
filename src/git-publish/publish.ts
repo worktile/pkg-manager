@@ -6,14 +6,13 @@
  * found in the LICENSE file at https://github.com/worktile/pkg-manager/blob/master/LICENSE
  */
 import simpleGit, { SimpleGit } from "simple-git/promise";
-import fs from "fs";
 import path from "path";
 import { protocol, gitProviders, buildGitProvider } from "./git-provider";
 import chalk from "chalk";
 import inquirer from "inquirer";
 import semver from "semver";
 import { logger } from "../logger";
-import { shell, fs as fsExtra } from "@docgeni/toolkit";
+import { fs } from "../fs";
 
 export interface GitRepositoryOptions {
   protocol?: protocol;
@@ -53,7 +52,7 @@ export async function gitPublish(
     }
     const packageJson = JSON.parse(
       fs.readFileSync(packageJsonFilePath, "utf8")
-    ) as any;
+    );
 
     const gitProvider = buildGitProvider(options.provider);
     const gitOrigin = gitProvider.origin(
@@ -78,7 +77,8 @@ export async function gitPublish(
     }
 
     logger.info(`copy file to ${tmpPath} ...`);
-    shell.cp(`${sourcePath}/**/**`, tmpPath);
+
+    await fs.copy(sourcePath, tmpPath);
     logger.success(`copy files success`);
 
     // use call for test
@@ -117,12 +117,13 @@ export async function gitPublish(
       await git.push("origin", "master", { "-f": true } as any);
     }
     logger.info(`remove tmp folder...`);
-    await shell.rm(tmpPath);
+    await fs.remove(tmpPath);
 
     logger.success(`publish success!`);
   } catch (error) {
-    await shell.rm(tmpPath);
     console.error(error);
+    console.log(error.stack);
+    await fs.remove(tmpPath);
   } finally {
     process.exit();
   }

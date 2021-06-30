@@ -13,7 +13,7 @@ describe('#pm-configuration', () => {
     it('should get correct wtpmrc file', () => {
         const config = getConfiguration();
         expect(!!config).equals(true);
-        expect(config.defaultBranch).equals('master');
+        expect(config.allowBranch).deep.equals(['master', 'v0.*']);
     });
 
     // it('should get correct wtpmrc file', () => {

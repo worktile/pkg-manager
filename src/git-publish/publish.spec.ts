@@ -9,11 +9,11 @@ import simpleGit from 'simple-git/promise';
 import sinon from 'sinon';
 import { SinonStub } from 'sinon';
 import inquirer from 'inquirer';
-import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
 import { gitPublish, defaultOptions } from './publish';
-import { shell } from '@docgeni/toolkit';
+import { fs } from '../fs';
+
 
 describe('git-publish', () => {
     const testPath = './test_built';
@@ -38,7 +38,7 @@ describe('git-publish', () => {
     let readFileSyncFake: SinonStub;
 
     let rmStub: SinonStub;
-    let copyAsyncStub: SinonStub;
+    let copyStub: SinonStub;
     let processExitStub: SinonStub;
     beforeEach(() => {
         simpleGitCallStub = sinon.stub(simpleGit as any, 'call');
@@ -59,16 +59,16 @@ describe('git-publish', () => {
         inquirerPrompt.returns(Promise.resolve({ confirm: true }));
         inquirerFake = sinon.stub().returns(Promise.resolve({ confirm: true }));
 
-        existsSyncFake = sinon.stub(fs as any, 'existsSync');
-        readFileSyncFake = sinon.stub(fs as any, 'readFileSync');
+        existsSyncFake = sinon.stub(fs, 'existsSync');
+        readFileSyncFake = sinon.stub(fs, 'readFileSync');
 
-        rmStub = sinon.stub(shell, 'rm');
-        copyAsyncStub = sinon.stub(shell, 'cp');
+        rmStub = sinon.stub(fs, 'remove');
+        copyStub = sinon.stub(fs, 'copy');
         processExitStub = sinon.stub(process, 'exit');
     });
 
     afterEach(() => {
-        [simpleGitCallStub, existsSyncFake, readFileSyncFake, inquirerPrompt, rmStub, copyAsyncStub, processExitStub].forEach((fake) =>
+        [simpleGitCallStub, existsSyncFake, readFileSyncFake, inquirerPrompt, rmStub, copyStub, processExitStub].forEach((fake) =>
             fake.restore()
         );
     });
@@ -81,9 +81,10 @@ describe('git-publish', () => {
         await gitPublish(testPath, {
             name: repositoryName
         });
+        sinon.assert.callCount(existsSyncFake, 1);
 
-        sinon.assert.callCount(copyAsyncStub, 1);
-        sinon.assert.calledWith(copyAsyncStub, path.resolve(process.cwd(), testPath) + '/**/**', path.resolve(process.cwd(), '.tmp'));
+        sinon.assert.callCount(copyStub, 1);
+        sinon.assert.calledWith(copyStub, path.resolve(process.cwd(), testPath), path.resolve(process.cwd(), '.tmp'));
 
         sinon.assert.callCount(simpleGitFake.init, 1);
         sinon.assert.callCount(simpleGitFake.commit, 1);
@@ -130,7 +131,7 @@ describe('git-publish', () => {
         await gitPublish(testPath, {
             name: repositoryName
         });
-        sinon.assert.callCount(copyAsyncStub, 0);
+        sinon.assert.callCount(copyStub, 0);
         sinon.assert.callCount(simpleGitFake.init, 0);
         sinon.assert.callCount(rmStub, 0);
     });
@@ -139,12 +140,12 @@ describe('git-publish', () => {
         const packageJsonFilePath = `${path.resolve(process.cwd(), testPath)}/package.json`;
         existsSyncFake.withArgs(packageJsonFilePath).returns(true);
         readFileSyncFake.withArgs(packageJsonFilePath, 'utf8').returns('{"version":"0.0.1"}');
-        copyAsyncStub.throws(new Error(`mock error`));
+        copyStub.throws(new Error(`mock error`));
         await gitPublish(testPath, {
             name: repositoryName
         });
 
-        sinon.assert.callCount(copyAsyncStub, 1);
+        sinon.assert.callCount(copyStub, 1);
         sinon.assert.callCount(simpleGitFake.init, 0);
         sinon.assert.callCount(rmStub, 1);
         sinon.assert.calledWith(rmStub, path.resolve(process.cwd(), '.tmp'));
