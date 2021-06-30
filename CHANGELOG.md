@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.1](https://github.com/worktile/pkg-manager/compare/v0.0.1-beta.1...v0.0.1) (2021-06-30)
+
+
+### Bug Fixes
+
+* fix git publish command and test ([eaf6b2b](https://github.com/worktile/pkg-manager/commit/eaf6b2bc3b33d2c3503eb8422f8de91ddfb89edc))
+
+
+
 ## [0.0.1-beta.1](https://github.com/worktile/pkg-manager/compare/v0.0.1-beta.0...v0.0.1-beta.1) (2021-06-25)
 
 
