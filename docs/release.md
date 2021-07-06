@@ -3,7 +3,7 @@ title: "Release"
 order: 30
 ---
 
-
+Release 提供修改版本号，创建 Release 分支，生成更新日志，提交到远程分支等功能。
 ### 使用说明
 
 ```
@@ -110,8 +110,7 @@ Issue 格式化 URL，可以设置成 Github, Gitlab, Bitbucket等等，取决�
 ### `--bump-files`
 
 ### `--infile`
-
-Read the CHANGELOG from this file, default is `CHANGELOG.md`
+更新日志读取和生成的文件，默认是`CHANGELOG.md`
 
 ### `--preset`
 

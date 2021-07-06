@@ -15,6 +15,7 @@
     "release": "bin/release.js"
   },
   "scripts": {
+    "start": "yarn start:docs",
     "build": "tsc --build --clean && tsc --build",
     "prerelease": "yarn build",
     "release-only": "ts-node ./src/commands/index.ts release",
@@ -50,8 +51,8 @@
     "yargs": "^17.0.1"
   },
   "devDependencies": {
-    "@docgeni/cli": "1.0.3",
-    "@docgeni/template": "1.0.3",
+    "@docgeni/cli": "1.0.7",
+    "@docgeni/template": "1.0.7",
     "@types/chai": "^4.2.19",
     "@types/fs-extra": "^9.0.11",
     "@types/inquirer": "^7.3.2",
