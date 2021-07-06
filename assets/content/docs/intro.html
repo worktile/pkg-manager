@@ -1,15 +1,15 @@
-<p><code>@worktile/pkg-manager</code> 主要提供了 <code>wpm</code> 命令行工具，包含以下子命令：</p>
+<p><code>@worktile/pkg-manager</code> 是一款简单实用的包管理工具，主要提供自动升级版本，并发布类库等功能。核心提供了 <code>wpm</code> 命令行，包含以下子命令：</p>
 <ul>
-<li><code>wpm release</code> 主要提供修改版本号、生成更新日志、创建 Release 分支、提交代码到远程分支的功能</li>
-<li><code>wpm publish</code> 主要提供发布版本（只有类库项目才会需要）和创建Tag推送到远程仓储</li>
-<li><code>wpm git-publish</code> 主要提供发布代码到 GitHub 仓储的功能，目前推荐使用 GitHub Package 功能进行私有包管理</li>
+<li><code>wpm release</code>：修改版本号、生成更新日志、创建 Release 分支、提交代码到远程分支的功能</li>
+<li><code>wpm publish</code>：主要提供发布版本（只有类库项目才会需要）和创建Tag推送到远程仓储</li>
+<li><code>wpm git-publish</code>：主要提供发布代码到 GitHub 仓储的功能，目前推荐使用 GitHub Package 功能进行私有包管理</li>
 </ul>
 
         <h2 id="安装" class="docs-header-link">
           <span header-link="安装"></span>
           安装
         </h2>
-      <p>执行如下命令安装<code>pkg-manager</code>模块</p>
+      <p>执行如下命令安装<code>pkg-manager</code></p>
 <pre class="language-bash"><code class="language-bash"><div>$ <span class="token function">npm</span> i @worktile/pkg-manager --save
 // or
 $ yarn add @worktile/pkg-manager</div></code></pre>
