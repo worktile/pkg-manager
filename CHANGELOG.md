@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.2](https://github.com/worktile/pkg-manager/compare/v0.0.1...v0.0.2) (2021-07-08)
+
+
+### Bug Fixes
+
+* push origin to current branch when releaseBranch is empty ([642cee2](https://github.com/worktile/pkg-manager/commit/642cee2e453c358d94e8245e8f9c03b7cfca1005))
+* skip branch when release ([96fe969](https://github.com/worktile/pkg-manager/commit/96fe969a6419bdb235bd4a53f891b5c583f5e8f2))
+
+
+
 ## [0.0.1](https://github.com/worktile/pkg-manager/compare/v0.0.1-beta.1...v0.0.1) (2021-06-30)
 
 
