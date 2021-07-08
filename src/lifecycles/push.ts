@@ -14,13 +14,14 @@ export class PushLifecycle extends Lifecycle {
         if (context.options.skip.push) {
             return;
         }
-        this.logger.info(`pushing ${chalk.green(context.releaseBranch)} to remote`);
-        if (!context.options.dryRun && context.releaseBranch) {
+        const branch = context.releaseBranch || context.currentBranch;
+        this.logger.info(`pushing ${chalk.green(branch)} to remote`);
+        if (!context.options.dryRun && branch) {
             context.git.outputHandler((command, stdout, stderr) => {
                 stdout.pipe(process.stdout);
                 stderr.pipe(process.stderr);
             });
-            await context.git.push('origin', context.releaseBranch);
+            await context.git.push('origin', branch);
         }
     }
 }

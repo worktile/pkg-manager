@@ -17,6 +17,7 @@ module.exports = {
         }
     ],
     skip: {
+        branch: false
     },
     commitAll: true,
     hooks: {
