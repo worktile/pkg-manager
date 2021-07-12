@@ -24,20 +24,8 @@ $ yarn add @worktile/pkg-manager
 
 ## Quick Links
 - ✨ Learn about it on the [docs site](https://worktile.github.io/pkg-manager)
-
-### wpm release
-
-```bash
-wpm release 1.0.1 # 明确版本号
-wpm release patch # 语义化版本关键字: `patch`、`minor`、`major`
-wpm release       # 通过命令交互界面选择版本
-```
-
-### wpm publish
-
-```bash
-wpm publish
-```
+- 🚀 [wpm release](https://worktile.github.io/pkg-manager/release)
+- 📦 [wpm publish](https://worktile.github.io/pkg-manager/publish)
 
 ## LICENSE
 
