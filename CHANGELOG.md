@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.3](https://github.com/worktile/pkg-manager/compare/v0.0.2...v0.0.3) (2021-09-09)
+
+
+### Features
+
+* add prebump and postbump hooks ([29693fc](https://github.com/worktile/pkg-manager/commit/29693fc1d3a4ed0a4bb470389e2ff088101f7732))
+
+
+
 ## [0.0.2](https://github.com/worktile/pkg-manager/compare/v0.0.1...v0.0.2) (2021-07-08)
 
 
