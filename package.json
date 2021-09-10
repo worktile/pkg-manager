@@ -28,7 +28,7 @@
     "pub": "ts-node ./src/commands/index.ts publish",
     "pub-only": "npm publish --access=public",
     "wpm": "ts-node ./src/commands/index.ts",
-    "test": "NODE_ENV=test mocha src/**/*.spec.ts --timeout 999999 --require ts-node/register/transpile-only",
+    "test": "NODE_ENV=test mocha src/**/**/*.spec.ts --timeout 999999 --require ts-node/register/transpile-only",
     "start:docs": "docgeni serve --port 4500",
     "build:docs": "docgeni build --prod",
     "build:docs-gh-pages": "docgeni build --prod --base-href=/pkg-manager/"

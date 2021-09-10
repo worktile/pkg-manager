@@ -23,7 +23,7 @@ async function runLifecycleHook(
     // command "echo {{version}}" => "echo 1.0.1"
     let finalCommand = command;
     if (params && params.version) {
-      finalCommand = command.replace("{{version}}", params.version);
+      finalCommand = command.replace(/{{version}}/g, params.version);
     }
     logger.info(`running hook ${name} (command: ${finalCommand})`);
     if (!options.dryRun) {
