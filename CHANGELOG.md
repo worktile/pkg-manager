@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.4](https://github.com/worktile/pkg-manager/compare/v0.0.3...v0.0.4) (2021-09-10)
+
+
+### Features
+
+* runLifecycleHook support multiple version ([afd53b2](https://github.com/worktile/pkg-manager/commit/afd53b2c5556bb21176c7de0289166b68f25feb3))
+
+
+
 ## [0.0.3](https://github.com/worktile/pkg-manager/compare/v0.0.2...v0.0.3) (2021-09-09)
 
 
