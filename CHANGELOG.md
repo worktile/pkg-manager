@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.5](https://github.com/worktile/pkg-manager/compare/v0.0.4...v0.0.5) (2021-10-14)
+
+
+### Bug Fixes
+
+* bump docgeni/toolkit for success ([9c43102](https://github.com/worktile/pkg-manager/commit/9c43102044e1cf3495ee93fbfebab042253ca34c))
+
+
+
 ## [0.0.4](https://github.com/worktile/pkg-manager/compare/v0.0.3...v0.0.4) (2021-09-10)
 
 
