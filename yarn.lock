@@ -1192,28 +1192,6 @@
   dependencies:
     tslib "*"
 
-"@docgeni/toolkit@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@docgeni/toolkit/-/toolkit-1.0.2.tgz#659c5ec7a37ae0f7287e5eb0166e4a456a6aab8e"
-  integrity sha512-do9elX3Lv0AFnJ7frGHPs+P/gHwuWYMinwfD2xoTV25BIpU2owIk6TXJYFtfHkGMRLT7KMDyfUKtuYQVrN8iBA==
-  dependencies:
-    camelcase "^6.0.0"
-    chalk "^3.0.0"
-    change-case "^4.1.1"
-    chokidar "^3.3.1"
-    fancy-log "^1.3.3"
-    front-matter "^3.1.0"
-    fs-extra "^9.0.0"
-    glob "^7.1.6"
-    handlebars "^4.7.3"
-    lodash "^4.17.21"
-    minimatch "3.0.4"
-    param-case "^3.0.2"
-    pluralize "^8.0.0"
-    shelljs "0.8.4"
-    time-stamp "^2.2.0"
-    title-case "^3.0.2"
-
 "@docgeni/toolkit@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@docgeni/toolkit/-/toolkit-1.0.4.tgz#4fb84e1b7a38a52911340436bc82fe6f68145eb0"
@@ -1233,6 +1211,29 @@
     param-case "^3.0.2"
     pluralize "^8.0.0"
     shelljs "0.8.4"
+    time-stamp "^2.2.0"
+    title-case "^3.0.2"
+
+"@docgeni/toolkit@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@docgeni/toolkit/-/toolkit-1.1.0.tgz#d731ecc31bc986db3d27e32bf086def60387d4aa"
+  integrity sha512-Kz7GXS0fRX7i2DOSMS4ItM/eEkwcdfcBDyno61MD41g+AYSc+XA/+3nIlZ5t88YEUj+lVmyUWkPynjoLjUVShA==
+  dependencies:
+    camelcase "^6.0.0"
+    chalk "^3.0.0"
+    change-case "^4.1.1"
+    chokidar "^3.3.1"
+    fancy-log "^1.3.3"
+    front-matter "^3.1.0"
+    fs-extra "^9.0.0"
+    glob "^7.1.6"
+    handlebars "^4.7.3"
+    lodash "^4.17.21"
+    minimatch "3.0.4"
+    param-case "^3.0.2"
+    pluralize "^8.0.0"
+    shelljs "0.8.4"
+    tapable "^1.1.3"
     time-stamp "^2.2.0"
     title-case "^3.0.2"
 
