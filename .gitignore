@@ -67,3 +67,5 @@ tsconfig.tsbuildinfo
 /_site
 /dist
 .docgeni/site
+
+.idea
