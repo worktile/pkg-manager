@@ -51,24 +51,21 @@ export async function gitPublish(
       return;
     }
     const packageJson = JSON.parse(
-      fs.readFileSync(packageJsonFilePath, "utf8")
+        fs.readFileSync(packageJsonFilePath, 'utf8')
     );
 
-    const gitProvider = buildGitProvider(options.provider);
-    const gitOrigin = gitProvider.origin(
-      options.protocol,
-      options.organizationOrUser,
-      options.name
-    );
+    const gitProvider = buildGitProvider(options.provider, options.organizationOrUser, options.name);
+
+    const gitOrigin = gitProvider.origin(options.protocol);
 
     const questions = [
       {
-        name: "confirm",
-        type: "confirm",
+        name: 'confirm',
+        type: 'confirm',
         message: `The current operation will cover the ${chalk.red(
-          `${gitOrigin}`
-        )} repository.\n Do you want to continue?`,
-      },
+            `${gitOrigin}`
+        )} repository.\n Do you want to continue?`
+      }
     ];
     const { confirm } = await inquirer.prompt(questions);
     if (!confirm) {
@@ -87,11 +84,7 @@ export async function gitPublish(
       await git.init();
       await git.addRemote(
         "origin",
-        gitProvider.origin(
-          options.protocol,
-          options.organizationOrUser,
-          options.name
-        )
+          gitProvider.origin(options.protocol)
       );
       await git.add("./*");
       await git.commit(`chore(release): publish ${packageJson.version}`);

@@ -8,6 +8,7 @@
 import { Lifecycle } from './lifecycle';
 import { CommandContext } from '../interface';
 import chalk from 'chalk';
+import { buildGitProviderFromRemote } from '../git-publish/git-provider';
 
 export class PushLifecycle extends Lifecycle {
     async run(context: CommandContext): Promise<void> {
@@ -28,10 +29,9 @@ export class PushLifecycle extends Lifecycle {
 
             // prompt to create PR based correct branch
             const remoteUrl = await context.git.remote(['get-url', remote, '--push']) as string;
-            const githubHostname = 'github.com';
-            if (remoteUrl.includes(githubHostname)) {
-                const repoHttpsUrl = `https://${githubHostname}/${remoteUrl.slice(remoteUrl.indexOf(githubHostname) + githubHostname.length + 1, remoteUrl.lastIndexOf('.git'))}`;
-                const createPRUrl = `${repoHttpsUrl}/pull/new/${context.currentBranch}..${branch}`;
+            const gitProvider = buildGitProviderFromRemote(remoteUrl);
+            if (gitProvider) {
+                const createPRUrl = gitProvider.createPRUrl(context.currentBranch, branch);
                 this.logger.info(`Create a pull request: ${createPRUrl}`);
             }
         }
