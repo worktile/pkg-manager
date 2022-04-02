@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.6](https://github.com/worktile/pkg-manager/compare/v0.0.5...v0.0.6) (2022-04-02)
+
+
+### Bug Fixes
+
+* update commit type chore to build ([7007060](https://github.com/worktile/pkg-manager/commit/70070601633f78ad7ae0d7fd5b9b5bc62b8c6999))
+
+
+### Features
+
+* now push lifecycle prompts pr url ([08bff76](https://github.com/worktile/pkg-manager/commit/08bff76e8f8d2554637dabc3d47c34f11f66dab2))
+
+
+
 ## [0.0.5](https://github.com/worktile/pkg-manager/compare/v0.0.4...v0.0.5) (2021-10-14)
 
 
