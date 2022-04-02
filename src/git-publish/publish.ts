@@ -87,7 +87,7 @@ export async function gitPublish(
           gitProvider.origin(options.protocol)
       );
       await git.add("./*");
-      await git.commit(`chore(release): publish ${packageJson.version}`);
+      await git.commit(`build(release): publish ${packageJson.version}`);
     }
     logger.success(`git commit success`);
 

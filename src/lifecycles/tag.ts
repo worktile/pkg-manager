@@ -26,7 +26,7 @@ export class TagLifecycle extends Lifecycle {
         }
         await this.runLifecycleHook('pretag', context.options);
         if (!context.options.dryRun) {
-            await context.git.addAnnotatedTag(tagName, `chore: create release ${tagName}`);
+            await context.git.addAnnotatedTag(tagName, `build: create release ${tagName}`);
         }
         await this.runLifecycleHook('posttag', context.options);
     }

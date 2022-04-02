@@ -88,7 +88,7 @@ describe('git-publish', () => {
 
         sinon.assert.callCount(simpleGitFake.init, 1);
         sinon.assert.callCount(simpleGitFake.commit, 1);
-        sinon.assert.calledWith(simpleGitFake.commit, 'chore(release): publish 0.0.1');
+        sinon.assert.calledWith(simpleGitFake.commit, 'build(release): publish 0.0.1');
 
         sinon.assert.callCount(simpleGitFake.listRemote, 1);
         sinon.assert.calledWith(simpleGitFake.listRemote, ['--tags']);
