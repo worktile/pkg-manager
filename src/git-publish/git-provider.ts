@@ -35,7 +35,7 @@ export class GitHubProvider extends GitProvider {
 
     createPRUrl(baseBranch: string, headBranch: string): string {
         const repoUrl = `https://${this.host}/${this.organizationOrUser}/${this.name}`;
-        const createPRUrl = `${repoUrl}/pull/new/${baseBranch}..${headBranch}`;
+        const createPRUrl = `${repoUrl}/pull/new/${baseBranch}...${headBranch}`;
         return createPRUrl;
     }
 }
