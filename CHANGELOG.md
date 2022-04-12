@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.7](https://github.com/worktile/pkg-manager/compare/v0.0.6...v0.0.7) (2022-04-12)
+
+
+### Bug Fixes
+
+* GitHub createPRUrl is wrong ([cf2263c](https://github.com/worktile/pkg-manager/commit/cf2263ced2461f45f38be6b92d116931462d1eea))
+
+
+### Features
+
+* update releaseCommitMessageFormat to "build: release v{{version}}" ([#15](https://github.com/worktile/pkg-manager/issues/15)) ([3f16a75](https://github.com/worktile/pkg-manager/commit/3f16a757765fba75c7f2df39edd625fe492d9d5e))
+
+
+
 ## [0.0.6](https://github.com/worktile/pkg-manager/compare/v0.0.5...v0.0.6) (2022-04-02)
 
 
