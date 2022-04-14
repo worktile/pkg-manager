@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.8](https://github.com/worktile/pkg-manager/compare/v0.0.7...v0.0.8) (2022-04-14)
+
+
+### Bug Fixes
+
+* remove v prefix from releaseCommitMessageFormat ([2c01667](https://github.com/worktile/pkg-manager/commit/2c01667f56996d0034cecd1e75f74d500777dfa1))
+* update version to currentTag for releaseCommitMessageFormat ([5070841](https://github.com/worktile/pkg-manager/commit/5070841679a6b6cb046cd5dd3a058f4e2fb95e5f))
+
+
+
 ## [0.0.7](https://github.com/worktile/pkg-manager/compare/v0.0.6...v0.0.7) (2022-04-12)
 
 
