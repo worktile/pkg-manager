@@ -11,7 +11,7 @@ export const defaults: CommandOptions = {
     defaultBranch: 'master',
     allowBranch: ['master', 'develop'],
     releaseBranchFormat: 'release-v{{version}}',
-    releaseCommitMessageFormat: "build: release v{{currentTag}}",
+    releaseCommitMessageFormat: "build: release {{currentTag}}",
     packageDir: 'built',
     dryRun: false,
     skip: {},
