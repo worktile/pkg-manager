@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.10](https://github.com/worktile/pkg-manager/compare/v0.0.9...v0.0.10) (2022-05-23)
+
+
+### Bug Fixes
+
+* remove composer.lock ([69bdead](https://github.com/worktile/pkg-manager/commit/69bdead18ccd56b6b8e93008fa7e9bf7871326d7))
+
+
+
 ## [0.0.9](https://github.com/worktile/pkg-manager/compare/v0.0.8...v0.0.9) (2022-04-15)
 
 
