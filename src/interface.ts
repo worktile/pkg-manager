@@ -84,8 +84,7 @@ export interface CommandOptions extends Config {
      * @default
      * [
      *   'package-lock.json',
-     *   'npm-shrinkwrap.json',
-     *   'composer.lock'
+     *   'npm-shrinkwrap.json'
      * ]
      */
     bumpFiles?: Array<BumpFile>;

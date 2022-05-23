@@ -15,7 +15,7 @@ export const defaults: CommandOptions = {
     packageDir: 'built',
     dryRun: false,
     skip: {},
-    bumpFiles: ['package.json', 'package-lock.json', 'npm-shrinkwrap.json', 'composer.lock'],
+    bumpFiles: ['package.json', 'package-lock.json', 'npm-shrinkwrap.json'],
     preset: 'angular',
     issueUrlFormat: 'https//at.worktile.com/agile/items/{{id}}',
     commitAll: false,
