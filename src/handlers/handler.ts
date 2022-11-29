@@ -63,31 +63,44 @@ export abstract class Handler {
         const allowBranches = coerceArray(this.options.allowBranch);
 
         let targetBranch: string;
-        if (this.matchAllowBranch(gitStatus.current, allowBranches)) {
-            const message = `You will ${this.name} ${chalk.green(gitStatus.current)} branch, allow ${this.name} branches: ${chalk.blue(
-                allowBranches.join(' ')
-            )}. \n Do you want to continue?`;
-            const { confirm } = await inquirer.prompt({
-                name: 'confirm',
-                type: 'confirm',
-                message,
-                default: true
-            });
-            if (confirm) {
+        if (this.options.skip.confirm) {
+            if (this.matchAllowBranch(gitStatus.current, allowBranches)) {
                 targetBranch = gitStatus.current;
             } else {
+                logger.warn(
+                    `Command ${this.name} not allowed in current branch ${chalk.blue(gitStatus.current)}, please checkout to ${chalk.green(
+                        allowBranches.join(' ')
+                    )}`
+                );
+            }
+        } else {
+            if (this.matchAllowBranch(gitStatus.current, allowBranches)) {
+                const message = `You will ${this.name} ${chalk.green(gitStatus.current)} branch, allow ${this.name} branches: ${chalk.blue(
+                    allowBranches.join(' ')
+                )}. \n Do you want to continue?`;
+                const { confirm } = await inquirer.prompt({
+                    name: 'confirm',
+                    type: 'confirm',
+                    message,
+                    default: true
+                });
+                if (confirm) {
+                    targetBranch = gitStatus.current;
+                } else {
+                    const allBranches = await git.branchLocal();
+                    targetBranch = await this.selectBranchFromPrompt(allBranches.all, allowBranches);
+                }
+            } else {
+                logger.warn(
+                    `Command ${this.name} not allowed in current branch ${chalk.blue(gitStatus.current)}, please checkout to ${chalk.green(
+                        allowBranches.join(' ')
+                    )}`
+                );
                 const allBranches = await git.branchLocal();
                 targetBranch = await this.selectBranchFromPrompt(allBranches.all, allowBranches);
             }
-        } else {
-            logger.warn(
-                `Command ${this.name} not allowed in current branch ${chalk.blue(gitStatus.current)}, please checkout to ${chalk.green(
-                    allowBranches.join(' ')
-                )}`
-            );
-            const allBranches = await git.branchLocal();
-            targetBranch = await this.selectBranchFromPrompt(allBranches.all, allowBranches);
         }
+
         if (!targetBranch) {
             throw new ValidationError('E_NO_TARGET_BRANCH', `target-branch is empty`);
         }

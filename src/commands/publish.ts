@@ -22,6 +22,12 @@ export const publishCommand: CommandModule = {
             desc: ` 'Map of steps in the release process that should be skipped, bump,changelog,commit,branch,tag,push',`,
             default: defaults.skip
         });
+        yargs.option('skip.confirm', {
+            alias: 'sc',
+            type: 'boolean',
+            desc: ` 'Map of steps in the release process that should be skipped, bump,changelog,commit,branch,tag,push',`,
+            default: false
+        });
         return yargs;
     },
     handler: async (argv: any) => {

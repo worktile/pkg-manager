@@ -25,6 +25,8 @@ export interface Skip {
     tag?: boolean;
     // submit pull request
     pr?: boolean;
+    // confirm release or publish
+    confirm?: boolean;
 }
 
 export type BumpFile = { filename: string; updater?: string; type?: 'json' | 'plain-text' | 'code' } | string;
