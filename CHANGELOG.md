@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.11](https://github.com/worktile/pkg-manager/compare/v0.0.10...v0.0.11) (2022-11-29)
+
+
+### Features
+
+* add skip confirm ([4e22477](https://github.com/worktile/pkg-manager/commit/4e2247746633d93d07f9122bca64626c4c577632))
+
+
+
 ## [0.0.10](https://github.com/worktile/pkg-manager/compare/v0.0.9...v0.0.10) (2022-05-23)
 
 
