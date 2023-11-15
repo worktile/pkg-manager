@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.1.0](https://github.com/worktile/pkg-manager/compare/v0.0.11...v0.1.0) (2023-11-15)
+
+
+### Features
+
+* remove engines ([d0c81a8](https://github.com/worktile/pkg-manager/commit/d0c81a8ea57c01601158d736bcdc58ce7390729e))
+
+
+
 ## [0.0.11](https://github.com/worktile/pkg-manager/compare/v0.0.10...v0.0.11) (2022-11-29)
 
 
