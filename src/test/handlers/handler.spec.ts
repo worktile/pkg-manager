@@ -59,7 +59,8 @@ describe('#handler', () => {
 
     it('should prompt confirm when current branch is match allowBranch', async () => {
         myHandler = new MyHandler({
-            allowBranch: 'master'
+            allowBranch: 'master',
+            skip: {}
         });
         simpleGitMock.status.returns(
             Promise.resolve({

@@ -63,7 +63,7 @@ export abstract class Handler {
         const allowBranches = coerceArray(this.options.allowBranch);
 
         let targetBranch: string;
-        if (this.options.skip.confirm) {
+        if (this.options.skip?.confirm) {
             if (this.matchAllowBranch(gitStatus.current, allowBranches)) {
                 targetBranch = gitStatus.current;
             } else {

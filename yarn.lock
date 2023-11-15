@@ -1933,13 +1933,6 @@
     "@sigstore/protobuf-specs" "^0.2.0"
     tuf-js "^1.1.7"
 
-"@sinonjs/commons@^1.6.0", "@sinonjs/commons@^1.7.0", "@sinonjs/commons@^1.8.3":
-  version "1.8.6"
-  resolved "https://registry.npmjs.org/@sinonjs/commons/-/commons-1.8.6.tgz#80c516a4dc264c2a69115e7578d62581ff455ed9"
-  integrity sha512-Ky+XkAkqPZSm3NLBeUng77EBQl3cmeJhITaGHdYH8kjVB+aun3S4XBRti2zt17mtt0mIUDiNxYeoJm6drVvBJQ==
-  dependencies:
-    type-detect "4.0.8"
-
 "@sinonjs/commons@^2.0.0":
   version "2.0.0"
   resolved "https://registry.npmjs.org/@sinonjs/commons/-/commons-2.0.0.tgz#fd4ca5b063554307e8327b4564bd56d3b73924a3"
@@ -1961,19 +1954,19 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
-"@sinonjs/fake-timers@^7.1.2":
-  version "7.1.2"
-  resolved "https://registry.npmjs.org/@sinonjs/fake-timers/-/fake-timers-7.1.2.tgz#2524eae70c4910edccf99b2f4e6efc5894aff7b5"
-  integrity sha512-iQADsW4LBMISqZ6Ci1dupJL9pprqwcVFTcOsEmQOEhW+KLCVn/Y4Jrvg2k19fIHCp+iFprriYPTdRcQR8NbUPg==
+"@sinonjs/fake-timers@^11.2.2":
+  version "11.2.2"
+  resolved "https://registry.npmjs.org/@sinonjs/fake-timers/-/fake-timers-11.2.2.tgz#50063cc3574f4a27bd8453180a04171c85cc9699"
+  integrity sha512-G2piCSxQ7oWOxwGSAyFHfPIsyeJGXYtc6mFbnFA+kRXkiEnTl8c/8jul2S329iFBnDI9HGoeWWAZvuvOkZccgw==
   dependencies:
-    "@sinonjs/commons" "^1.7.0"
+    "@sinonjs/commons" "^3.0.0"
 
-"@sinonjs/samsam@^6.0.2":
-  version "6.1.3"
-  resolved "https://registry.npmjs.org/@sinonjs/samsam/-/samsam-6.1.3.tgz#4e30bcd4700336363302a7d72cbec9b9ab87b104"
-  integrity sha512-nhOb2dWPeb1sd3IQXL/dVPnKHDOAFfvichtBf4xV00/rU1QbPCQqKMbvIheIjqwVjh7qIgf2AHTHi391yMOMpQ==
+"@sinonjs/samsam@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.npmjs.org/@sinonjs/samsam/-/samsam-8.0.0.tgz#0d488c91efb3fa1442e26abea81759dfc8b5ac60"
+  integrity sha512-Bp8KUVlLp8ibJZrnvq2foVhP0IVX2CIprMJPK0vqGqgrDa0OHVKeZyBykqskkrdxV6yKBPmGasO8LVjAKR3Gew==
   dependencies:
-    "@sinonjs/commons" "^1.6.0"
+    "@sinonjs/commons" "^2.0.0"
     lodash.get "^4.4.2"
     type-detect "^4.0.8"
 
@@ -2288,10 +2281,10 @@
     "@types/glob" "~7.2.0"
     "@types/node" "*"
 
-"@types/sinon@^10.0.2":
-  version "10.0.20"
-  resolved "https://registry.npmjs.org/@types/sinon/-/sinon-10.0.20.tgz#f1585debf4c0d99f9938f4111e5479fb74865146"
-  integrity sha512-2APKKruFNCAZgx3daAyACGzWuJ028VVCUDk6o2rw/Z4PXT0ogwdV4KUegW0MwVs0Zu59auPXbbuBJHF12Sx1Eg==
+"@types/sinon@^17.0.1":
+  version "17.0.1"
+  resolved "https://registry.npmjs.org/@types/sinon/-/sinon-17.0.1.tgz#f17816577ee61d462cb7bfcea6ff64fb05063256"
+  integrity sha512-Q2Go6TJetYn5Za1+RJA1Aik61Oa2FS8SuJ0juIqUuJ5dZR4wvhKfmSdIqWtQ3P6gljKWjW0/R7FZkA4oXVL6OA==
   dependencies:
     "@types/sinonjs__fake-timers" "*"
 
@@ -3981,7 +3974,7 @@ diff@^4.0.1:
   resolved "https://registry.npmjs.org/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
   integrity sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==
 
-diff@^5.0.0:
+diff@^5.1.0:
   version "5.1.0"
   resolved "https://registry.npmjs.org/diff/-/diff-5.1.0.tgz#bc52d298c5ea8df9194800224445ed43ffc87e40"
   integrity sha512-D+mk+qE8VC/PAUrlAU34N+VfXev0ghe5ywmpqrawphmVZc1bEfn56uo9qpyGp1p4xpzOHkSW4ztBd6L7Xx4ACw==
@@ -6445,7 +6438,7 @@ nice-napi@^1.0.2:
     node-addon-api "^3.0.0"
     node-gyp-build "^4.2.2"
 
-nise@^5.1.0:
+nise@^5.1.5:
   version "5.1.5"
   resolved "https://registry.npmjs.org/nise/-/nise-5.1.5.tgz#f2aef9536280b6c18940e32ba1fbdc770b8964ee"
   integrity sha512-VJuPIfUFaXNRzETTQEEItTOP8Y171ijr+JLq42wHes3DiryR8vT+1TXQW/Rx8JNUhyYYWyIvjXTU6dOhJcs9Nw==
@@ -7919,16 +7912,16 @@ simple-git@^2.40.0:
     "@kwsites/promise-deferred" "^1.1.1"
     debug "^4.3.2"
 
-sinon@^11.1.1:
-  version "11.1.2"
-  resolved "https://registry.npmjs.org/sinon/-/sinon-11.1.2.tgz#9e78850c747241d5c59d1614d8f9cbe8840e8674"
-  integrity sha512-59237HChms4kg7/sXhiRcUzdSkKuydDeTiamT/jesUVHshBgL8XAmhgFo0GfK6RruMDM/iRSij1EybmMog9cJw==
+sinon@^17.0.1:
+  version "17.0.1"
+  resolved "https://registry.npmjs.org/sinon/-/sinon-17.0.1.tgz#26b8ef719261bf8df43f925924cccc96748e407a"
+  integrity sha512-wmwE19Lie0MLT+ZYNpDymasPHUKTaZHUH/pKEubRXIzySv9Atnlw+BUMGCzWgV7b7wO+Hw6f1TEOr0IUnmU8/g==
   dependencies:
-    "@sinonjs/commons" "^1.8.3"
-    "@sinonjs/fake-timers" "^7.1.2"
-    "@sinonjs/samsam" "^6.0.2"
-    diff "^5.0.0"
-    nise "^5.1.0"
+    "@sinonjs/commons" "^3.0.0"
+    "@sinonjs/fake-timers" "^11.2.2"
+    "@sinonjs/samsam" "^8.0.0"
+    diff "^5.1.0"
+    nise "^5.1.5"
     supports-color "^7.2.0"
 
 slash@^4.0.0:
