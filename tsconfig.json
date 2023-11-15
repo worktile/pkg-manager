@@ -3,7 +3,7 @@
     "outDir": "./lib",
     "rootDir": "src",
     "baseUrl": ".",
-    "target": "ES2018",
+    "target": "es2018",
     "module": "commonjs",
     "declaration": true,
     "declarationMap": true,
