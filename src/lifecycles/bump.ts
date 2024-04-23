@@ -8,12 +8,11 @@
 
 import { Lifecycle } from './lifecycle';
 import { CommandContext } from '../interface';
-import standardVersion = require('standard-version');
+import standardVersion from 'commit-and-tag-version';
 
 export class BumpLifecycle extends Lifecycle {
     async run(context: CommandContext): Promise<void> {
-        
-        this.logger.info(`using standard-version to bumping, outputting changes and commit`);
+        this.logger.info(`using commit-and-tag-version to bumping, outputting changes and commit`);
         await this.runLifecycleHook('prebump', context.options, this.getLifecycleHookParams(context));
         const options: standardVersion.Options = Object.assign({}, context.options, {
             releaseAs: context.versions.next

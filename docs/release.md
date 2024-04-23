@@ -130,7 +130,7 @@ If you want to commit generated artifacts in the release commit, you can use the
 wpm supports lifecycle hooks. These allow you to execute your own supplementary commands during the release or publish. The following hooks are available and execute in the order documented:
 
 -   prerelease/postrelease: executed before/after anything happens. If the prerelease script returns a non-zero exit code, versioning will be aborted, but it has no other effect on the process.
--   prebump/postbump: executed before and after the version is bumped. If the prebump script returns a version #, it will be used rather than the version calculated by standard-version.
+-   prebump/postbump: executed before and after the version is bumped. If the prebump script returns a version #, it will be used rather than the version calculated by commit-and-tag-version.
 -   prechangelog/postchangelog: executes before and after the CHANGELOG is generated.
 -   precommit/postcommit: called before and after the commit step.
 -   pretag/posttag: called before and after the tagging step.

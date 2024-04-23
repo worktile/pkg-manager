@@ -7,7 +7,7 @@
  */
 import { Lifecycle } from './lifecycle';
 import { CommandContext } from '../interface';
-import latestSemverTag from 'standard-version/lib/latest-semver-tag';
+import latestSemverTag from 'commit-and-tag-version/lib/latest-semver-tag';
 import chalk from 'chalk';
 import semver, { ReleaseType } from 'semver';
 import inquirer from 'inquirer';

@@ -48,7 +48,7 @@ export interface CommandOptions extends Config {
      */
     releaseAs?: string;
     /**
-     * See the commands that running standard-version would run.
+     * See the commands that running commit-and-tag-version would run.
      *
      * @default false
      */
