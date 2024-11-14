@@ -44,7 +44,7 @@
   "dependencies": {
     "@docgeni/toolkit": "^2.1.0",
     "@types/shelljs": "^0.8.8",
-    "commit-and-tag-version": "12.5.0",
+    "commit-and-tag-version": "12.4.0",
     "cosmiconfig": "^7.0.0",
     "inquirer": "^8.1.1",
     "lodash": "^4.17.21",
