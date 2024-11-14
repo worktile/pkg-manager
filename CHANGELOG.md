@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.3](https://github.com/worktile/pkg-manager/compare/v0.1.2...v0.1.3) (2024-11-14)
+
+
+### Bug Fixes
+
+* update version of commit-and-tag-version to 12.4.0 ([c7da33f](https://github.com/worktile/pkg-manager/commit/c7da33f11b7bfc3e4f66a02fc1cf1ac6ccbc9d8e))
+
+
+
 ## [0.1.2](https://github.com/worktile/pkg-manager/compare/v0.1.1...v0.1.2) (2024-11-14)
 
 
