@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.4](https://github.com/worktile/pkg-manager/compare/v0.1.3...v0.1.4) (2024-11-14)
+
+
+### Bug Fixes
+
+* add "conventional-changelog-angular": "^5.0.13" to peerDependencies resolve changelog can't generate when conventional-changelog-angular installed is new version ([a428692](https://github.com/worktile/pkg-manager/commit/a42869221f09d3c66c4d204b7d10e839ac5418dd))
+
+
+
 ## [0.1.3](https://github.com/worktile/pkg-manager/compare/v0.1.2...v0.1.3) (2024-11-14)
 
 
