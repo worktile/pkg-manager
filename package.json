@@ -53,6 +53,9 @@
     "write-json-file": "^4.3.0",
     "yargs": "^17.0.1"
   },
+  "peerDependencies": {
+    "conventional-changelog-angular": "^5.0.13"
+  },
   "devDependencies": {
     "@docgeni/angular": "16.0.0",
     "@docgeni/cli": "2.2.1",
