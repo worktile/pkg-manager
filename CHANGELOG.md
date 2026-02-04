@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.1.5](https://github.com/worktile/pkg-manager/compare/v0.1.4...v0.1.5) (2026-02-04)
+
+
+### Features
+
+* bump cosmiconfig to 9.0.0 support esm ([88c4b94](https://github.com/worktile/pkg-manager/commit/88c4b94adc934c6dcf5ac0b157edc273b5c145e7))
+
+
+
 ## [0.1.4](https://github.com/worktile/pkg-manager/compare/v0.1.3...v0.1.4) (2024-11-14)
 
 
