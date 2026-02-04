@@ -15,6 +15,8 @@ const searchPlaces = [
     `.${moduleName}rc.yaml`,
     `.${moduleName}rc.yml`,
     `.${moduleName}rc.js`,
+    `.${moduleName}rc.cjs`,
+    `.${moduleName}rc.mjs`,
     `${moduleName}.config.js`
 ];
 
