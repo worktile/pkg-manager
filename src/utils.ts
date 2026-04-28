@@ -15,11 +15,11 @@ export function readJsonFile(filePath: string): any {
     return JSON.parse(contents);
 }
 
-export function readPackageJson(): {
+export function readPackageJson(cwd: string = process.cwd()): {
     version: string;
     name: string;
 } {
-    return readJsonFile(path.resolve(process.cwd(), './package.json')) as {
+    return readJsonFile(path.resolve(cwd, './package.json')) as {
         version: string;
         name: string;
     };

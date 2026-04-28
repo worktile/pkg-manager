@@ -18,6 +18,11 @@ export const releaseCommand: CommandModule = {
     describe: 'Release package or project contains bump version, changelog, create release branch, push',
     builder: (yargs) => {
         yargs
+            .option('package-path', {
+                alias: 'p',
+                desc: 'Path to the package directory to release',
+                type: 'string'
+            })
             .option('skip', {
                 alias: 's',
                 // choices: ['bump', 'changelog', 'commit', 'branch', 'push'],
@@ -75,7 +80,7 @@ export const releaseCommand: CommandModule = {
             hooks: argv.hooks,
             infile: argv.infile,
             tagPrefix: argv.tagPrefix,
-            cwd: defaults.cwd
+            cwd: argv.packagePath ? require('path').resolve(argv.packagePath) : defaults.cwd
         };
         const handler = new ReleaseHandler(options);
         await handler.start().catch((error) => {

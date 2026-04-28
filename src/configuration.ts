@@ -20,9 +20,9 @@ const searchPlaces = [
     `${moduleName}.config.js`
 ];
 
-export const getConfiguration = function(options?: OptionsSync) {
+export const getConfiguration = function (options?: OptionsSync, cwd?: string) {
     const exploreSync = cosmiconfigSync(moduleName, options);
-    const result = exploreSync.search();
+    const result = exploreSync.search(cwd);
 
     if (result && !result.isEmpty) {
         if (!result.config || typeof result.config !== 'object') {

@@ -13,6 +13,21 @@ import { releaseCommand } from "./release";
 import { publishCommand } from "./publish";
 import { getConfiguration } from "../configuration";
 import { gitPublishCommand } from "./git-publish";
+import path from "path";
+
+// Get packagePath from argv if provided
+const rawArgv = hideBin(process.argv);
+let packagePath: string;
+
+// Check for --package-path or -p option
+for (let i = 0; i < rawArgv.length; i++) {
+  if (rawArgv[i] === "--package-path" || rawArgv[i] === "-p") {
+    packagePath = rawArgv[i + 1];
+    break;
+  }
+}
+
+const cwd = packagePath ? path.resolve(packagePath) : process.cwd();
 
 const argv = yargs(hideBin(process.argv))
   .scriptName("wpm")
@@ -60,6 +75,6 @@ const argv = yargs(hideBin(process.argv))
   .version()
   .showHelpOnFail(false)
   .pkgConf("wpm")
-  .config(getConfiguration())
+  .config(getConfiguration(undefined, cwd))
   .help()
   .argv;
