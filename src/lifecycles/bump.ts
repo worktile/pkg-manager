@@ -12,11 +12,15 @@ import standardVersion from 'commit-and-tag-version';
 import chalk from 'chalk';
 import conventionalChangelog from 'conventional-changelog';
 import * as fs from 'fs';
+import { defaults } from '../defaults';
 
 export class BumpLifecycle extends Lifecycle {
     currentVersion: string;
 
     nextVersion: string;
+
+    defaultInfile = defaults.infile;
+
     async run(context: CommandContext): Promise<void> {
         await this.runLifecycleHook('prebump', context.options, this.getLifecycleHookParams(context));
 
@@ -25,7 +29,7 @@ export class BumpLifecycle extends Lifecycle {
 
         const { packages } = context.options;
 
-        if (packages && packages.length > 0) {
+        if (packages && packages?.length > 0) {
             await this.runMultiPackageBump(context);
         } else {
             await this.runSinglePackageBump(context);
@@ -70,7 +74,7 @@ export class BumpLifecycle extends Lifecycle {
                 ? pkg.infile.startsWith('/')
                     ? pkg.infile
                     : `${pkgPath}/${pkg.infile}`
-                : `${pkgPath}/CHANGELOG.md`;
+                : `${pkgPath}/${this.defaultInfile}`;
 
             const bumpFiles = pkg.bumpFiles
                 ? pkg.bumpFiles.map((file) =>
@@ -83,6 +87,11 @@ export class BumpLifecycle extends Lifecycle {
                 : baseOptions.bumpFiles?.map((file) =>
                       typeof file === 'string' ? `${pkgPath}/${file}` : { ...file, filename: `${pkgPath}/${file.filename}` }
                   );
+
+            /*
+             * skip commit 因为 commitAllChanges 会处理所有 package 的 commit 操作
+             * skip changelog 因为 generateChangelogForPackage 会处理所有 package 的 changelog 操作
+             */
 
             const options: standardVersion.Options = Object.assign({}, baseOptions, {
                 releaseAs: context.versions.next,
@@ -114,7 +123,12 @@ export class BumpLifecycle extends Lifecycle {
         infile: string | undefined,
         fullPkgPath: string
     ): Promise<void> {
-        const infilePath = infile ? (infile.startsWith('/') ? infile : `${fullPkgPath}/${infile}`) : `${fullPkgPath}/CHANGELOG.md`;
+        this.logger.info('options', options);
+        this.logger.info('infile', infile);
+        this.logger.info('fullPkgPath', fullPkgPath);
+        this.logger.info('pkgPath', pkgPath);
+
+        const infilePath = infile ? (infile.startsWith('/') ? infile : `${fullPkgPath}/${infile}`) : `${fullPkgPath}/${this.defaultInfile}`;
 
         this.logger.info(`Generating changelog for ${pkgPath}: ${this.currentVersion} -> ${this.nextVersion}`);
 
@@ -142,8 +156,8 @@ export class BumpLifecycle extends Lifecycle {
             { version: this.nextVersion },
             {
                 ...gitOptions,
-                from: '9e52c569bf3924d8c883459056edb9e9ccbcf61f',
-                // from: gitOptions.from || undefined,
+                // from: '9e52c569bf3924d8c883459056edb9e9ccbcf61f',
+                from: gitOptions.from || undefined,
                 to: 'HEAD',
                 merges: null,
                 showSignature: false
@@ -197,7 +211,7 @@ export class BumpLifecycle extends Lifecycle {
     }
 
     /**
-     * Find commit with version 
+     * Find commit with version
      * 找上一个发版 commit 的 hash
      */
     private async findCommitWithVersion(version: string | undefined, pkgPath: string, cwd?: string): Promise<string | undefined> {
@@ -261,14 +275,13 @@ export class BumpLifecycle extends Lifecycle {
         for (const pkg of packages) {
             const pkgPath = pkg.path.startsWith('/') ? pkg.path : `${projectRoot}/${pkg.path}`;
 
-            const infilePath = this.resolveFilePath(pkg.infile || 'CHANGELOG.md', pkgPath);
+            const infilePath = this.resolveFilePath(pkg.infile || this.defaultInfile, pkgPath);
             files.add(infilePath);
 
             const pkgBumpFiles = pkg.bumpFiles || options.bumpFiles || [];
             for (const file of pkgBumpFiles) {
-                const filePath = typeof file === 'string'
-                    ? this.resolveFilePath(file, pkgPath)
-                    : this.resolveFilePath(file.filename, pkgPath);
+                const filePath =
+                    typeof file === 'string' ? this.resolveFilePath(file, pkgPath) : this.resolveFilePath(file.filename, pkgPath);
                 files.add(filePath);
             }
         }
@@ -282,7 +295,6 @@ export class BumpLifecycle extends Lifecycle {
 
     private buildCommitMessage(options: any, nextVersion: string): string {
         const format = options.releaseCommitMessageFormat || 'build: release {{currentTag}}';
-        const tag = `${options.tagPrefix || 'v'}${nextVersion}`;
-        return format.replace(/\{\{currentTag\}\}/g, tag);
+        return format.replace(/\{\{currentTag\}\}/g, nextVersion);
     }
 }
