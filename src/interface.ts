@@ -44,6 +44,10 @@ export type Hooks = {
 };
 export interface CommandOptions extends Config {
     /**
+     * Packages to release,
+     */
+    packages?: { path: string; bumpFiles?: BumpFile[]; infile?: string }[];
+    /**
      * Explicit version or ReleaseType patch, minor, major
      */
     releaseAs?: string;

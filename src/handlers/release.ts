@@ -30,10 +30,13 @@ export class ReleaseHandler extends Handler {
 
     async prepare() {
         this.normalizeBumpFiles();
+        this.normalizePackages();
     }
 
     private normalizeBumpFiles() {
-        // convert code updater
+        if (!this.context.options.bumpFiles) {
+            return;
+        }
         this.context.options.bumpFiles = this.context.options.bumpFiles.map(item => {
             if (typeof item !== 'string' && item.type === 'code') {
                 return {
@@ -43,6 +46,31 @@ export class ReleaseHandler extends Handler {
             } else {
                 return item;
             }
+        });
+    }
+
+    private normalizePackages() {
+        const { packages } = this.context.options;
+        if (!packages || !Array.isArray(packages)) {
+            return;
+        }
+        this.context.options.packages = packages.map(pkg => {
+            if (typeof pkg === 'string') {
+                return { path: pkg };
+            }
+            if (pkg.bumpFiles) {
+                pkg.bumpFiles = pkg.bumpFiles.map(item => {
+                    if (typeof item !== 'string' && item.type === 'code') {
+                        return {
+                            filename: item.filename,
+                            updater: require.resolve('../updaters/code-updater')
+                        };
+                    } else {
+                        return item;
+                    }
+                });
+            }
+            return pkg;
         });
     }
 }
