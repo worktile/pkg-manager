@@ -137,7 +137,6 @@ export class BumpLifecycle extends Lifecycle {
             { version: this.nextVersion },
             {
                 ...gitOptions
-                // from: '9e52c569bf3924d8c883459056edb9e9ccbcf61f'
             }
         );
         return this.streamToString(changelogStream);
