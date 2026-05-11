@@ -7,173 +7,174 @@
  */
 
 import { Lifecycle } from './lifecycle';
-import { CommandContext } from '../interface';
+import { CommandContext, Package } from '../interface';
 import standardVersion from 'commit-and-tag-version';
 import chalk from 'chalk';
 import conventionalChangelog from 'conventional-changelog';
 import * as fs from 'fs';
 import { defaults } from '../defaults';
+import { exec } from 'child_process';
+import path from 'path';
 
 export class BumpLifecycle extends Lifecycle {
-    currentVersion: string;
+    currentVersion!: string;
 
-    nextVersion: string;
+    nextVersion!: string;
 
-    defaultInfile = defaults.infile;
+    readonly defaultInfile = defaults.infile;
+
+    packages: Package[] = [];
 
     async run(context: CommandContext): Promise<void> {
         await this.runLifecycleHook('prebump', context.options, this.getLifecycleHookParams(context));
-
         this.currentVersion = context.versions.current;
         this.nextVersion = context.versions.next;
+        this.packages = context.options?.packages || [];
 
-        const { packages } = context.options;
-
-        if (packages && packages?.length > 0) {
-            await this.runMultiPackageBump(context);
+        if (this.packages.length > 0) {
+            await this.bumpMultiPackage(context);
         } else {
-            await this.runSinglePackageBump(context);
+            await this.bumpSinglePackage(context);
         }
 
         await this.runLifecycleHook('postbump', context.options, this.getLifecycleHookParams(context));
     }
 
-    /**
-     * Bump version for single package (原有逻辑)
-     */
-    private async runSinglePackageBump(context: CommandContext): Promise<void> {
+    private async bumpSinglePackage(context: CommandContext): Promise<void> {
         this.logger.info(`using commit-and-tag-version to bumping, outputting changes and commit`);
-        const options: standardVersion.Options = Object.assign({}, context.options, {
-            releaseAs: context.versions.next
-        }) as standardVersion.Options;
-        Object.assign(options.skip, context.options.skip, {
-            tag: true
-        });
-        // 1. bump version
-        // 2. generate changelog
-        // 3. git commit
+        const options: standardVersion.Options = {
+            ...context.options,
+            releaseAs: this.nextVersion,
+            skip: { ...context.options.skip, tag: true }
+        } as standardVersion.Options;
         await standardVersion(options);
     }
 
-    /**
-     * Bump version for multiple packages (monorepo)
-     */
-    private async runMultiPackageBump(context: CommandContext): Promise<void> {
-        this.logger.info(`using commit-and-tag-version to bumping for multiple packages`);
+    private async bumpMultiPackage(context: CommandContext): Promise<void> {
+        this.logger.info('using commit-and-tag-version for monorepo');
 
-        const { packages } = context.options;
-        const baseOptions = context.options;
+        const { options: baseOptions } = context;
         const projectRoot = baseOptions.cwd || process.cwd();
 
-        for (const pkg of packages) {
+        for (const pkg of this.packages) {
             this.logger.info(`Processing package: ${chalk.green(pkg.path)}`);
+            const pkgPath = this.resolveFilePath(pkg.path, projectRoot);
+            const bumpFiles = this.resolveBumpFiles(pkg, baseOptions, pkgPath);
 
-            const pkgPath = pkg.path.startsWith('/') ? pkg.path : `${projectRoot}/${pkg.path}`;
-
-            const infilePath = pkg.infile
-                ? pkg.infile.startsWith('/')
-                    ? pkg.infile
-                    : `${pkgPath}/${pkg.infile}`
-                : `${pkgPath}/${this.defaultInfile}`;
-
-            const bumpFiles = pkg.bumpFiles
-                ? pkg.bumpFiles.map((file) =>
-                      typeof file === 'string'
-                          ? file.startsWith('/')
-                              ? file
-                              : `${pkgPath}/${file}`
-                          : { ...file, filename: file.filename.startsWith('/') ? file.filename : `${pkgPath}/${file.filename}` }
-                  )
-                : baseOptions.bumpFiles?.map((file) =>
-                      typeof file === 'string' ? `${pkgPath}/${file}` : { ...file, filename: `${pkgPath}/${file.filename}` }
-                  );
-
-            /*
-             * skip commit 因为 commitAllChanges 会处理所有 package 的 commit 操作
-             * skip changelog 因为 generateChangelogForPackage 会处理所有 package 的 changelog 操作
-             */
-
-            const options: standardVersion.Options = Object.assign({}, baseOptions, {
-                releaseAs: context.versions.next,
+            const options: standardVersion.Options = {
+                ...baseOptions,
+                releaseAs: this.nextVersion,
                 cwd: projectRoot,
-                bumpFiles: bumpFiles,
-                infile: infilePath,
+                bumpFiles,
                 path: pkg.path,
                 releaseCount: 1,
                 outputUnreleased: false,
-                skip: {
-                    ...baseOptions.skip,
-                    tag: true,
-                    commit: true,
-                    changelog: true
-                }
-            }) as standardVersion.Options;
+                skip: { ...baseOptions.skip, tag: true, commit: true, changelog: true }
+            } as standardVersion.Options;
 
             await standardVersion(options);
 
-            await this.generateChangelogForPackage(options, pkg.path, pkg.infile, pkgPath);
+            if (pkg.infile !== '') {
+                await this.generateChangelog(this.resolveFilePath(pkg.infile, pkgPath), [pkg.path], projectRoot);
+            }
         }
 
-        await this.commitAllChanges(context);
+        if (baseOptions.infile !== '') {
+            await this.generateChangelog(
+                this.resolveFilePath(baseOptions.infile as string, projectRoot),
+                this.packages.map((pkg) => pkg.path),
+                projectRoot
+            );
+        }
+
+        await this.commitChanges(context);
     }
 
-    private async generateChangelogForPackage(
-        options: standardVersion.Options,
-        pkgPath: string,
-        infile: string | undefined,
-        fullPkgPath: string
-    ): Promise<void> {
-        this.logger.info('options', options);
-        this.logger.info('infile', infile);
-        this.logger.info('fullPkgPath', fullPkgPath);
-        this.logger.info('pkgPath', pkgPath);
+    private resolveBumpFiles(pkg: Package, baseOptions: any, pkgPath: string): any[] | undefined {
+        const bumpFiles = pkg.bumpFiles || baseOptions.bumpFiles;
+        if (!bumpFiles) return undefined;
 
-        const infilePath = infile ? (infile.startsWith('/') ? infile : `${fullPkgPath}/${infile}`) : `${fullPkgPath}/${this.defaultInfile}`;
+        return bumpFiles.map((file: any) => {
+            if (typeof file === 'string') {
+                return this.resolveFilePath(file, pkgPath);
+            }
+            return { ...file, filename: this.resolveFilePath(file.filename, pkgPath) };
+        });
+    }
 
-        this.logger.info(`Generating changelog for ${pkgPath}: ${this.currentVersion} -> ${this.nextVersion}`);
+    private async generateChangelog(infilePath: string, pkgPaths: string[], cwd?: string): Promise<void> {
+        this.logger.info(`Generating changelog at ${infilePath}: ${this.currentVersion} -> ${this.nextVersion}`);
+        const commitWithVersion = await this.findVersionCommit(this.currentVersion, pkgPaths, cwd);
+        const generated = await this.buildChangelogContent(commitWithVersion, pkgPaths);
 
-        const gitOptions: { merges: null; path: string; showSignature: boolean; from?: string } = {
+        if (!generated.trim()) {
+            this.logger.warn(`No changelog content generated for ${pkgPaths.join(', ')}`);
+            return;
+        }
+
+        fs.writeFileSync(infilePath, this.mergeChangelog(infilePath, generated));
+    }
+
+    private async buildChangelogContent(commitWithVersion: string | undefined, paths: string[]): Promise<string> {
+        if (paths.length === 1) return this.getChangelogForPath(commitWithVersion, paths[0]);
+        const contents = await Promise.all(paths.map((path) => this.getChangelogForPath(commitWithVersion, path)));
+        return this.mergeChangelogContents(contents);
+    }
+
+    private async getChangelogForPath(commitWithVersion: string | undefined, path: string): Promise<string> {
+        const gitOptions: any = {
             merges: null,
-            path: pkgPath,
-            showSignature: false
+            showSignature: false,
+            to: 'HEAD',
+            path
         };
 
-        const commitWithVersion = await this.findCommitWithVersion(this.currentVersion, pkgPath, options.cwd);
         if (commitWithVersion) {
             gitOptions.from = commitWithVersion;
-            this.logger.info(`Found commit ${commitWithVersion} with version ${this.currentVersion}`);
-        } else {
-            this.logger.info(`No commit found with version ${this.currentVersion}, generating from all commits`);
         }
-
         const changelogStream = conventionalChangelog(
-            {
-                preset: 'angular',
-                releaseCount: 1,
-                outputUnreleased: true,
-                tagPrefix: ''
-            },
+            { preset: 'angular', releaseCount: 1, outputUnreleased: true },
             { version: this.nextVersion },
             {
-                ...gitOptions,
-                // from: '9e52c569bf3924d8c883459056edb9e9ccbcf61f',
-                from: gitOptions.from || undefined,
-                to: 'HEAD',
-                merges: null,
-                showSignature: false
+                ...gitOptions
+                // from: '9e52c569bf3924d8c883459056edb9e9ccbcf61f'
             }
         );
+        return this.streamToString(changelogStream);
+    }
 
-        const generated = await this.streamToString(changelogStream);
-        if (!generated.trim()) {
-            this.logger.warn(`No changelog content generated for ${pkgPath}`);
+    private mergeChangelogContents(contents: string[]): string {
+        const sections = new Map<string, Set<string>>();
+        let versionHeader = '';
+
+        for (const content of contents) {
+            let currentSection = '';
+
+            for (const line of content.split('\n')) {
+                const trimmed = line.trimRight();
+                if (!trimmed) continue;
+
+                if (trimmed.startsWith('## ') && !versionHeader) {
+                    versionHeader = trimmed;
+                } else if (trimmed.startsWith('### ')) {
+                    currentSection = trimmed;
+
+                    if (!sections.has(currentSection)) {
+                        sections.set(currentSection, new Set());
+                    }
+                } else if (currentSection) {
+                    sections.get(currentSection)!.add(trimmed);
+                }
+            }
         }
 
-        this.logger.info(`generateChangelogForPackage generated`, generated);
-
-        const finalContent = this.mergeChangelog(infilePath, generated);
-
-        fs.writeFileSync(infilePath, finalContent);
+        let result = versionHeader + '\n\n';
+        for (const [section, items] of sections) {
+            if (items.size) {
+                result += `${section}\n\n${Array.from(items).join('\n')}\n\n`;
+            }
+        }
+        return result.trim();
     }
 
     /**
@@ -210,91 +211,63 @@ export class BumpLifecycle extends Lifecycle {
         });
     }
 
-    /**
-     * Find commit with version
-     * 找上一个发版 commit 的 hash
-     */
-    private async findCommitWithVersion(version: string | undefined, pkgPath: string, cwd?: string): Promise<string | undefined> {
+    private async findVersionCommit(version: string | undefined, pkgPaths: string[], cwd?: string): Promise<string | undefined> {
         if (!version) return undefined;
-
-        const { exec } = require('child_process');
-        return new Promise((resolve) => {
-            exec(
-                `git log --grep="${version}" --grep="release" --all-match --pretty=format:"%H" -- "${pkgPath}"`,
-                { cwd: cwd || process.cwd() },
-                (error: Error | null, stdout: string) => {
-                    if (error) {
-                        resolve(undefined);
-                        return;
-                    }
-                    const lines = stdout.trim().split('\n');
-                    if (lines.length > 0) {
-                        resolve(lines[0].split(' ')[0]);
-                    } else {
-                        resolve(undefined);
-                    }
-                }
-            );
+        const cmd = `git log --grep="${version}" --grep="release" --all-match --pretty=format:"%H" -- ${pkgPaths
+            .map((p) => `"${p}"`)
+            .join(' ')}`;
+        return new Promise<string | undefined>((resolve) => {
+            exec(cmd, { cwd: cwd || process.cwd() }, (error, stdout) => {
+                if (error) return resolve(undefined);
+                const lines = stdout.trim().split('\n');
+                resolve(lines.length > 0 ? lines[0].split(' ')[0] : undefined);
+            });
         });
     }
 
-    private async commitAllChanges(context: CommandContext): Promise<void> {
-        const { options } = context;
-
+    private async commitChanges(context: CommandContext): Promise<void> {
+        const { options, git } = context;
         if (options.skip?.commit) {
             this.logger.info('Skipping commit as requested');
             return;
         }
 
-        const { packages } = options;
         const projectRoot = options.cwd || process.cwd();
-
-        const allFiles = this.collectCommitFiles(packages, projectRoot, options);
-
-        const commitMessage = this.buildCommitMessage(options, context.versions.next);
+        const allFiles = this.collectCommitFiles(this.packages, projectRoot, options);
+        const commitMessage = this.buildCommitMessage(options, this.nextVersion);
 
         this.logger.info(`Committing ${allFiles.size} files with message: ${chalk.green(commitMessage)}`);
-
         if (options.dryRun) {
             this.logger.info(`[dry-run] git commit -m "${commitMessage}"`);
             return;
         }
 
-        const git = context.git;
-        if (!git) {
-            throw new Error('Git context is not available');
-        }
-
+        if (!git) throw new Error('Git context is not available');
         await git.add(Array.from(allFiles));
         await git.commit(commitMessage);
     }
 
-    private collectCommitFiles(packages: any[], projectRoot: string, options: any): Set<string> {
+    private collectCommitFiles(packages: Package[], projectRoot: string, options: any): Set<string> {
         const files = new Set<string>();
-
         for (const pkg of packages) {
-            const pkgPath = pkg.path.startsWith('/') ? pkg.path : `${projectRoot}/${pkg.path}`;
-
-            const infilePath = this.resolveFilePath(pkg.infile || this.defaultInfile, pkgPath);
-            files.add(infilePath);
-
-            const pkgBumpFiles = pkg.bumpFiles || options.bumpFiles || [];
-            for (const file of pkgBumpFiles) {
-                const filePath =
-                    typeof file === 'string' ? this.resolveFilePath(file, pkgPath) : this.resolveFilePath(file.filename, pkgPath);
-                files.add(filePath);
+            const pkgPath = this.resolveFilePath(pkg.path, projectRoot);
+            if (pkg.infile !== '') {
+                files.add(this.resolveFilePath((pkg.infile || this.defaultInfile) as string, pkgPath));
+            }
+            for (const file of pkg.bumpFiles || options.bumpFiles || []) {
+                files.add(this.resolveFilePath(typeof file === 'string' ? file : file.filename, pkgPath));
             }
         }
-
+        files.add(this.resolveFilePath(options.infile || this.defaultInfile, projectRoot));
         return files;
     }
 
     private resolveFilePath(file: string, basePath: string): string {
-        return file.startsWith('/') ? file : `${basePath}/${file}`;
+        return path.isAbsolute(file) ? file : path.resolve(basePath, file);
     }
 
     private buildCommitMessage(options: any, nextVersion: string): string {
-        const format = options.releaseCommitMessageFormat || 'build: release {{currentTag}}';
+        const format = options.releaseCommitMessageFormat || defaults.releaseCommitMessageFormat;
         return format.replace(/\{\{currentTag\}\}/g, nextVersion);
     }
 }
