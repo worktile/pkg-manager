@@ -21,7 +21,14 @@ export class ReleaseHandler extends Handler {
     }
 
     getLifecycles(): Lifecycle[] {
-        return [lifecycles.selectVersion, lifecycles.releaseBranch, lifecycles.bump, lifecycles.push];
+        return [
+            lifecycles.selectVersion,
+            lifecycles.releaseBranch,
+            lifecycles.bump,
+            lifecycles.changelog,
+            lifecycles.commit,
+            lifecycles.push
+        ];
     }
 
     async verify() {

@@ -12,11 +12,15 @@ import { BumpLifecycle } from './bump';
 import { PushLifecycle } from './push';
 import { TagLifecycle } from './tag';
 import { PushTagsLifecycle } from './push-tags';
+import { ChangelogLifecycle } from './changelog';
+import { CommitLifecycle } from './commit';
 
 export const lifecycles = {
     selectVersion: new SelectVersionLifecycle(),
     releaseBranch: new ReleaseBranchLifecycle(),
     bump: new BumpLifecycle(),
+    changelog: new ChangelogLifecycle(),
+    commit: new CommitLifecycle(),
     push: new PushLifecycle(),
     tag: new TagLifecycle(),
     pushTags: new PushTagsLifecycle()
