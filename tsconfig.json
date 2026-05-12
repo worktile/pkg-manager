@@ -4,7 +4,7 @@
     "rootDir": "src",
     "baseUrl": ".",
     "target": "es2018",
-    "module": "commonjs",
+    "module": "node16",
     "moduleResolution": "node16",
     "declaration": true,
     "declarationMap": true,
