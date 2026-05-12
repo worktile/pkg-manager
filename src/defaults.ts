@@ -22,5 +22,6 @@ export const defaults: CommandOptions = {
     hooks: {},
     infile: 'CHANGELOG.md',
     tagPrefix: 'v',
-    cwd: process.cwd()
+    cwd: process.cwd(),
+    header: '# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n'
 };

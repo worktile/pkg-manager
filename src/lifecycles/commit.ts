@@ -19,7 +19,7 @@ export class CommitLifecycle extends Lifecycle {
     packages: Package[] = [];
 
     async run(context: CommandContext): Promise<void> {
-        if (context.options.skip?.commit || context.options?.packages?.length === 0) {
+        if (context.options.skip?.commit || !context.options?.packages) {
             return;
         }
 
