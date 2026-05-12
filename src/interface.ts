@@ -42,7 +42,13 @@ export type Hooks = {
      */
     posttag?: string;
 };
+
+export type Package = { path: string; bumpFiles?: BumpFile[]; infile?: string };
 export interface CommandOptions extends Config {
+    /**
+     * Packages to release,
+     */
+    packages?: Package[];
     /**
      * Explicit version or ReleaseType patch, minor, major
      */

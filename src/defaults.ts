@@ -11,7 +11,7 @@ export const defaults: CommandOptions = {
     defaultBranch: 'master',
     allowBranch: ['master', 'develop'],
     releaseBranchFormat: 'release-v{{version}}',
-    releaseCommitMessageFormat: "build: release {{currentTag}}",
+    releaseCommitMessageFormat: 'build: release {{currentTag}}',
     packageDir: 'built',
     dryRun: false,
     skip: {},
@@ -22,5 +22,6 @@ export const defaults: CommandOptions = {
     hooks: {},
     infile: 'CHANGELOG.md',
     tagPrefix: 'v',
-    cwd: process.cwd()
+    cwd: process.cwd(),
+    header: '# Changelog\n\nAll notable changes to this project will be documented in this file.\n\n'
 };

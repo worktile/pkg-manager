@@ -52,6 +52,14 @@ export const releaseCommand: CommandModule = {
                 alias: 'i',
                 describe: 'Read the CHANGELOG from this file',
                 default: defaults.infile
+            })
+            .option('packages', {
+                desc: `Packages to release, array of { path: string; bumpFiles?: BumpFile[]; infile?: string }`,
+                type: 'array'
+            })
+            .option('skip.confirm', {
+                desc: `Skip confirmation prompt`,
+                boolean: true
             });
 
         return yargs;
@@ -75,7 +83,8 @@ export const releaseCommand: CommandModule = {
             hooks: argv.hooks,
             infile: argv.infile,
             tagPrefix: argv.tagPrefix,
-            cwd: defaults.cwd
+            cwd: defaults.cwd,
+            packages: argv.packages
         };
         const handler = new ReleaseHandler(options);
         await handler.start().catch((error) => {

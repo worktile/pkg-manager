@@ -4,12 +4,14 @@
     "rootDir": "src",
     "baseUrl": ".",
     "target": "es2018",
-    "module": "commonjs",
+    "module": "node16",
+    "moduleResolution": "node16",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "composite": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "src/test", "lib"]
