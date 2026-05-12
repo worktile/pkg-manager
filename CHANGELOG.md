@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+# [0.2.0-next.0](https://github.com/worktile/pkg-manager/compare/v0.1.5...v0.2.0-next.0) (2026-05-12)
+
+
+### Features
+
+* **wpm:** lifecycles add changelog and commit ([dbcc686](https://github.com/worktile/pkg-manager/commit/dbcc686569b4be6e5e884eea71c9792b4a805335))
+
+
+
 ## [0.1.5](https://github.com/worktile/pkg-manager/compare/v0.1.4...v0.1.5) (2026-02-04)
 
 
