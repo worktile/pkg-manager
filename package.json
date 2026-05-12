@@ -25,6 +25,7 @@
     "release": "yarn release-only",
     "pub": "ts-node ./src/commands/index.ts publish",
     "pub-only": "npm publish --access=public",
+    "pub-next-only": "npm publish --access=public --tag=next",
     "wpm": "ts-node ./src/commands/index.ts",
     "test": "NODE_ENV=test mocha src/**/**/*.spec.ts --timeout 999999 --require ts-node/register/transpile-only",
     "start:docs": "docgeni serve --port 4500",
