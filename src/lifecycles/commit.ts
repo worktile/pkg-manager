@@ -9,7 +9,7 @@ import { Lifecycle } from './lifecycle';
 import { CommandContext, Package } from '../interface';
 import chalk from 'chalk';
 import { defaults } from '../defaults';
-import path from 'path';
+import { resolveFilePath } from '../utils';
 
 export class CommitLifecycle extends Lifecycle {
     nextVersion!: string;
@@ -54,20 +54,16 @@ export class CommitLifecycle extends Lifecycle {
     private collectCommitFiles(packages: Package[], projectRoot: string, options: any): Set<string> {
         const files = new Set<string>();
         for (const pkg of packages) {
-            const pkgPath = this.resolveFilePath(pkg.path, projectRoot);
+            const pkgPath = resolveFilePath(pkg.path, projectRoot);
             if (pkg.infile !== '') {
-                files.add(this.resolveFilePath((pkg.infile || this.defaultInfile) as string, pkgPath));
+                files.add(resolveFilePath((pkg.infile || this.defaultInfile) as string, pkgPath));
             }
             for (const file of pkg.bumpFiles || options.bumpFiles || []) {
-                files.add(this.resolveFilePath(typeof file === 'string' ? file : file.filename, pkgPath));
+                files.add(resolveFilePath(typeof file === 'string' ? file : file.filename, pkgPath));
             }
         }
-        files.add(this.resolveFilePath(options.infile || this.defaultInfile, projectRoot));
+        files.add(resolveFilePath(options.infile || this.defaultInfile, projectRoot));
         return files;
-    }
-
-    private resolveFilePath(file: string, basePath: string): string {
-        return path.isAbsolute(file) ? file : path.resolve(basePath, file);
     }
 
     private buildCommitMessage(options: any, nextVersion: string): string {

@@ -39,3 +39,7 @@ export function commaSeparatedList(value: string) {
 export function createSimpleGit(workspace: string = process.cwd()): SimpleGit {
     return simpleGit.call(simpleGit, workspace);
 }
+
+export function resolveFilePath(file: string, basePath: string): string {
+    return path.isAbsolute(file) ? file : path.resolve(basePath, file);
+}

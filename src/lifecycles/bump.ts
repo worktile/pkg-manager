@@ -10,7 +10,7 @@ import { Lifecycle } from './lifecycle';
 import { CommandContext, Package } from '../interface';
 import standardVersion from 'commit-and-tag-version';
 import chalk from 'chalk';
-import path from 'path';
+import { resolveFilePath } from '../utils';
 
 export class BumpLifecycle extends Lifecycle {
     nextVersion!: string;
@@ -49,7 +49,7 @@ export class BumpLifecycle extends Lifecycle {
 
         for (const pkg of this.packages) {
             this.logger.info(`Processing package: ${chalk.green(pkg.path)}`);
-            const pkgPath = this.resolveFilePath(pkg.path, projectRoot);
+            const pkgPath = resolveFilePath(pkg.path, projectRoot);
             const bumpFiles = this.resolveBumpFiles(pkg, baseOptions, pkgPath);
 
             const options: standardVersion.Options = {
@@ -73,13 +73,9 @@ export class BumpLifecycle extends Lifecycle {
 
         return bumpFiles.map((file: any) => {
             if (typeof file === 'string') {
-                return this.resolveFilePath(file, pkgPath);
+                return resolveFilePath(file, pkgPath);
             }
-            return { ...file, filename: this.resolveFilePath(file.filename, pkgPath) };
+            return { ...file, filename: resolveFilePath(file.filename, pkgPath) };
         });
-    }
-
-    private resolveFilePath(file: string, basePath: string): string {
-        return path.isAbsolute(file) ? file : path.resolve(basePath, file);
     }
 }

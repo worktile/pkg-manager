@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import { defaults } from '../defaults';
 import { exec } from 'child_process';
 import path from 'path';
+import { resolveFilePath } from '../utils';
 
 export class ChangelogLifecycle extends Lifecycle {
     currentVersion!: string;
@@ -39,12 +40,12 @@ export class ChangelogLifecycle extends Lifecycle {
         for (const pkg of this.packages) {
             if (!pkg.infile || pkg.infile === '') continue;
 
-            await this.generateChangelog(this.resolveFilePath(pkg.infile, path.resolve(cwd, pkg.path)), [pkg.path], cwd);
+            await this.generateChangelog(resolveFilePath(pkg.infile, path.resolve(cwd, pkg.path)), [pkg.path], cwd);
         }
 
         if (options.infile !== '') {
             await this.generateChangelog(
-                this.resolveFilePath(options.infile as string, cwd),
+                resolveFilePath(options.infile as string, cwd),
                 this.packages.map((p) => p.path),
                 cwd
             );
@@ -121,9 +122,5 @@ export class ChangelogLifecycle extends Lifecycle {
                 resolve(stdout.trim().split('\n')[0] || undefined);
             });
         });
-    }
-
-    private resolveFilePath(file: string, basePath: string): string {
-        return path.isAbsolute(file) ? file : path.resolve(basePath, file);
     }
 }
