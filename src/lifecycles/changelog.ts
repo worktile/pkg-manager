@@ -39,9 +39,13 @@ export class ChangelogLifecycle extends Lifecycle {
         // 3. 单独包 和 根层 若设置 infile 为空，意味着不生成 changelog
         if (this.packages.length) {
             for (const pkg of this.packages) {
-                if (!pkg.infile || pkg.infile === '') continue;
-
-                await this.generateChangelog(resolveFilePath(pkg.infile, path.resolve(cwd, pkg.path)), [pkg.path], cwd);
+                if (pkg?.infile !== '') {
+                    await this.generateChangelog(
+                        resolveFilePath((pkg.infile || defaults.infile) as string, path.resolve(cwd, pkg.path)),
+                        [pkg.path],
+                        cwd
+                    );
+                }
             }
         }
 
