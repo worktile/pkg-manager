@@ -12,10 +12,8 @@ import { lifecycles } from '../lifecycles';
 import { Lifecycle } from '../lifecycles/lifecycle';
 import { ValidationError } from '../errors';
 import { runLifecycleHook } from '../run-lifecycle-hook';
-import { logger } from '../logger';
 
 export class ReleaseHandler extends Handler {
-    logger = logger;
     name = 'release';
 
     constructor(options: CommandOptions) {
@@ -46,7 +44,7 @@ export class ReleaseHandler extends Handler {
         if (!this.context.options.bumpFiles) {
             return;
         }
-        this.context.options.bumpFiles = this.context.options.bumpFiles.map((item) => {
+        this.context.options.bumpFiles = this.context.options.bumpFiles.map(item => {
             if (typeof item !== 'string' && item.type === 'code') {
                 return {
                     filename: item.filename,
@@ -56,7 +54,6 @@ export class ReleaseHandler extends Handler {
                 return item;
             }
         });
-        this.logger.info(`Bump files: ${this.context.options.bumpFiles}`);
     }
 
     private normalizePackages() {
@@ -64,12 +61,12 @@ export class ReleaseHandler extends Handler {
         if (!packages || !Array.isArray(packages)) {
             return;
         }
-        this.context.options.packages = packages.map((pkg) => {
+        this.context.options.packages = packages.map(pkg => {
             if (typeof pkg === 'string') {
                 return { path: pkg };
             }
             if (pkg.bumpFiles) {
-                pkg.bumpFiles = pkg.bumpFiles.map((item) => {
+                pkg.bumpFiles = pkg.bumpFiles.map(item => {
                     if (typeof item !== 'string' && item.type === 'code') {
                         return {
                             filename: item.filename,
