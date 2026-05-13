@@ -2,7 +2,6 @@ module.exports = {
     allowBranch: ['master', 'v0.*'],
     bumpFiles: [
         'package.json',
-        'package-lock.json',
         {
             filename: './VERSION.txt',
             type: 'plain-text'
