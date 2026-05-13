@@ -70,6 +70,7 @@ export const releaseCommand: CommandModule = {
         }
         const options: CommandOptions = {
             dryRun: argv.dryRun,
+            force: argv.force,
             skip: argv.skip,
             defaultBranch: argv.defaultBranch,
             allowBranch: argv.allowBranch,

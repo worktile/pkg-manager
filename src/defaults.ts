@@ -14,6 +14,7 @@ export const defaults: CommandOptions = {
     releaseCommitMessageFormat: 'build: release {{currentTag}}',
     packageDir: 'built',
     dryRun: false,
+    force: false,
     skip: {},
     bumpFiles: ['package.json', 'package-lock.json', 'npm-shrinkwrap.json'],
     preset: 'angular',

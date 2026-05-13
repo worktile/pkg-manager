@@ -25,13 +25,15 @@ export class PublishHandler extends Handler {
     async verify() {
         const gitStatus = await this.context.git.status();
 
-        if (gitStatus.files.length > 0 && !this.context.options.dryRun) {
-            if (!this.context.options.dryRun) {
-                throw new ValidationError(
-                    'E_GIT_STATUS',
-                    `Your current branch has uncommitted code, please retry publish after clean it.`
-                );
-            }
+        if (
+            gitStatus.files.length > 0 &&
+            !this.context.options.dryRun &&
+            !this.context.options.force
+        ) {
+            throw new ValidationError(
+                'E_GIT_STATUS',
+                `Your current branch has uncommitted code, please retry publish after clean it.`
+            );
         }
         return true;
     }
