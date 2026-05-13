@@ -24,7 +24,6 @@ export class BumpLifecycle extends Lifecycle {
 
         const cwd = context.options?.cwd || process.cwd();
 
-        // 收集所有要 bump 的文件（root + packages）
         const allFiles = this.collectAllBumpFiles(context, cwd);
 
         if (context.options?.dryRun) {
@@ -40,7 +39,7 @@ export class BumpLifecycle extends Lifecycle {
     }
 
     /**
-     * 统一收集所有 bumpFiles
+     * 收集所有 bumpFiles：root + packages
      */
     private collectAllBumpFiles(context: CommandContext, cwd: string): string[] {
         const options = context.options || {};
@@ -49,7 +48,7 @@ export class BumpLifecycle extends Lifecycle {
         // root bumpFiles
         files.push(...this.normalizeBumpFiles(options.bumpFiles, cwd));
 
-        // packages bumpFiles（如果存在）
+        // packages bumpFiles
         if (this.packages.length > 0) {
             for (const pkg of this.packages) {
                 const pkgRoot = resolveFilePath(pkg.path, cwd);
