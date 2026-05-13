@@ -8,9 +8,9 @@
 
 import { Lifecycle } from './lifecycle';
 import { CommandContext, Package } from '../interface';
-import standardVersion from 'commit-and-tag-version';
 import chalk from 'chalk';
 import { resolveFilePath } from '../utils';
+import fs from 'fs/promises';
 
 export class BumpLifecycle extends Lifecycle {
     nextVersion!: string;
@@ -22,60 +22,67 @@ export class BumpLifecycle extends Lifecycle {
         this.nextVersion = context.versions.next;
         this.packages = context.options?.packages || [];
 
-        if (this.packages.length > 0) {
-            await this.bumpMultiPackage(context);
-        } else {
-            await this.bumpSinglePackage(context);
+        const cwd = context.options?.cwd || process.cwd();
+
+        // 收集所有要 bump 的文件（root + packages）
+        const allFiles = this.collectAllBumpFiles(context, cwd);
+
+        if (context.options?.dryRun) {
+            this.logger.info('[dry-run]', allFiles);
+            return;
+        }
+
+        for (const file of allFiles) {
+            await this.bumpFileVersion(file, this.nextVersion);
         }
 
         await this.runLifecycleHook('postbump', context.options, this.getLifecycleHookParams(context));
     }
 
-    private async bumpSinglePackage(context: CommandContext): Promise<void> {
-        this.logger.info(`using commit-and-tag-version to bumping`);
-        const options: standardVersion.Options = {
-            ...context.options,
-            releaseAs: this.nextVersion,
-            skip: { ...context.options.skip, tag: true }
-        } as standardVersion.Options;
-        await standardVersion(options);
-    }
+    /**
+     * 统一收集所有 bumpFiles
+     */
+    private collectAllBumpFiles(context: CommandContext, cwd: string): string[] {
+        const options = context.options || {};
+        const files: string[] = [];
 
-    private async bumpMultiPackage(context: CommandContext): Promise<void> {
-        this.logger.info('using commit-and-tag-version for monorepo');
+        // root bumpFiles
+        files.push(...this.normalizeBumpFiles(options.bumpFiles, cwd));
 
-        const { options: baseOptions } = context;
-        const projectRoot = baseOptions.cwd || process.cwd();
+        // packages bumpFiles（如果存在）
+        if (this.packages.length > 0) {
+            for (const pkg of this.packages) {
+                const pkgRoot = resolveFilePath(pkg.path, cwd);
+                const bumpFiles = this.normalizeBumpFiles(pkg.bumpFiles || options.bumpFiles, pkgRoot);
 
-        for (const pkg of this.packages) {
-            this.logger.info(`Processing package: ${chalk.green(pkg.path)}`);
-            const pkgPath = resolveFilePath(pkg.path, projectRoot);
-            const bumpFiles = this.resolveBumpFiles(pkg, baseOptions, pkgPath);
-
-            const options: standardVersion.Options = {
-                ...baseOptions,
-                releaseAs: this.nextVersion,
-                cwd: projectRoot,
-                bumpFiles,
-                path: pkg.path,
-                releaseCount: 1,
-                outputUnreleased: false,
-                skip: { ...baseOptions.skip, tag: true, commit: true, changelog: true }
-            } as standardVersion.Options;
-
-            await standardVersion(options);
-        }
-    }
-
-    private resolveBumpFiles(pkg: Package, baseOptions: any, pkgPath: string): any[] | undefined {
-        const bumpFiles = pkg.bumpFiles || baseOptions.bumpFiles;
-        if (!bumpFiles) return undefined;
-
-        return bumpFiles.map((file: any) => {
-            if (typeof file === 'string') {
-                return resolveFilePath(file, pkgPath);
+                files.push(...bumpFiles);
             }
-            return { ...file, filename: resolveFilePath(file.filename, pkgPath) };
+        }
+
+        return files;
+    }
+
+    private normalizeBumpFiles(bumpFiles: any, basePath: string): string[] {
+        if (!bumpFiles) return [];
+
+        return bumpFiles.map((file: any) =>
+            typeof file === 'string' ? resolveFilePath(file, basePath) : resolveFilePath(file.filename, basePath)
+        );
+    }
+
+    private async bumpFileVersion(filePath: string, nextVersion: string) {
+        const content = await fs.readFile(filePath, 'utf-8').catch(() => {
+            throw new Error(`Cannot read file: ${filePath}`);
         });
+
+        const json = JSON.parse(content);
+        if (!json?.version) {
+            console.warn(chalk.yellow(`Skip (no version): ${filePath}`));
+            return;
+        }
+
+        json.version = nextVersion;
+
+        await fs.writeFile(filePath, JSON.stringify(json, null, 2) + '\n', 'utf-8');
     }
 }
