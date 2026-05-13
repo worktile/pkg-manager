@@ -2,10 +2,10 @@ module.exports = {
     allowBranch: ['master', 'v0.*'],
     bumpFiles: [
         'package.json',
-        {
-            filename: './VERSION.txt',
-            type: 'plain-text'
-        },
+        // {
+        //     filename: './VERSION.txt',
+        //     type: 'plain-text'
+        // },
         {
             filename: './src/version.json',
             type: 'json'

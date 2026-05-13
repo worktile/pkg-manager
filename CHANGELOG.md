@@ -11,6 +11,41 @@ All notable changes to this project will be documented in this file. See [commit
 
 
 
+# 0.2.0-next.3 (2026-05-13)
+
+
+### Bug Fixes
+
+* add "conventional-changelog-angular": "^5.0.13" to peerDependencies resolve changelog can't generate when conventional-changelog-angular installed is new version ([a428692](https://github.com/smile1016/pkg-manager/commit/a42869221f09d3c66c4d204b7d10e839ac5418dd))
+* bump commit-and-tag-version to 12.5.0 ([7d7a2a3](https://github.com/smile1016/pkg-manager/commit/7d7a2a3c06b1f7b17ff74f481493943a9c6f1c13))
+* bump docgeni/toolkit for success ([9c43102](https://github.com/smile1016/pkg-manager/commit/9c43102044e1cf3495ee93fbfebab042253ca34c))
+* fix git publish command and test ([eaf6b2b](https://github.com/smile1016/pkg-manager/commit/eaf6b2bc3b33d2c3503eb8422f8de91ddfb89edc))
+* GitHub createPRUrl is wrong ([cf2263c](https://github.com/smile1016/pkg-manager/commit/cf2263ced2461f45f38be6b92d116931462d1eea))
+* push origin to current branch when releaseBranch is empty ([642cee2](https://github.com/smile1016/pkg-manager/commit/642cee2e453c358d94e8245e8f9c03b7cfca1005))
+* remove composer.lock ([69bdead](https://github.com/smile1016/pkg-manager/commit/69bdead18ccd56b6b8e93008fa7e9bf7871326d7))
+* remove v prefix from releaseCommitMessageFormat ([2c01667](https://github.com/smile1016/pkg-manager/commit/2c01667f56996d0034cecd1e75f74d500777dfa1))
+* skip branch when release ([96fe969](https://github.com/smile1016/pkg-manager/commit/96fe969a6419bdb235bd4a53f891b5c583f5e8f2))
+* update commit type chore to build ([7007060](https://github.com/smile1016/pkg-manager/commit/70070601633f78ad7ae0d7fd5b9b5bc62b8c6999))
+* update version of commit-and-tag-version to 12.4.0 ([c7da33f](https://github.com/smile1016/pkg-manager/commit/c7da33f11b7bfc3e4f66a02fc1cf1ac6ccbc9d8e))
+* update version to currentTag for releaseCommitMessageFormat ([5070841](https://github.com/smile1016/pkg-manager/commit/5070841679a6b6cb046cd5dd3a058f4e2fb95e5f))
+
+
+### Features
+
+* add prebump and postbump hooks ([29693fc](https://github.com/smile1016/pkg-manager/commit/29693fc1d3a4ed0a4bb470389e2ff088101f7732))
+* add pub-next-only ([f305f58](https://github.com/smile1016/pkg-manager/commit/f305f5827f749a1d76877aa70d1c0ae4995012f7))
+* add skip confirm ([4e22477](https://github.com/smile1016/pkg-manager/commit/4e2247746633d93d07f9122bca64626c4c577632))
+* bump cosmiconfig to 9.0.0 support esm ([88c4b94](https://github.com/smile1016/pkg-manager/commit/88c4b94adc934c6dcf5ac0b157edc273b5c145e7))
+* inital wpm release ([0119674](https://github.com/smile1016/pkg-manager/commit/0119674ae4c74b8a35031882bae5e59548e959d1))
+* now push lifecycle prompts pr url ([08bff76](https://github.com/smile1016/pkg-manager/commit/08bff76e8f8d2554637dabc3d47c34f11f66dab2))
+* remove engines ([d0c81a8](https://github.com/smile1016/pkg-manager/commit/d0c81a8ea57c01601158d736bcdc58ce7390729e))
+* runLifecycleHook support multiple version ([afd53b2](https://github.com/smile1016/pkg-manager/commit/afd53b2c5556bb21176c7de0289166b68f25feb3))
+* support --force for wpm publish #NEXUS-1865 ([8cd3542](https://github.com/smile1016/pkg-manager/commit/8cd35421ec6865a43896eab5c34c7dccd7875f2a)), closes [#NEXUS-1865](https://github.com/smile1016/pkg-manager/issues/NEXUS-1865)
+* update package name to @worktile/pm ([cf19799](https://github.com/smile1016/pkg-manager/commit/cf19799f386c4aecd99b37ee2a0d0de7b4b8627d))
+* update releaseCommitMessageFormat to "build: release v{{version}}" ([dae1ea8](https://github.com/smile1016/pkg-manager/commit/dae1ea8558a19217adf1163fe7f1aeb1cfa989b0))
+* update releaseCommitMessageFormat to "build: release v{{version}}" ([#15](https://github.com/smile1016/pkg-manager/issues/15)) ([3f16a75](https://github.com/smile1016/pkg-manager/commit/3f16a757765fba75c7f2df39edd625fe492d9d5e))
+* **wpm:** lifecycles add changelog and commit ([dbcc686](https://github.com/smile1016/pkg-manager/commit/dbcc686569b4be6e5e884eea71c9792b4a805335))
+
 ## [0.1.5](https://github.com/worktile/pkg-manager/compare/v0.1.4...v0.1.5) (2026-02-04)
 
 
