@@ -36,6 +36,13 @@ const argv = yargs(hideBin(process.argv))
     default: defaults.dryRun,
     global: true,
   })
+  .option("force", {
+    alias: "f",
+    boolean: true,
+    desc: `Ignore uncommitted changes checks (e.g. for publish)`,
+    default: defaults.force,
+    global: true,
+  })
   .option("issue-url-format", {
     default: defaults.issueUrlFormat,
     string: true,

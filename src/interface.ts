@@ -60,6 +60,12 @@ export interface CommandOptions extends Config {
      */
     dryRun?: boolean;
     /**
+     * When true, skip checks for a dirty working tree (e.g. during publish).
+     *
+     * @default false
+     */
+    force?: boolean;
+    /**
      * Default or base branch, default is master, create release based on this branch
      *
      * @default master
