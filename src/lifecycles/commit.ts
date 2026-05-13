@@ -19,7 +19,7 @@ export class CommitLifecycle extends Lifecycle {
     packages: Package[] = [];
 
     async run(context: CommandContext): Promise<void> {
-        if (context.options.skip?.commit || !context.options?.packages) {
+        if (context.options.skip?.commit) {
             return;
         }
 
@@ -36,38 +36,68 @@ export class CommitLifecycle extends Lifecycle {
     private async commitChanges(context: CommandContext): Promise<void> {
         const { options, git } = context;
 
+        if (!git) {
+            throw new Error('Git context is not available');
+        }
+
         const projectRoot = options.cwd || process.cwd();
+
         const allFiles = this.collectCommitFiles(this.packages, projectRoot, options);
+
         const commitMessage = this.buildCommitMessage(options, this.nextVersion);
 
         this.logger.info(`Committing ${allFiles.size} files with message: ${chalk.green(commitMessage)}`);
+
         if (options.dryRun) {
+            this.logger.info(`[dry-run] git add ${Array.from(allFiles).join(' ')}`);
+
             this.logger.info(`[dry-run] git commit -m "${commitMessage}"`);
+
             return;
         }
 
-        if (!git) throw new Error('Git context is not available');
         await git.add(Array.from(allFiles));
         await git.commit(commitMessage);
     }
 
+    /**
+     * 收集所有需要 commit 的文件：root infile, root bumpFiles, package infile, package bumpFiles
+     */
     private collectCommitFiles(packages: Package[], projectRoot: string, options: any): Set<string> {
         const files = new Set<string>();
-        for (const pkg of packages) {
-            const pkgPath = resolveFilePath(pkg.path, projectRoot);
-            if (pkg.infile !== '') {
-                files.add(resolveFilePath((pkg.infile || this.defaultInfile) as string, pkgPath));
-            }
-            for (const file of pkg.bumpFiles || options.bumpFiles || []) {
-                files.add(resolveFilePath(typeof file === 'string' ? file : file.filename, pkgPath));
+
+        // 1. root infile
+        if (options.infile !== '') {
+            files.add(resolveFilePath(options.infile || this.defaultInfile, projectRoot));
+        }
+
+        // 2. root bumpFiles
+        for (const file of options.bumpFiles || []) {
+            files.add(resolveFilePath(typeof file === 'string' ? file : file.filename, projectRoot));
+        }
+
+        if (this.packages?.length) {
+            for (const pkg of packages) {
+                const pkgPath = resolveFilePath(pkg.path, projectRoot);
+
+                // 3. package infile
+                if (pkg.infile !== '') {
+                    files.add(resolveFilePath(pkg.infile || (this.defaultInfile as string), pkgPath));
+                }
+
+                // 4. package bumpFiles
+                for (const file of pkg.bumpFiles || options.bumpFiles || []) {
+                    files.add(resolveFilePath(typeof file === 'string' ? file : file.filename, pkgPath));
+                }
             }
         }
-        files.add(resolveFilePath(options.infile || this.defaultInfile, projectRoot));
+
         return files;
     }
 
     private buildCommitMessage(options: any, nextVersion: string): string {
         const format = options.releaseCommitMessageFormat || defaults.releaseCommitMessageFormat;
+
         return format.replace(/\{\{currentTag\}\}/g, nextVersion);
     }
 }

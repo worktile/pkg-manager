@@ -23,7 +23,7 @@ export class ChangelogLifecycle extends Lifecycle {
     async run(context: CommandContext): Promise<void> {
         const { options, versions } = context;
 
-        if (options.skip?.changelog || !options?.packages) return;
+        if (options.skip?.changelog) return;
 
         await this.runLifecycleHook('prechangelog', options, this.getLifecycleHookParams(context));
 
@@ -37,10 +37,16 @@ export class ChangelogLifecycle extends Lifecycle {
         // 1. 生成每个包的 changelog
         // 2. 生成 .wpmrc.ts 所在路径的根层 changelog
         // 3. 单独包 和 根层 若设置 infile 为空，意味着不生成 changelog
-        for (const pkg of this.packages) {
-            if (!pkg.infile || pkg.infile === '') continue;
-
-            await this.generateChangelog(resolveFilePath(pkg.infile, path.resolve(cwd, pkg.path)), [pkg.path], cwd);
+        if (this.packages.length) {
+            for (const pkg of this.packages) {
+                if (pkg?.infile !== '') {
+                    await this.generateChangelog(
+                        resolveFilePath((pkg.infile || defaults.infile) as string, path.resolve(cwd, pkg.path)),
+                        [pkg.path],
+                        cwd
+                    );
+                }
+            }
         }
 
         if (options.infile !== '') {
@@ -78,7 +84,7 @@ export class ChangelogLifecycle extends Lifecycle {
             .commits({
                 to: 'HEAD',
                 path: pkgPath,
-                ...(commit && { from: commit })
+                ...(commit ? { from: commit } : {})
             })
             .context({ version: this.nextVersion })
             .options({ outputUnreleased: true });

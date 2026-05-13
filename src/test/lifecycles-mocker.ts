@@ -19,6 +19,7 @@ export class LifecyclesMocker {
     runs: {
         selectVersion: SinonStub;
         releaseBranch: SinonStub;
+        changelog: SinonStub;
         bump: SinonStub;
         tag: SinonStub;
         push: SinonStub;
@@ -31,6 +32,7 @@ export class LifecyclesMocker {
         this.runs = {
             selectVersion: sinon.stub(lifecycles.selectVersion, 'run'),
             releaseBranch: sinon.stub(lifecycles.releaseBranch, 'run'),
+            changelog: sinon.stub(lifecycles.changelog, 'run'),
             bump: sinon.stub(lifecycles.bump, 'run'),
             tag: sinon.stub(lifecycles.tag, 'run'),
             push: sinon.stub(lifecycles.push, 'run'),
