@@ -84,7 +84,7 @@ export class ChangelogLifecycle extends Lifecycle {
             .commits({
                 to: 'HEAD',
                 path: pkgPath,
-                ...(commit && { from: commit })
+                ...(commit ? { from: commit } : {})
             })
             .context({ version: this.nextVersion })
             .options({ outputUnreleased: true });
