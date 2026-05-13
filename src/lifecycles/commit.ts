@@ -10,6 +10,7 @@ import { CommandContext, Package } from '../interface';
 import chalk from 'chalk';
 import { defaults } from '../defaults';
 import { resolveFilePath } from '../utils';
+import fs from 'fs';
 
 export class CommitLifecycle extends Lifecycle {
     nextVersion!: string;
@@ -66,14 +67,22 @@ export class CommitLifecycle extends Lifecycle {
     private collectCommitFiles(packages: Package[], projectRoot: string, options: any): Set<string> {
         const files = new Set<string>();
 
+        const addFileIfExists = (filePath: string) => {
+            if (fs.existsSync(filePath)) {
+                files.add(filePath);
+            } else {
+                this.logger.warn(chalk.yellow(`Skip (file not found): ${filePath}`));
+            }
+        };
+
         // 1. root infile
         if (options.infile !== '') {
-            files.add(resolveFilePath(options.infile || this.defaultInfile, projectRoot));
+            addFileIfExists(resolveFilePath(options.infile || this.defaultInfile, projectRoot));
         }
 
         // 2. root bumpFiles
         for (const file of options.bumpFiles || []) {
-            files.add(resolveFilePath(typeof file === 'string' ? file : file.filename, projectRoot));
+            addFileIfExists(resolveFilePath(typeof file === 'string' ? file : file.filename, projectRoot));
         }
 
         if (this.packages?.length) {
@@ -82,12 +91,12 @@ export class CommitLifecycle extends Lifecycle {
 
                 // 3. package infile
                 if (pkg.infile !== '') {
-                    files.add(resolveFilePath(pkg.infile || (this.defaultInfile as string), pkgPath));
+                    addFileIfExists(resolveFilePath(pkg.infile || (this.defaultInfile as string), pkgPath));
                 }
 
                 // 4. package bumpFiles
                 for (const file of pkg.bumpFiles || options.bumpFiles || []) {
-                    files.add(resolveFilePath(typeof file === 'string' ? file : file.filename, pkgPath));
+                    addFileIfExists(resolveFilePath(typeof file === 'string' ? file : file.filename, pkgPath));
                 }
             }
         }
