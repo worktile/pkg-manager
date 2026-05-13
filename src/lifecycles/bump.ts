@@ -46,17 +46,15 @@ export class BumpLifecycle extends Lifecycle {
         const options = context.options || {};
         const files: BumpFile[] = [];
 
-        // root bumpFiles
         files.push(...this.normalizeBumpFiles(options.bumpFiles, cwd));
 
-        // packages bumpFiles
-        if (this.packages.length > 0) {
-            for (const pkg of this.packages) {
-                const pkgRoot = resolveFilePath(pkg.path, cwd);
-                const bumpFiles = this.normalizeBumpFiles(pkg.bumpFiles || options.bumpFiles, pkgRoot);
+        if (!this.packages.length) return files;
 
-                files.push(...bumpFiles);
-            }
+        for (const pkg of this.packages) {
+            const pkgRoot = resolveFilePath(pkg.path, cwd);
+            const bumpFiles = this.normalizeBumpFiles(pkg.bumpFiles || options.bumpFiles, pkgRoot);
+
+            files.push(...bumpFiles);
         }
 
         return files;
@@ -78,7 +76,9 @@ export class BumpLifecycle extends Lifecycle {
 
     private getUpdater(type?: string, updaterPath?: string): VersionUpdater {
         if (updaterPath) {
-            const customUpdater = require(updaterPath);
+            const mod = require(updaterPath);
+            const customUpdater = mod.default || mod;
+
             return {
                 async read(filename: string, contents: string): Promise<string> {
                     return customUpdater.readVersion(contents);
@@ -94,19 +94,27 @@ export class BumpLifecycle extends Lifecycle {
                 return new PlainTextUpdater();
             case 'ts':
                 return new TypeScriptUpdater();
-            case 'json':
             default:
                 return new JsonUpdater();
         }
     }
 
+    /**
+     * 更新文件版本号
+     * bumpFile 是 string 默认 json updater
+     * bumpFile 是对象 根据 type 和 updater 来更新
+     */
     private async bumpFileVersion(bumpFile: BumpFile, nextVersion: string) {
         const filePath = typeof bumpFile === 'string' ? bumpFile : bumpFile.filename;
+
         const type = typeof bumpFile === 'string' ? 'json' : bumpFile.type;
-        const updaterPath = typeof bumpFile !== 'string' ? bumpFile.updater : undefined;
+
+        const updaterPath = typeof bumpFile === 'string' ? undefined : bumpFile.updater;
+
         console.log(filePath, type, updaterPath);
 
         let content: string;
+
         try {
             content = await fs.readFile(filePath, 'utf-8');
         } catch {
@@ -117,6 +125,7 @@ export class BumpLifecycle extends Lifecycle {
         const updater = this.getUpdater(type, updaterPath);
 
         const currentVersion = await updater.read(filePath, content);
+
         if (!currentVersion) {
             this.logger.warn(chalk.yellow(`Skip (no version): ${filePath}`));
             return;
