@@ -60,6 +60,12 @@ export class BumpLifecycle extends Lifecycle {
         return files;
     }
 
+    /**
+     * 标准化 bumpFiles 格式
+     * 1. 字符串直接返回
+     * 2. 对象根据 type 来判断，code 类型的需要添加 updater
+     * 3. 其他情况添加处理后的 filename 字段
+     */
     private normalizeBumpFiles(bumpFiles: any, basePath: string): BumpFile[] {
         if (!bumpFiles) return [];
 
@@ -113,9 +119,9 @@ export class BumpLifecycle extends Lifecycle {
     private async bumpFileVersion(bumpFile: BumpFile, nextVersion: string) {
         const filePath = typeof bumpFile === 'string' ? bumpFile : bumpFile.filename;
 
-        const type = typeof bumpFile === 'string' ? 'json' : bumpFile.type;
+        const type = typeof bumpFile === 'string' ? 'json' : bumpFile?.type;
 
-        const updaterPath = typeof bumpFile === 'string' ? undefined : bumpFile.updater;
+        const updaterPath = typeof bumpFile === 'string' ? undefined : bumpFile?.updater;
 
         let content: string;
 
