@@ -144,7 +144,7 @@ export class BumpLifecycle extends Lifecycle {
         const result = await updater.write(filePath, content, nextVersion);
 
         if (result !== undefined) {
-            await fs.writeFile(filePath, result as any, 'utf-8');
+            await fs.writeFile(filePath, result as string, 'utf-8');
         }
     }
 }
