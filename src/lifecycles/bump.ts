@@ -111,8 +111,6 @@ export class BumpLifecycle extends Lifecycle {
 
         const updaterPath = typeof bumpFile === 'string' ? undefined : bumpFile.updater;
 
-        console.log(filePath, type, updaterPath);
-
         let content: string;
 
         try {
