@@ -103,7 +103,6 @@ export class SelectVersionLifecycle extends Lifecycle {
         const tagVersion = await latestSemverTag({ tagPrefix: context.options.tagPrefix });
         const version = context.versions.current;
         this.logger.info(`current version is ${chalk.green(version)} and latest tag is ${chalk.green(tagVersion)}`);
-        context.options.releaseAs =context.versions.next
         let nextVersion = this.getNextVersionFromExplicit(context);
         if (!nextVersion) {
             nextVersion = await this.getNextVersionFromPrompt(context);
