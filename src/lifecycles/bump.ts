@@ -71,7 +71,7 @@ export class BumpLifecycle extends Lifecycle {
 
         return bumpFiles.map((file: any): BumpFile => {
             if (typeof file === 'string') {
-                return file;
+                return resolveFilePath(file, basePath);
             }
             if (file.type === 'code') {
                 return {
