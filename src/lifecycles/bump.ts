@@ -67,6 +67,12 @@ export class BumpLifecycle extends Lifecycle {
             if (typeof file === 'string') {
                 return file;
             }
+            if (file.type === 'code') {
+                return {
+                    filename: resolveFilePath(file.filename, basePath),
+                    updater: require.resolve('../updaters/code-updater')
+                };
+            }
             return {
                 ...file,
                 filename: resolveFilePath(file.filename, basePath)
