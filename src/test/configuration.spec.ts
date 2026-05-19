@@ -16,11 +16,9 @@ describe('#pm-configuration', () => {
         expect(config.allowBranch).deep.equals(['master', 'v0.*']);
     });
 
-    // it('should get correct wtpmrc file', () => {
-    //     const config = getConfiguration({
-    //         stopDir: path.resolve(__dirname, './')
-    //     });
-    //     console.log(path.resolve(__dirname, './'));
-    //     console.log(config);
-    // });
+    it('should load configuration from a specified config file', () => {
+        const configPath = path.resolve(__dirname, './fixtures/custom.wpmrc.js');
+        const config = getConfiguration(undefined, configPath);
+        expect(config.allowBranch).deep.equals(['custom-branch']);
+    });
 });
