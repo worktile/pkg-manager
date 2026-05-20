@@ -11,6 +11,8 @@ import { CommandContext, Package, BumpFile } from '../interface';
 import chalk from 'chalk';
 import { resolveFilePath } from '../utils';
 import fs from 'fs/promises';
+import path from 'path';
+import writeJsonFile from 'write-json-file';
 import { JsonUpdater, PlainTextUpdater, TypeScriptUpdater, VersionUpdater } from '../updaters';
 
 export class BumpLifecycle extends Lifecycle {
@@ -35,6 +37,7 @@ export class BumpLifecycle extends Lifecycle {
         for (const file of allFiles) {
             await this.bumpFileVersion(file, this.nextVersion);
         }
+        await this.syncLockfileWorkspaceVersion(allFiles, cwd, context);
 
         await this.runLifecycleHook('postbump', context.options, this.getLifecycleHookParams(context));
     }
@@ -146,5 +149,56 @@ export class BumpLifecycle extends Lifecycle {
         if (result !== undefined) {
             await fs.writeFile(filePath, result as string, 'utf-8');
         }
+    }
+
+    private async syncLockfileWorkspaceVersion(allFiles: BumpFile[], cwd: string, context: CommandContext): Promise<void> {
+        // 从 .wpmrc.ts 中 bumpFiles 里拿到的 package.json 路径，即拿到本次 bump 的包
+        const bumpedPkgJsonPaths = allFiles
+            .map((file) => (typeof file === 'string' ? file : file.filename))
+            .filter((filePath) => path.basename(filePath) === 'package.json');
+
+        if (!bumpedPkgJsonPaths.length) {
+            return;
+        }
+
+        // 从发版时的 cwd 开始，逐级向上找第一个带 packages 字段的 package-lock.json，作为 monorepo 的 lockfile
+        let lockfilePath = null;
+        let lockfileContent = null;
+        while (true) {
+            const candidate = path.join(cwd, 'package-lock.json');
+            try {
+                const content = JSON.parse(await fs.readFile(candidate, 'utf-8'));
+                if (content.packages) {
+                    lockfilePath = candidate;
+                    lockfileContent = content;
+                    break;
+                }
+            } catch {
+                // continue
+            }
+            const parentDir = path.dirname(cwd);
+            if (parentDir === cwd) return;
+            cwd = parentDir;
+        }
+
+        // 根据已 bump 的 package.json，映射到 lockfile packages 里对应的 key，并写入新版本
+        const lockfileDir = path.dirname(lockfilePath);
+        for (const pkgJsonPath of bumpedPkgJsonPaths) {
+            const relativePath = path.relative(lockfileDir, pkgJsonPath).replace(/\\/g, '/');
+            const packages = lockfileContent!.packages;
+            if (relativePath === 'package.json') {
+                if (packages?.['']) {
+                    packages[''].version = this.nextVersion;
+                }
+            } else if (relativePath.endsWith('/package.json')) {
+                const workspaceKey = path.posix.dirname(relativePath);
+                if (packages?.[workspaceKey]) {
+                    packages[workspaceKey].version = this.nextVersion;
+                }
+            }
+        }
+
+        await writeJsonFile(lockfilePath, lockfileContent, { detectIndent: true, indent: 2 });
+        context.extraCommitFiles = [...(context.extraCommitFiles || []), lockfilePath];
     }
 }
