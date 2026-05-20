@@ -11,6 +11,8 @@ import { CommandContext, Package, BumpFile } from '../interface';
 import chalk from 'chalk';
 import { resolveFilePath } from '../utils';
 import fs from 'fs/promises';
+import path from 'path';
+import writeJsonFile from 'write-json-file';
 import { JsonUpdater, PlainTextUpdater, TypeScriptUpdater, VersionUpdater } from '../updaters';
 
 export class BumpLifecycle extends Lifecycle {
@@ -35,6 +37,7 @@ export class BumpLifecycle extends Lifecycle {
         for (const file of allFiles) {
             await this.bumpFileVersion(file, this.nextVersion);
         }
+        await this.syncLockfileWorkspaceVersion(allFiles, cwd, context);
 
         await this.runLifecycleHook('postbump', context.options, this.getLifecycleHookParams(context));
     }
@@ -146,5 +149,65 @@ export class BumpLifecycle extends Lifecycle {
         if (result !== undefined) {
             await fs.writeFile(filePath, result as string, 'utf-8');
         }
+    }
+
+    private async syncLockfileWorkspaceVersion(allFiles: BumpFile[], scanDir: string, context: CommandContext): Promise<void> {
+        // Collect bumped package.json paths from bumpFiles
+        const bumpedPkgJsonPaths = allFiles
+            .map((file) => (typeof file === 'string' ? file : file.filename))
+            .filter((filePath) => path.basename(filePath) === 'package.json');
+
+        if (!bumpedPkgJsonPaths.length) {
+            return;
+        }
+
+        // Find monorepo package-lock.json by scanning upward
+        let lockfilePath = null;
+        let lockfileContent = null;
+        while (true) {
+            const candidate = path.join(scanDir, 'package-lock.json');
+            try {
+                const content = JSON.parse(await fs.readFile(candidate, 'utf-8'));
+                if (content.packages) {
+                    lockfilePath = candidate;
+                    lockfileContent = content;
+                    break;
+                }
+            } catch {
+                // continue
+            }
+            const parentDir = path.dirname(scanDir);
+            if (parentDir === scanDir) {
+                return;
+            }
+            scanDir = parentDir;
+        }
+
+        // Update packages[workspaceKey].version according to bumped package
+        const lockfileDir = path.dirname(lockfilePath);
+        let updated = false;
+        for (const pkgJsonPath of bumpedPkgJsonPaths) {
+            const relativePath = path.relative(lockfileDir, pkgJsonPath).replace(/\\/g, '/');
+            const packages = lockfileContent!.packages;
+            if (relativePath === 'package.json') {
+                if (packages?.[''] && packages[''].version !== this.nextVersion) {
+                    packages[''].version = this.nextVersion;
+                    updated = true;
+                }
+            } else if (relativePath.endsWith('/package.json')) {
+                const workspaceKey = path.posix.dirname(relativePath);
+                if (packages?.[workspaceKey] && packages[workspaceKey].version !== this.nextVersion) {
+                    packages[workspaceKey].version = this.nextVersion;
+                    updated = true;
+                }
+            }
+        }
+
+        if (!updated) {
+            return;
+        }
+
+        await writeJsonFile(lockfilePath, lockfileContent, { detectIndent: true, indent: 2 });
+        context.extraCommitFiles = [...(context.extraCommitFiles || []), lockfilePath];
     }
 }

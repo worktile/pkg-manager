@@ -158,4 +158,5 @@ export interface CommandContext {
     releaseTag?: string;
     currentBranch?: string;
     targetBranch?: string;
+    extraCommitFiles?: string[];
 }
