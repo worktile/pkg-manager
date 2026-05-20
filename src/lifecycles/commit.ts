@@ -43,7 +43,7 @@ export class CommitLifecycle extends Lifecycle {
 
         const projectRoot = options.cwd || process.cwd();
 
-        const allFiles = this.collectCommitFiles(this.packages, projectRoot, options);
+        const allFiles = this.collectCommitFiles(this.packages, projectRoot, options, context);
 
         const commitMessage = this.buildCommitMessage(options, this.nextVersion);
 
@@ -64,7 +64,7 @@ export class CommitLifecycle extends Lifecycle {
     /**
      * 收集所有需要 commit 的文件：root infile, root bumpFiles, package infile, package bumpFiles
      */
-    private collectCommitFiles(packages: Package[], projectRoot: string, options: any): Set<string> {
+    private collectCommitFiles(packages: Package[], projectRoot: string, options: any, context: CommandContext): Set<string> {
         const files = new Set<string>();
 
         const addFileIfExists = (filePath: string) => {
@@ -99,6 +99,10 @@ export class CommitLifecycle extends Lifecycle {
                     addFileIfExists(resolveFilePath(typeof file === 'string' ? file : file.filename, pkgPath));
                 }
             }
+        }
+
+        for (const file of context.extraCommitFiles || []) {
+            addFileIfExists(file);
         }
 
         return files;
