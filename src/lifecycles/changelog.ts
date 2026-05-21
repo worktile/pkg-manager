@@ -12,6 +12,7 @@ import { defaults } from '../defaults';
 import { exec } from 'child_process';
 import path from 'path';
 import { resolveFilePath } from '../utils';
+import { customPresets } from '../preset';
 
 export class ChangelogLifecycle extends Lifecycle {
     currentVersion!: string;
@@ -77,8 +78,17 @@ export class ChangelogLifecycle extends Lifecycle {
     private async getChangelogForPath(commit: string | undefined, pkgPath: string[], cwd?: string): Promise<string> {
         const { ConventionalChangelog } = await import('conventional-changelog');
 
-        const generator = new ConventionalChangelog(cwd || process.cwd())
-            .loadPreset(this.context.options.preset || defaults.preset)
+        const presetName = this.context.options.preset || defaults.preset;
+        const generator = new ConventionalChangelog(cwd || process.cwd());
+
+        const customCreatePreset = customPresets[presetName];
+        if (customCreatePreset) {
+            generator.config(customCreatePreset());
+        } else {
+            generator.loadPreset(presetName);
+        }
+
+        generator
             .readPackage()
             .readRepository()
             .commits({
