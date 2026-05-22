@@ -119,7 +119,7 @@ export abstract class Handler {
             await git.pull(targetBranch);
         }
 
-        const pkg = readPackageJson();
+        const pkg = readPackageJson(this.options.packageJsonPath);
         this.context = {
             options: this.options,
             versions: {

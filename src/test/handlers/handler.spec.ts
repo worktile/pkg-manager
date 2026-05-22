@@ -1,14 +1,9 @@
-import { ReleaseHandler } from '../../handlers';
 import { CommandOptions } from '../../interface';
-import { defaults } from '../../defaults';
-import sinon, { SinonSpy, SinonStub } from 'sinon';
-import simpleGit, { SimpleGit } from 'simple-git/promise';
-import { lifecycles } from '../../lifecycles';
-import path from 'path';
+import sinon, { SinonStub } from 'sinon';
+import simpleGit from 'simple-git/promise';
 import { expect } from 'chai';
-import { LifecyclesMocker } from '../lifecycles-mocker';
 import { createSimpleGitMock, SimpleGitMock } from '../simple-git';
-import { Fixture, createBasicFixture } from '../fixtures';
+import { createBasicFixture, Fixture } from '../fixtures';
 import inquirer from 'inquirer';
 import { Handler } from '../../handlers/handler';
 import { Lifecycle } from '../../lifecycles/lifecycle';
@@ -30,13 +25,13 @@ class MyHandler extends Handler {
     }
 
     async prepare(): Promise<void> {}
+
+    getContext() {
+        return this.context;
+    }
 }
 describe('#handler', () => {
     let myHandler: MyHandler;
-    const options: CommandOptions = Object.assign({}, defaults, {
-        releaseAs: '1.0.0',
-        cwd: path.resolve(process.cwd(), 'tmp')
-    });
 
     let simpleGitCallStub: SinonStub;
     let simpleGitMock: SimpleGitMock;
@@ -130,5 +125,29 @@ describe('#handler', () => {
         await myHandler.start();
 
         promptStub.restore();
+    });
+
+    it('should read version from custom packageJsonPath', async () => {
+        basicFixture.writePackageJson({
+            packageJsonPath: 'packages/app/package.json',
+            name: 'app',
+            version: '2.0.0'
+        });
+
+        myHandler = new MyHandler({
+            allowBranch: 'master',
+            skip: { confirm: true },
+            packageJsonPath: 'packages/app/package.json'
+        });
+        simpleGitMock.status.returns(
+            Promise.resolve({
+                current: 'master'
+            })
+        );
+        simpleGitMock.branchLocal.returns(Promise.resolve({ all: ['master'] }));
+
+        await myHandler.start();
+
+        expect(myHandler.getContext()?.versions?.current).equal('2.0.0');
     });
 });

@@ -1,12 +1,13 @@
 import { ReleaseHandler } from '../../handlers';
 import { CommandOptions } from '../../interface';
 import { defaults } from '../../defaults';
-import sinon, { SinonSpy, SinonStub } from 'sinon';
-import simpleGit, { SimpleGit } from 'simple-git/promise';
+import sinon, { SinonStub } from 'sinon';
+import simpleGit from 'simple-git/promise';
 import path from 'path';
+import { expect } from 'chai';
 import { LifecyclesMocker } from '../lifecycles-mocker';
 import { createSimpleGitMock, SimpleGitMock } from '../simple-git';
-import { Fixture, createBasicFixture } from '../fixtures';
+import { createBasicFixture, Fixture } from '../fixtures';
 import inquirer from 'inquirer';
 
 describe('#pm-release-handler', () => {
@@ -63,5 +64,38 @@ describe('#pm-release-handler', () => {
 
         lifecyclesMocker.restore();
         promptStub.restore();
+    });
+
+    it('should use version from custom packageJsonPath', async () => {
+        basicFixture.writePackageJson({
+            packageJsonPath: 'packages/app/package.json',
+            name: 'app',
+            version: '2.0.0'
+        });
+
+        releaseHandler = new ReleaseHandler(
+            Object.assign({}, options, {
+                skip: { confirm: true },
+                packageJsonPath: 'packages/app/package.json'
+            })
+        );
+        simpleGitMock.status.returns(
+            Promise.resolve({
+                current: 'master'
+            })
+        );
+        simpleGitMock.branchLocal.returns(Promise.resolve({ all: ['master'] }));
+
+        const lifecyclesMocker = new LifecyclesMocker({
+            nextVersion: '3.0.0'
+        });
+
+        await releaseHandler.start();
+
+        expect(lifecyclesMocker.runs.selectVersion.calledOnce).eq(true);
+        const context = lifecyclesMocker.runs.selectVersion.getCall(0).args[0];
+        expect(context.versions).deep.eq({ current: '2.0.0', next: '3.0.0' });
+
+        lifecyclesMocker.restore();
     });
 });

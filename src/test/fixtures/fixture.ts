@@ -42,12 +42,17 @@ export class Fixture {
     }
 
     writePackageJson(options: any = {}) {
-        const pkg = Object.assign(options, {
-            version: this.options.version,
-            name: this.options.name,
-            repository: this.options.repository
-        });
-        fs.writeFileSync('package.json', JSON.stringify(pkg), 'utf-8');
+        const { packageJsonPath = 'package.json', ...overrides } = options;
+        const pkg = Object.assign(
+            {
+                version: this.options.version,
+                name: this.options.name,
+                repository: this.options.repository
+            },
+            overrides
+        );
+        fs.mkdirSync(path.dirname(packageJsonPath), { recursive: true });
+        fs.writeFileSync(packageJsonPath, JSON.stringify(pkg), 'utf-8');
     }
 
     destroy() {

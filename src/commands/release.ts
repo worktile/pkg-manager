@@ -85,7 +85,8 @@ export const releaseCommand: CommandModule = {
             infile: argv.infile,
             tagPrefix: argv.tagPrefix,
             cwd: defaults.cwd,
-            packages: argv.packages
+            packages: argv.packages,
+            packageJsonPath: argv.packageJsonPath
         };
         const handler = new ReleaseHandler(options);
         await handler.start().catch((error) => {
