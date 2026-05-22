@@ -27,6 +27,8 @@ export interface Skip {
     pr?: boolean;
     // confirm release or publish
     confirm?: boolean;
+    // hidden changelog link
+    changelogLink?: boolean;
 }
 
 export type BumpFile = { filename: string; updater?: string; type?: 'json' | 'plain-text' | 'code' } | string;
@@ -45,6 +47,7 @@ export type Hooks = {
 
 export type Package = { path: string; bumpFiles?: BumpFile[]; infile?: string };
 export interface CommandOptions extends Config {
+    packageJsonPath?: string;
     /**
      * Packages to release,
      */

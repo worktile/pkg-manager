@@ -77,16 +77,30 @@ export class ChangelogLifecycle extends Lifecycle {
     private async getChangelogForPath(commit: string | undefined, pkgPath: string[], cwd?: string): Promise<string> {
         const { ConventionalChangelog } = await import('conventional-changelog');
 
+        const contextConfig = this.context.options.skip?.changelogLink
+            ? {
+                  version: this.nextVersion,
+                  linkCompare: false,
+                  linkReferences: false
+              }
+            : {
+                  version: this.nextVersion
+              };
+
         const generator = new ConventionalChangelog(cwd || process.cwd())
             .loadPreset(this.context.options.preset || defaults.preset)
-            .readPackage()
-            .readRepository()
+            .readPackage((pkg) => {
+                if (this.context.options.skip?.changelogLink) {
+                    delete pkg.repository;
+                }
+                return pkg;
+            })
             .commits({
                 to: 'HEAD',
                 path: pkgPath,
                 ...(commit ? { from: commit } : {})
             })
-            .context({ version: this.nextVersion })
+            .context(contextConfig)
             .options({ outputUnreleased: true });
 
         let content = '';
