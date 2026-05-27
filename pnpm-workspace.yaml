@@ -1,6 +1,3 @@
-packages:
-  - '.'
-
 # Recreate node_modules when hoist settings change (non-interactive)
 confirmModulesPurge: false
 

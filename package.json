@@ -23,7 +23,7 @@
   },
   "scripts": {
     "start": "pnpm run start:docs",
-    "build": "tsc --build --clean && tsc --build",
+    "build": "tsc --build --clean tsconfig.lib.json && tsc --build tsconfig.lib.json",
     "prerelease": "pnpm run build",
     "release-only": "ts-node ./src/commands/index.ts release",
     "release": "pnpm run release-only",

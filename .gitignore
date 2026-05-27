@@ -64,6 +64,7 @@ test_built
 .history
 lib
 tsconfig.tsbuildinfo
+tsconfig.lib.tsbuildinfo
 /_site
 /dist
 .docgeni/site
