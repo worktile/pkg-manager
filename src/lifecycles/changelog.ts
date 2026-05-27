@@ -71,6 +71,14 @@ export class ChangelogLifecycle extends Lifecycle {
             return;
         }
 
+        if (this.context.options.dryRun) {
+            const baseCwd = cwd || process.cwd();
+            const displayPath = path.relative(baseCwd, infilePath) || path.basename(infilePath);
+            this.logger.info(`${displayPath}:`);
+            console.log(generated);
+            return;
+        }
+
         fs.writeFileSync(infilePath, this.mergeChangelog(infilePath, generated));
     }
 
