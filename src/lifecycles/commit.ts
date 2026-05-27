@@ -50,9 +50,9 @@ export class CommitLifecycle extends Lifecycle {
         this.logger.info(`Committing ${allFiles.size} files with message: ${chalk.green(commitMessage)}`);
 
         if (options.dryRun) {
-            this.logger.info(`[dry-run] git add ${Array.from(allFiles).join(' ')}`);
+            this.logger.info(`git add ${Array.from(allFiles).join(' ')}`);
 
-            this.logger.info(`[dry-run] git commit -m "${commitMessage}"`);
+            this.logger.info(`git commit -m "${commitMessage}"`);
 
             return;
         }

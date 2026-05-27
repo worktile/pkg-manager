@@ -30,7 +30,7 @@ export class BumpLifecycle extends Lifecycle {
         const allFiles = this.collectAllBumpFiles(context, cwd);
 
         if (context.options?.dryRun) {
-            this.logger.info('[dry-run]', allFiles);
+            this.logger.info('Bump files:', allFiles);
             return;
         }
 
