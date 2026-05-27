@@ -22,10 +22,18 @@ const BUILD = `(?:\\+(${BUILD_IDENTIFIER}(?:\\.${BUILD_IDENTIFIER})*))`;
 const FULL_VERSION_IDENTIFIER = `${MAIN_VERSION_IDENTIFIER}${PRERELEASE}?${BUILD}?`;
 const REGEX_FULL_VERSION = new RegExp(FULL_VERSION_IDENTIFIER);
 
-module.exports.readVersion = function(contents: string) {
-    return REGEX_FULL_VERSION.exec(contents)[0];
+function matchVersion(contents: string): string {
+    const match = REGEX_FULL_VERSION.exec(contents);
+    if (!match) {
+        throw new Error('no semver found in file contents');
+    }
+    return match[0];
+}
+
+module.exports.readVersion = function (contents: string) {
+    return matchVersion(contents);
 };
 
-module.exports.writeVersion = function(contents: string, version: string) {
-    return contents.replace(REGEX_FULL_VERSION.exec(contents)[0], version);
+module.exports.writeVersion = function (contents: string, version: string) {
+    return contents.replace(matchVersion(contents), version);
 };

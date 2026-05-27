@@ -40,9 +40,9 @@ export class SelectVersionLifecycle extends Lifecycle {
         }
     }
 
-    private getNextVersionFromExplicit(context: CommandContext) {
-        const version = context.versions.current;
-        let nextVersion = null;
+    private getNextVersionFromExplicit(context: CommandContext): string | undefined {
+        const version = context.versions!.current;
+        let nextVersion: string | null = null;
         if (context.options.releaseAs) {
             if (semver.valid(context.options.releaseAs)) {
                 nextVersion = context.options.releaseAs;
@@ -53,7 +53,7 @@ export class SelectVersionLifecycle extends Lifecycle {
                 }
                 nextVersion = semver.inc(version, releaseType);
             }
-            if (semver.lte(nextVersion, version)) {
+            if (!nextVersion || semver.lte(nextVersion, version)) {
                 throw new ValidationError(
                     'E_INVALID_RELEASE',
                     `input releaseAs(${context.options.releaseAs}) is lte ${version}, please re-typing`
@@ -65,7 +65,7 @@ export class SelectVersionLifecycle extends Lifecycle {
     }
 
     private async getNextVersionFromPrompt(context: CommandContext): Promise<string> {
-        const version = context.versions.current;
+        const version = context.versions!.current;
         const releases = RELEASE_TYPES.map((release: ReleaseType) => {
             return {
                 name: `${release} ${version} => ${semver.inc(version, release)}`,
@@ -92,7 +92,11 @@ export class SelectVersionLifecycle extends Lifecycle {
             if (releaseAs === 'typing') {
                 return await this.typingReleaseVersion(version);
             } else {
-                return semver.inc(version, releaseAs);
+                const next = semver.inc(version, releaseAs);
+                if (!next) {
+                    throw new ValidationError('E_INVALID_RELEASE', `failed to increment version with release type ${releaseAs}`);
+                }
+                return next;
             }
         } else {
             throw new ValidationError('E_NO_RELEASE_AS', `release-as is empty`);
@@ -101,8 +105,8 @@ export class SelectVersionLifecycle extends Lifecycle {
 
     async run(context: CommandContext): Promise<void> {
         const tagVersion = await latestSemverTag({ tagPrefix: context.options.tagPrefix });
-        const version = context.versions.current;
-        this.logger.info(`current version is ${chalk.green(version)} and latest tag is ${chalk.green(tagVersion)}`);
+        const version = context.versions!.current;
+        this.logger.info(`current version is ${chalk.green(version)} and latest tag is ${chalk.green(tagVersion ?? 'none')}`);
         let nextVersion = this.getNextVersionFromExplicit(context);
         if (!nextVersion) {
             nextVersion = await this.getNextVersionFromPrompt(context);
@@ -117,7 +121,7 @@ export class SelectVersionLifecycle extends Lifecycle {
             default: true
         });
         if (confirm) {
-            context.versions.next = nextVersion;
+            context.versions!.next = nextVersion;
         } else {
             throw new CommandTerminationError(`release has been cancelled`);
         }

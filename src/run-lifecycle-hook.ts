@@ -18,7 +18,7 @@ async function runLifecycleHook(
   options: CommandOptions,
   params?: LifecycleHookParams
 ) {
-  const command: string = options.hooks ? options.hooks[name] : "";
+  const command: string = options.hooks?.[name] ?? "";
   if (command) {
     // command "echo {{version}}" => "echo 1.0.1"
     let finalCommand = command;

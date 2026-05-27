@@ -17,9 +17,9 @@ Generic CLI tool to automate versioning and package publishing related tasks:
 ## Installation
 
 ```bash
-$ npm i @worktile/pkg-manager --save-dev
+$ pnpm add @worktile/pkg-manager -D
 // or
-$ yarn add @worktile/pkg-manager -D
+$ npm i @worktile/pkg-manager --save-dev
 ```
 
 ## Quick Links

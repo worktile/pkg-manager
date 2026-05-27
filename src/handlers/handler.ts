@@ -15,9 +15,10 @@ import { minimatch } from 'minimatch';
 import { logger } from '../logger';
 import { createSimpleGit, readPackageJson } from '../utils';
 import { coerceArray } from '../coercion/array';
+import { defaults } from '../defaults';
 
 export abstract class Handler {
-    protected context: CommandContext;
+    protected context!: CommandContext;
 
     abstract name: string;
 
@@ -38,20 +39,19 @@ export abstract class Handler {
                 return;
             }
             await runLifecycleHook(`pre${this.name}`, this.context.options);
-            const lifecycles = this.getLifecycles();
-            let cap: Lifecycle = null;
-            let index = 0;
-            while ((cap = lifecycles[index++])) {
-                await cap.run(this.context);
+            for (const lifecycle of this.getLifecycles()) {
+                await lifecycle.run(this.context);
             }
             await runLifecycleHook(`post${this.name}`, this.context.options);
-        } catch (error) {
+        } catch (error: unknown) {
             if (error instanceof CommandTerminationError) {
                 logger.warn(error.message);
             } else if (error instanceof ValidationError) {
                 logger.warn(`[${error.prefix}] ${error.message}`);
-            } else {
+            } else if (error instanceof Error) {
                 logger.error(`${error.message}, stack: ${error.stack}`);
+            } else {
+                logger.error(String(error));
             }
             process.exit(1);
         }
@@ -60,22 +60,24 @@ export abstract class Handler {
     protected async prepareContext() {
         const git = createSimpleGit(this.options.cwd || process.cwd());
         const gitStatus = await git.status();
-        const allowBranches = coerceArray(this.options.allowBranch);
+        const allowBranches = coerceArray(this.options.allowBranch ?? defaults.allowBranch!);
 
-        let targetBranch: string;
+        let targetBranch: string | undefined;
+        const currentBranch = gitStatus.current;
+
         if (this.options.skip?.confirm) {
-            if (this.matchAllowBranch(gitStatus.current, allowBranches)) {
-                targetBranch = gitStatus.current;
+            if (this.matchAllowBranch(currentBranch, allowBranches)) {
+                targetBranch = currentBranch ?? undefined;
             } else {
                 logger.warn(
-                    `Command ${this.name} not allowed in current branch ${chalk.blue(gitStatus.current)}, please checkout to ${chalk.green(
+                    `Command ${this.name} not allowed in current branch ${chalk.blue(currentBranch)}, please checkout to ${chalk.green(
                         allowBranches.join(' ')
                     )}`
                 );
             }
         } else {
-            if (this.matchAllowBranch(gitStatus.current, allowBranches)) {
-                const message = `You will ${this.name} ${chalk.green(gitStatus.current)} branch, allow ${this.name} branches: ${chalk.blue(
+            if (this.matchAllowBranch(currentBranch, allowBranches)) {
+                const message = `You will ${this.name} ${chalk.green(currentBranch)} branch, allow ${this.name} branches: ${chalk.blue(
                     allowBranches.join(' ')
                 )}. \n Do you want to continue?`;
                 const { confirm } = await inquirer.prompt({
@@ -85,14 +87,14 @@ export abstract class Handler {
                     default: true
                 });
                 if (confirm) {
-                    targetBranch = gitStatus.current;
+                    targetBranch = currentBranch ?? undefined;
                 } else {
                     const allBranches = await git.branchLocal();
                     targetBranch = await this.selectBranchFromPrompt(allBranches.all, allowBranches);
                 }
             } else {
                 logger.warn(
-                    `Command ${this.name} not allowed in current branch ${chalk.blue(gitStatus.current)}, please checkout to ${chalk.green(
+                    `Command ${this.name} not allowed in current branch ${chalk.blue(currentBranch)}, please checkout to ${chalk.green(
                         allowBranches.join(' ')
                     )}`
                 );
@@ -105,7 +107,7 @@ export abstract class Handler {
             throw new ValidationError('E_NO_TARGET_BRANCH', `target-branch is empty`);
         }
 
-        if (gitStatus.current !== targetBranch) {
+        if (currentBranch !== targetBranch) {
             // switch to default branch when current is not eq default branch
             logger.info(`git checkout to branch ${chalk.green(targetBranch)}...`);
             if (!this.options.dryRun) {
@@ -126,12 +128,12 @@ export abstract class Handler {
                 current: pkg.version
             },
             git: git,
-            currentBranch: gitStatus.current,
+            currentBranch: currentBranch ?? undefined,
             targetBranch: targetBranch
         };
     }
 
-    private matchAllowBranch(branch: string, allowBranch: string[]) {
+    private matchAllowBranch(branch: string | null | undefined, allowBranch: string[]) {
         if (!branch) {
             return false;
         }

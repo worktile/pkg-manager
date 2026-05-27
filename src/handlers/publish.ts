@@ -23,7 +23,8 @@ export class PublishHandler extends Handler {
     }
 
     async verify() {
-        const gitStatus = await this.context.git.status();
+        const git = this.context.git!;
+        const gitStatus = await git.status();
 
         if (
             gitStatus.files.length > 0 &&
@@ -40,6 +41,7 @@ export class PublishHandler extends Handler {
 
     async prepare() {
         // Publish command has not bump version, it will use default branch package.json
-        this.context.versions.next = this.context.versions.current;
+        const versions = this.context.versions!;
+        versions.next = versions.current;
     }
 }

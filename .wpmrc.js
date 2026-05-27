@@ -20,7 +20,7 @@ module.exports = {
     },
     commitAll: true,
     hooks: {
-        prepublish: 'yarn run build',
+        prepublish: 'pnpm run build',
         postpublish: 'npm run pub-only',
         postbump: 'git add .'
     }

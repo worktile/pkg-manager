@@ -14,23 +14,28 @@
     "wpm": "bin/wpm.js",
     "release": "bin/release.js"
   },
+  "packageManager": "pnpm@11.3.0",
   "engines": {
-    "node": "^12.20.0 || >=14.0.0"
+    "node": "^12.20.0 || >=14.0.0",
+    "pnpm": ">=9.0.0",
+    "npm": "please-use-pnpm",
+    "yarn": "please-use-pnpm"
   },
   "scripts": {
-    "start": "yarn start:docs",
+    "start": "pnpm run start:docs",
     "build": "tsc --build --clean && tsc --build",
-    "prerelease": "yarn build",
+    "prerelease": "pnpm run build",
     "release-only": "ts-node ./src/commands/index.ts release",
-    "release": "yarn release-only",
+    "release": "pnpm run release-only",
     "pub": "ts-node ./src/commands/index.ts publish",
     "pub-only": "npm publish --access=public",
+    "pub-next": "pnpm run build",
     "pub-next-only": "npm publish --access=public --tag=next",
     "wpm": "ts-node ./src/commands/index.ts",
     "test": "NODE_ENV=test mocha src/**/*.spec.ts --timeout 999999 --require ts-node/register/transpile-only",
-    "start:docs": "docgeni serve --port 4500",
-    "build:docs": "docgeni build --prod",
-    "build:docs-gh-pages": "docgeni build --prod --base-href=/pkg-manager/"
+    "start-docs": "docgeni serve --port 4500",
+    "build-docs": "docgeni build --configuration production",
+    "build-docs-gh-pages": "docgeni build --configuration production --base-href=/pkg-manager/"
   },
   "repository": {
     "type": "git",
@@ -43,8 +48,7 @@
   },
   "homepage": "https://github.com/worktile/pkg-manager#readme",
   "dependencies": {
-    "@docgeni/toolkit": "^2.1.0",
-    "@types/shelljs": "^0.8.8",
+    "@docgeni/toolkit": "^2.8.0-next.6",
     "commit-and-tag-version": "^12.4.0",
     "conventional-changelog": "^7.2.0",
     "conventional-changelog-angular": "^8.3.1",
@@ -59,14 +63,16 @@
     "yargs": "^17.0.1"
   },
   "peerDependencies": {
-    "conventional-changelog-angular": "^8.3.1"
+    "conventional-changelog-angular": "^8.3.1",
+    "@docgeni/angular": "21.0.0"
   },
   "devDependencies": {
-    "@angular/build": "19.0.0",
-    "@docgeni/angular": "19.0.0",
-    "@docgeni/cli": "2.7.0",
-    "@docgeni/template": "2.2.1",
+    "@docgeni/angular": "21.0.1",
+    "@docgeni/cli": "2.8.0-next.8",
+    "@docgeni/template": "2.8.0-next.8",
+    "zone.js": "0.16.2",
     "@types/chai": "^4.2.19",
+    "@types/shelljs": "^0.8.8",
     "@types/conventional-changelog-config-spec": "2.1.5",
     "@types/fs-extra": "^9.0.11",
     "@types/inquirer": "^7.3.2",
@@ -79,7 +85,7 @@
     "chai": "^4.3.4",
     "mocha": "^9.0.1",
     "sinon": "^17.0.1",
-    "ts-node": "^10.9.1",
-    "typescript": "5.8.3"
+    "ts-node": "^10.9.2",
+    "typescript": "6.0.3"
   }
 }

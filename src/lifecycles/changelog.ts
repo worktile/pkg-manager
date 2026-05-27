@@ -21,7 +21,8 @@ export class ChangelogLifecycle extends Lifecycle {
     context!: CommandContext;
 
     async run(context: CommandContext): Promise<void> {
-        const { options, versions } = context;
+        const { options } = context;
+        const versions = this.requireVersions(context);
 
         if (options.skip?.changelog) return;
 
@@ -96,7 +97,7 @@ export class ChangelogLifecycle extends Lifecycle {
               };
 
         const generator = new ConventionalChangelog(cwd || process.cwd())
-            .loadPreset(this.context.options.preset || defaults.preset)
+            .loadPreset(this.context.options.preset ?? defaults.preset!)
             .readPackage((pkg) => {
                 if (this.context.options.skip?.changelogLink) {
                     delete pkg.repository;
@@ -120,13 +121,13 @@ export class ChangelogLifecycle extends Lifecycle {
     }
 
     private mergeChangelog(file: string, generated: string): string {
-        const header = defaults.header;
+        const header = defaults.header ?? '';
 
         if (!fs.existsSync(file)) return header + generated;
 
         const content = fs.readFileSync(file, 'utf-8');
 
-        if (content.startsWith(header)) {
+        if (header && content.startsWith(header)) {
             return `${header}${generated}\n${content.slice(header.length)}`;
         }
 

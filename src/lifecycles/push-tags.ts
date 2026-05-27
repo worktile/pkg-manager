@@ -11,7 +11,7 @@ import { ValidationError } from '../errors';
  */
 export class PushTagsLifecycle extends Lifecycle {
     async run(context: CommandContext): Promise<void> {
-        if (context.options.skip.push) {
+        if (context.options.skip?.push) {
             return;
         }
 
@@ -19,9 +19,14 @@ export class PushTagsLifecycle extends Lifecycle {
             throw new ValidationError('E_NO_TAG', `release tag is skipped, push tag should not skip release tag`);
         }
 
+        const git = context.git;
+        if (!git) {
+            throw new ValidationError('E_NO_GIT', 'git client is required for push tags');
+        }
+
         this.logger.success(`pushing tag ${context.releaseTag} to remote`);
         if (!context.options.dryRun) {
-            await context.git.pushTags();
+            await git.pushTags();
         }
     }
 }

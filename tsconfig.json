@@ -1,18 +1,24 @@
 {
   "compilerOptions": {
     "outDir": "./lib",
-    "rootDir": "src",
-    "baseUrl": ".",
-    "target": "es2018",
-    "module": "node16",
-    "moduleResolution": "node16",
+    "rootDir": "./src",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "composite": true,
+    "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["node"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "src/test", "lib"]
+  "exclude": ["node_modules", "lib", "src/test", "**/*.spec.ts"],
+  "ts-node": {
+    "files": true
+  }
 }

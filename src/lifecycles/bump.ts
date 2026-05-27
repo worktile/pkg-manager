@@ -22,7 +22,7 @@ export class BumpLifecycle extends Lifecycle {
 
     async run(context: CommandContext): Promise<void> {
         await this.runLifecycleHook('prebump', context.options, this.getLifecycleHookParams(context));
-        this.nextVersion = context.versions.next;
+        this.nextVersion = this.requireVersions(context).next;
         this.packages = context.options?.packages || [];
 
         const cwd = context.options?.cwd || process.cwd();

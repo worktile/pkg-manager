@@ -10,8 +10,7 @@ export type protocol = 'ssh' | 'https';
 export type gitProviders = 'github' | 'gitlab';
 
 export abstract class GitProvider {
-    protected constructor(public host: string, public organizationOrUser: string, public name: string) {
-    }
+    protected constructor(public host: string, public organizationOrUser: string, public name: string) {}
 
     origin(protocol: protocol) {
         const protocols = {
@@ -29,30 +28,28 @@ export abstract class GitProvider {
 }
 
 export class GitHubProvider extends GitProvider {
-    constructor(organizationOrUser, name) {
+    constructor(organizationOrUser: string, name: string) {
         super('github.com', organizationOrUser, name);
     }
 
     createPRUrl(baseBranch: string, headBranch: string): string {
         const repoUrl = `https://${this.host}/${this.organizationOrUser}/${this.name}`;
-        const createPRUrl = `${repoUrl}/pull/new/${baseBranch}...${headBranch}`;
-        return createPRUrl;
+        return `${repoUrl}/pull/new/${baseBranch}...${headBranch}`;
     }
 }
 
 export class GitLabProvider extends GitProvider {
-    constructor(organizationOrUser, name) {
+    constructor(organizationOrUser: string, name: string) {
         super('gitlab.com', organizationOrUser, name);
     }
 
-    createPRUrl(baseBranch: string, headBranch: string): string | null {
+    createPRUrl(baseBranch: string, headBranch: string): string {
         const repoUrl = `https://${this.host}/${this.organizationOrUser}/${this.name}`;
-        const createPRUrl = `${repoUrl}/-/merge_requests/new?merge_request%5Bsource_branch%5D=${headBranch}&merge_request%5Btarget_branch%5D=${baseBranch}`;
-        return createPRUrl;
+        return `${repoUrl}/-/merge_requests/new?merge_request%5Bsource_branch%5D=${headBranch}&merge_request%5Btarget_branch%5D=${baseBranch}`;
     }
 }
 
-export function buildGitProvider(provider: gitProviders, organizationOrUser, name) {
+export function buildGitProvider(provider: gitProviders, organizationOrUser: string, name: string) {
     switch (provider) {
         case 'github':
             return new GitHubProvider(organizationOrUser, name);
@@ -63,8 +60,8 @@ export function buildGitProvider(provider: gitProviders, organizationOrUser, nam
     }
 }
 
-export function buildGitProviderFromRemote(remoteUrl: string): GitProvider | void {
-    let host: 'github.com' | 'gitlab.com';
+export function buildGitProviderFromRemote(remoteUrl: string): GitProvider | undefined {
+    let host: 'github.com' | 'gitlab.com' | undefined;
     if (remoteUrl.includes('github.com')) {
         host = 'github.com';
     } else if (remoteUrl.includes('gitlab.com')) {
@@ -72,14 +69,14 @@ export function buildGitProviderFromRemote(remoteUrl: string): GitProvider | voi
     }
 
     if (!host) {
-        return null;
+        return undefined;
     }
 
-    const [orgOrUser, name] = remoteUrl.slice(remoteUrl.indexOf(host) + host.length + 1, remoteUrl.lastIndexOf('.git'))
+    const [orgOrUser, name] = remoteUrl
+        .slice(remoteUrl.indexOf(host) + host.length + 1, remoteUrl.lastIndexOf('.git'))
         .split('/');
     if (host === 'github.com') {
         return new GitHubProvider(orgOrUser, name);
-    } else if (host === 'gitlab.com') {
-        return new GitLabProvider(orgOrUser, name);
     }
+    return new GitLabProvider(orgOrUser, name);
 }

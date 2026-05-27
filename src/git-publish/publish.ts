@@ -54,9 +54,11 @@ export async function gitPublish(
         fs.readFileSync(packageJsonFilePath, 'utf8')
     );
 
-    const gitProvider = buildGitProvider(options.provider, options.organizationOrUser, options.name);
+    const provider = options.provider!;
+    const repoProtocol = options.protocol!;
+    const gitProvider = buildGitProvider(provider, options.organizationOrUser!, options.name);
 
-    const gitOrigin = gitProvider.origin(options.protocol);
+    const gitOrigin = gitProvider.origin(repoProtocol);
 
     const questions = [
       {
@@ -84,7 +86,7 @@ export async function gitPublish(
       await git.init();
       await git.addRemote(
         "origin",
-          gitProvider.origin(options.protocol)
+          gitProvider.origin(repoProtocol)
       );
       await git.add("./*");
       await git.commit(`build(release): publish ${packageJson.version}`);
@@ -92,7 +94,8 @@ export async function gitPublish(
     logger.success(`git commit success`);
 
     const tags = (await git.listRemote(["--tags"])) || "";
-    const lastTag = tags.trim().split("\n").pop().split("/").pop().toString();
+    const tagLines = tags.trim().split("\n").filter(Boolean);
+    const lastTag = tagLines.length ? tagLines[tagLines.length - 1].split("/").pop() ?? "" : "";
 
     if (!semver.valid(lastTag) || semver.gt(packageJson.version, lastTag)) {
       logger.info(`push tag ${chalk.green(packageJson.version)} to origin...`);
@@ -113,9 +116,11 @@ export async function gitPublish(
     await fs.remove(tmpPath);
 
     logger.success(`publish success!`);
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(error);
-    console.log(error.stack);
+    if (error instanceof Error) {
+      console.log(error.stack);
+    }
     await fs.remove(tmpPath);
   } finally {
     process.exit();

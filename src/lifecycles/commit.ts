@@ -26,7 +26,7 @@ export class CommitLifecycle extends Lifecycle {
 
         await this.runLifecycleHook('precommit', context.options, this.getLifecycleHookParams(context));
 
-        this.nextVersion = context.versions.next;
+        this.nextVersion = this.requireVersions(context).next;
         this.packages = context.options?.packages || [];
 
         await this.commitChanges(context);

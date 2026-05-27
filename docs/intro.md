@@ -13,9 +13,9 @@ order: 10
 
 执行如下命令安装`pkg-manager`
 ```bash
-$ npm i @worktile/pkg-manager --save
+$ pnpm add @worktile/pkg-manager -D
 // or
-$ yarn add @worktile/pkg-manager
+$ npm i @worktile/pkg-manager --save-dev
 ```
 
 安装后在 package.json 中添加如下脚本：
@@ -60,7 +60,7 @@ module.exports = {
     },
     commitAll: true,
     hooks: {
-        prepublish: 'yarn workspaces run build',
+        prepublish: 'pnpm run -r build',
         postpublish: 'lerna publish from-git',
         postreleaseBranch: 'lerna version {{version}} && git add .'
     }

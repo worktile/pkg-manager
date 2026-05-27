@@ -1,0 +1,24 @@
+packages:
+  - '.'
+
+# Recreate node_modules when hoist settings change (non-interactive)
+confirmModulesPurge: false
+
+# Hoist to node_modules root (required by docgeni / Angular tooling)
+publicHoistPattern:
+  - '@angular/*'
+  - '@angular-devkit/*'
+  - '@schematics/*'
+  - '@ngtools/*'
+  - 'tslib'
+  - 'zone.js'
+
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  lmdb: true
+  msgpackr-extract: true
+
+# @docgeni 常发 next 版，豁免 minimumReleaseAge（默认 24h）等待
+minimumReleaseAgeExclude:
+  - '@docgeni/*'
