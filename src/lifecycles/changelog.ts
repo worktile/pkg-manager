@@ -75,7 +75,7 @@ export class ChangelogLifecycle extends Lifecycle {
             const baseCwd = cwd || process.cwd();
             const displayPath = path.relative(baseCwd, infilePath);
             this.logger.info(`${displayPath}:`);
-            this.logger.info(generated);
+            console.info(generated);
             return;
         }
 
