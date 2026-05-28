@@ -20,9 +20,6 @@ export class PushTagsLifecycle extends Lifecycle {
         }
 
         const git = context.git;
-        if (!git) {
-            throw new ValidationError('E_NO_GIT', 'git client is required for push tags');
-        }
 
         this.logger.success(`pushing tag ${context.releaseTag} to remote`);
         if (!context.options.dryRun) {

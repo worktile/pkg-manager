@@ -18,9 +18,6 @@ export class ReleaseBranchLifecycle extends Lifecycle {
         }
 
         const git = context.git;
-        if (!git) {
-            throw new ValidationError('E_NO_GIT', 'git client is required for release branch');
-        }
 
         const { next } = this.requireVersions(context);
         const targetBranch = context.targetBranch;

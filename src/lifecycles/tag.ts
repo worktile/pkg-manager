@@ -17,9 +17,6 @@ export class TagLifecycle extends Lifecycle {
         }
 
         const git = context.git;
-        if (!git) {
-            throw new ValidationError('E_NO_GIT', 'git client is required for tag');
-        }
 
         const { next } = this.requireVersions(context);
         const tagPrefix = context.options.tagPrefix ?? defaults.tagPrefix ?? 'v';

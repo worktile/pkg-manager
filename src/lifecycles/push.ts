@@ -18,9 +18,6 @@ export class PushLifecycle extends Lifecycle {
         }
 
         const git = context.git;
-        if (!git) {
-            throw new ValidationError('E_NO_GIT', 'git client is required for push');
-        }
 
         const remote = 'origin';
         const branch = context.releaseBranch || context.currentBranch;

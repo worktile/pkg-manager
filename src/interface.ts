@@ -156,7 +156,7 @@ export interface CommandContext {
         current: string;
         next?: string;
     };
-    git?: SimpleGit;
+    git: SimpleGit;
     // release branch name by releaseBranchFormat and version
     releaseBranch?: string;
     // release tag name

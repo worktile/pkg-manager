@@ -12,15 +12,27 @@ order: 10
 ## 安装
 
 执行如下命令安装`pkg-manager`
-```bash
-$ pnpm add @worktile/pkg-manager -D
-// or
-$ npm i @worktile/pkg-manager --save-dev
+
+::: code-group
+
+```base [npm]
+npm i @worktile/pkg-manager --save-dev
 ```
+
+```base [yarn]
+yarn add @worktile/pkg-manager -D
+```
+
+```base [pnpm]
+$ pnpm add @worktile/pkg-manager -D
+```
+:::
+```bash
+
 
 安装后在 package.json 中添加如下脚本：
 
-```
+```json
 {
   scripts: {
     ...
@@ -36,7 +48,7 @@ $ npm i @worktile/pkg-manager --save-dev
 
 每个子命令都会有不同的参数设置，可以执行命令的时候传参 `wpm release --skip.bump`，也可以在 .wpmrc 文件中配置。
 
-```
+```js
 module.exports = {
     allowBranch: ['master', 'v0.*'],
     bumpFiles: [

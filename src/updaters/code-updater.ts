@@ -24,10 +24,7 @@ const REGEX_FULL_VERSION = new RegExp(FULL_VERSION_IDENTIFIER);
 
 function matchVersion(contents: string): string {
     const match = REGEX_FULL_VERSION.exec(contents);
-    if (!match) {
-        throw new Error('no semver found in file contents');
-    }
-    return match[0];
+    return match ? match[0] : '';
 }
 
 module.exports.readVersion = function (contents: string) {

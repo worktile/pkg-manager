@@ -51,7 +51,7 @@ export abstract class Handler {
             } else if (error instanceof Error) {
                 logger.error(`${error.message}, stack: ${error.stack}`);
             } else {
-                logger.error(String(error));
+                logger.error(error as Error);
             }
             process.exit(1);
         }
