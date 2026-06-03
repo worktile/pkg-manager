@@ -134,7 +134,7 @@ export class ChangelogLifecycle extends Lifecycle {
         const versionPattern = /\n#{1,2} \[?[\d.]+\w*/;
         const match = content.match(versionPattern);
 
-        if (match && match.index !== undefined) {
+        if (match?.index != null) {
             return content.slice(0, match.index + 1) + generated + '\n' + content.slice(match.index + 1);
         }
 
