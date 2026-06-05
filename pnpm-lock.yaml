@@ -45,8 +45,8 @@ importers:
         specifier: ^4.3.0
         version: 4.3.0
       yargs:
-        specifier: ^17.0.1
-        version: 17.7.2
+        specifier: ^18.0.0
+        version: 18.0.0
     devDependencies:
       '@docgeni/angular':
         specifier: 21.0.1
