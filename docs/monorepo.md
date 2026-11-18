@@ -3,37 +3,45 @@ title: "Monorepo 发布"
 order: 35
 ---
 
-从 `0.2.0-next.0` 开始，`wpm release` 支持在 Monorepo 仓库中发布。你可以在 `.wpmrc.js` 中通过 `packages` 声明需要参与发布的子包，`wpm` 会在一次 Release 中同时完成根目录和各个子包的版本号更新、更新日志生成与提交。
+从 `0.2.0-next.0` 开始，`wpm release` 支持在 Monorepo 仓库中发布。你可以在配置文件中通过 `packages` 声明参与本次发布的子包。单次 `wpm release` 内的版本是统一的，但通过**多个 wpm 配置文件 + `--config`**，可以实现整仓发布、独立发布或自定义分组发布。
 
-### 能力边界
+### 发布模式
 
-Monorepo 发布仍然是**整仓统一版本**：
+同一个仓库可以放多份 wpm 配置文件，每次命令通过 `--config <file>` 选择其中一份：
 
--   版本号以根 `package.json`（或 `packageJsonPath` 指定的文件）为准，所有子包使用同一个新版本号
--   只创建一个 Release 分支、一个 Git Tag，并统一推送到远程
--   不提供子包独立版本、独立 Tag 或按依赖关系编排发布顺序的能力
+| 模式     | 配置方式                                                                                     | 版本表现                         |
+| -------- | -------------------------------------------------------------------------------------------- | -------------------------------- |
+| 整仓发布 | 一份配置的 `packages` 列出所有子包                                                           | 根目录与所有子包共享同一版本     |
+| 独立发布 | 每个包一份配置，`packageJsonPath` 指向该包 `package.json`，`packages` 只包含该包             | 各包按自己的 `package.json` 版本独立递增 |
+| 自定义分组 | 每组一份配置，`packages` 列出组内包，`packageJsonPath` 指向该组的版本来源                    | 组内共享版本，组与组之间独立     |
 
-如果需要各包独立发版，请继续使用 Lerna、Changesets 等工具，或拆分仓库。
+注意：**单次 `wpm release` 只处理一份配置**。因此一次调用内版本统一；跨配置、多次调用才能实现独立版本。Release 分支和 Tag 也按每次调用创建，独立发布时应使用不同的版本号，避免 `release-v{{version}}` 分支或 `v{{version}}` Tag 冲突。
 
 ### 目录结构示例
 
 ```text
 repo/
-├── package.json          # 版本号来源，根 CHANGELOG.md
-├── package-lock.json     # 可选，用于同步 workspace 版本
-├── .wpmrc.js
+├── package.json
+├── package-lock.json             # 可选，用于同步 workspace 版本
+├── wpm.all.config.js             # 整仓发布
+├── wpm.core.config.js            # 独立发布 packages/core
+├── wpm.ui.config.js              # 自定义分组：ui 相关包一起发布
 └── packages/
     ├── core/
     │   ├── package.json
     │   ├── CHANGELOG.md
     │   └── src/version.ts
-    └── cli/
+    ├── cli/
+    │   └── package.json
+    ├── ui/
+    │   └── package.json
+    └── ui-icons/
         └── package.json
 ```
 
 ### 配置
 
-在 `.wpmrc.js` 中增加 `packages` 配置：
+在配置文件中增加 `packages` 配置，并通过 `--config` 指定使用哪一份：
 
 ```js
 module.exports = {
@@ -87,6 +95,65 @@ module.exports = {
     packages: [{ path: 'packages/core' }, { path: 'packages/cli' }]
 };
 ```
+
+> `packageJsonPath` 只是版本号来源，不会自动更新该文件。确保它同时出现在对应层级的 `bumpFiles` 中，否则读取到的版本不会随发布递增。
+
+### 多配置文件示例
+
+**整仓发布**（`wpm.all.config.js`）：所有子包共享根 `package.json` 的版本。
+
+```js
+module.exports = {
+    allowBranch: ['master'],
+    packageJsonPath: 'package.json',
+    packages: [{ path: 'packages/core' }, { path: 'packages/cli' }, { path: 'packages/ui' }, { path: 'packages/ui-icons' }]
+};
+```
+
+**独立发布**（`wpm.core.config.js`）：只发布 `packages/core`，使用该包自己的版本号。
+
+```js
+module.exports = {
+    allowBranch: ['master'],
+    packageJsonPath: 'packages/core/package.json',
+    // 不 bump 根目录文件，避免把根 package.json 也改成 core 的版本
+    bumpFiles: [],
+    // 不生成根 CHANGELOG
+    infile: '',
+    packages: [{ path: 'packages/core', bumpFiles: ['package.json'] }]
+};
+```
+
+**自定义分组**（`wpm.ui.config.js`）：把 `ui` 和 `ui-icons` 作为一个整体发布，组内共享版本。
+
+```js
+module.exports = {
+    allowBranch: ['master'],
+    packageJsonPath: 'packages/ui/package.json',
+    bumpFiles: [],
+    infile: '',
+    packages: [
+        { path: 'packages/ui', bumpFiles: ['package.json'] },
+        { path: 'packages/ui-icons', bumpFiles: ['package.json'] }
+    ]
+};
+```
+
+按需选择配置执行：
+
+```sh
+wpm release --config wpm.all.config.js minor   # 整仓
+wpm release --config wpm.core.config.js patch  # 只发 core
+wpm release --config wpm.ui.config.js minor    # 发 ui 分组
+```
+
+使用多个配置文件时注意：
+
+-   **单次调用只处理一份配置**，一次调用内根目录和所选子包共享同一个新版本；独立版本来自多次调用和各自的 `packageJsonPath`。
+-   各配置的 `packages` 应互不重叠，否则同一个包会在多次发布中被重复 bump。
+-   独立发布或分组发布时，建议用 `bumpFiles: []` 关闭根目录 bump，并用 `infile: ''` 关闭根 CHANGELOG；子包通过自己的 `bumpFiles` 更新版本。
+-   Release 分支和 Tag 由每次调用的版本号生成，独立发布时请确保不同包使用不同版本号，避免分支或 Tag 冲突。
+-   `--config` 只决定读取哪份配置，Git 提交、分支和推送仍在当前仓库中执行。
 
 ### Release 各阶段行为
 
