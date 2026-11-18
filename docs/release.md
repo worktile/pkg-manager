@@ -40,6 +40,7 @@ wpm release [major | minor | patch | premajor | preminor | prepatch | prerelease
 -   `--preset`
 -   `--commit-all`
 -   `--hooks`
+-   `--packages`
 
 ### `--allow-branch <glob>`
 允许执行 Release 的分支白名单，通过 glob 规则配置，默认为：`["master", "develop"]`，最简单也是推荐的做法是在`.wpmrc.js`配置文件中配置，但是通过 CLI 选项可以覆盖。
@@ -159,4 +160,16 @@ As an example to build artifacts before publish, publish artifacts to npm after 
    }
   }
 }
+```
+
+### `--packages`
+
+Monorepo 仓库中需要参与本次 Release 的子包列表，每个元素为 `{ path, bumpFiles?, infile? }`。开启后，`wpm release` 会同时更新所选子包的版本号、生成各自的更新日志并一起提交。单次调用内版本统一；通过多份配置文件和 `--config`，可以实现整仓发布、按包独立发布或自定义分组发布。
+
+由于参数元素是对象，推荐在 `.wpmrc.js` 等配置文件中配置，不要通过命令行传入。完整的配置说明、各阶段行为与限制见 [Monorepo 发布](./monorepo)。
+
+```js
+module.exports = {
+    packages: [{ path: 'packages/core' }, { path: 'packages/cli' }]
+};
 ```

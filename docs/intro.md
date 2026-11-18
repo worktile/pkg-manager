@@ -9,6 +9,8 @@ order: 10
 - `wpm publish`：主要提供发布版本（只有类库项目才会需要）和创建Tag推送到远程仓储
 - `wpm git-publish`：主要提供发布代码到 GitHub 仓储的功能，目前推荐使用 GitHub Package 功能进行私有包管理
 
+从 `0.2.0-next.0` 开始，`wpm release` 支持 Monorepo 仓库：在配置中声明 `packages` 后，可以一次性完成多个子包的版本号更新、更新日志生成与提交；配合多份配置文件和 `--config`，还支持整仓发布、按包独立发布或自定义分组发布，详见 [Monorepo 发布](./monorepo)。
+
 ## 安装
 
 执行如下命令安装`pkg-manager`

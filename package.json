@@ -22,7 +22,7 @@
     "yarn": "please-use-pnpm"
   },
   "scripts": {
-    "start": "pnpm run start:docs",
+    "start": "pnpm run start-docs",
     "build": "tsc --build --clean tsconfig.lib.json && tsc --build tsconfig.lib.json",
     "prerelease": "pnpm run build",
     "release-only": "ts-node ./src/commands/index.ts release",
