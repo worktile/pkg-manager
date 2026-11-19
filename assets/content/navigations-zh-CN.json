@@ -1,0 +1,594 @@
+{
+  "navs": [
+    {
+      "id": "intro",
+      "path": "intro",
+      "channelPath": "",
+      "title": "介绍",
+      "order": 10,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E5%AE%89%E8%A3%85",
+          "name": "安装",
+          "level": 2,
+          "type": "h2"
+        },
+        {
+          "id": "%E9%85%8D%E7%BD%AE",
+          "name": "配置",
+          "level": 2,
+          "type": "h2"
+        }
+      ],
+      "contentPath": "docs/intro.html",
+      "originPath": "docs/intro.md"
+    },
+    {
+      "id": "release",
+      "path": "release",
+      "channelPath": "",
+      "title": "Release",
+      "order": 30,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E",
+          "name": "使用说明",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E8%AF%AD%E4%B9%89%E5%8C%96%E5%8D%87%E7%BA%A7%E7%89%88%E6%9C%AC-%3Ccode%3Ebump%3C/code%3E",
+          "name": "语义化升级版本 <code>bump</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%80%89%E9%A1%B9",
+          "name": "选项",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--allow-branch-&lt;glob&gt;%3C/code%3E",
+          "name": "<code>--allow-branch &lt;glob&gt;</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--dry-run%3C/code%3E",
+          "name": "<code>--dry-run</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--skip%3C/code%3E",
+          "name": "<code>--skip</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--release-branch-format%3C/code%3E",
+          "name": "<code>--release-branch-format</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--tag-prefix%3C/code%3E",
+          "name": "<code>--tag-prefix</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--issue-url-format%3C/code%3E",
+          "name": "<code>--issue-url-format</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--bump-files%3C/code%3E",
+          "name": "<code>--bump-files</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--infile%3C/code%3E",
+          "name": "<code>--infile</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--preset%3C/code%3E",
+          "name": "<code>--preset</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--commit-all%3C/code%3E",
+          "name": "<code>--commit-all</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--hooks%3C/code%3E",
+          "name": "<code>--hooks</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--packages%3C/code%3E",
+          "name": "<code>--packages</code>",
+          "level": 3,
+          "type": "h3"
+        }
+      ],
+      "contentPath": "docs/release.html",
+      "originPath": "docs/release.md"
+    },
+    {
+      "id": "monorepo",
+      "path": "monorepo",
+      "channelPath": "",
+      "title": "Monorepo 发布",
+      "order": 35,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F",
+          "name": "发布模式",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%A4%BA%E4%BE%8B",
+          "name": "目录结构示例",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%85%8D%E7%BD%AE",
+          "name": "配置",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E5%A4%9A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B",
+          "name": "多配置文件示例",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "release-%E5%90%84%E9%98%B6%E6%AE%B5%E8%A1%8C%E4%B8%BA",
+          "name": "Release 各阶段行为",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "package-lock-json-%E7%89%88%E6%9C%AC%E5%90%8C%E6%AD%A5",
+          "name": "package-lock.json 版本同步",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%AA%8C%E8%AF%81%E9%85%8D%E7%BD%AE",
+          "name": "验证配置",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98",
+          "name": "常见问题",
+          "level": 3,
+          "type": "h3"
+        }
+      ],
+      "contentPath": "docs/monorepo.html",
+      "originPath": "docs/monorepo.md"
+    },
+    {
+      "id": "publish",
+      "path": "publish",
+      "channelPath": "",
+      "title": "Publish",
+      "order": 40,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E",
+          "name": "使用说明",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%80%89%E4%B8%8B%E8%BF%87",
+          "name": "选下过",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--allow-branch-&lt;glob&gt;%3C/code%3E",
+          "name": "<code>--allow-branch &lt;glob&gt;</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--dry-run%3C/code%3E",
+          "name": "<code>--dry-run</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--skip%3C/code%3E",
+          "name": "<code>--skip</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--tag-prefix%3C/code%3E",
+          "name": "<code>--tag-prefix</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--hooks%3C/code%3E",
+          "name": "<code>--hooks</code>",
+          "level": 3,
+          "type": "h3"
+        }
+      ],
+      "contentPath": "docs/publish.html",
+      "originPath": "docs/publish.md"
+    },
+    {
+      "id": "git-publish",
+      "path": "git-publish",
+      "channelPath": "",
+      "title": "Git Publish",
+      "order": 50,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E",
+          "name": "使用说明",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%80%89%E9%A1%B9",
+          "name": "选项",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--source%3C/code%3E",
+          "name": "<code>--source</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--name%3C/code%3E",
+          "name": "<code>--name</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--protocol%3C/code%3E",
+          "name": "<code>--protocol</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--provider%3C/code%3E",
+          "name": "<code>--provider</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--organization%3C/code%3E",
+          "name": "<code>--organization</code>",
+          "level": 3,
+          "type": "h3"
+        }
+      ],
+      "contentPath": "docs/git-publish.html",
+      "originPath": "docs/git-publish.md"
+    }
+  ],
+  "docs": [
+    {
+      "id": "git-publish",
+      "path": "git-publish",
+      "channelPath": "",
+      "title": "Git Publish",
+      "order": 50,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E",
+          "name": "使用说明",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%80%89%E9%A1%B9",
+          "name": "选项",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--source%3C/code%3E",
+          "name": "<code>--source</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--name%3C/code%3E",
+          "name": "<code>--name</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--protocol%3C/code%3E",
+          "name": "<code>--protocol</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--provider%3C/code%3E",
+          "name": "<code>--provider</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--organization%3C/code%3E",
+          "name": "<code>--organization</code>",
+          "level": 3,
+          "type": "h3"
+        }
+      ],
+      "contentPath": "docs/git-publish.html",
+      "originPath": "docs/git-publish.md"
+    },
+    {
+      "id": "intro",
+      "path": "intro",
+      "channelPath": "",
+      "title": "介绍",
+      "order": 10,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E5%AE%89%E8%A3%85",
+          "name": "安装",
+          "level": 2,
+          "type": "h2"
+        },
+        {
+          "id": "%E9%85%8D%E7%BD%AE",
+          "name": "配置",
+          "level": 2,
+          "type": "h2"
+        }
+      ],
+      "contentPath": "docs/intro.html",
+      "originPath": "docs/intro.md"
+    },
+    {
+      "id": "monorepo",
+      "path": "monorepo",
+      "channelPath": "",
+      "title": "Monorepo 发布",
+      "order": 35,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F",
+          "name": "发布模式",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%A4%BA%E4%BE%8B",
+          "name": "目录结构示例",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%85%8D%E7%BD%AE",
+          "name": "配置",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E5%A4%9A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B",
+          "name": "多配置文件示例",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "release-%E5%90%84%E9%98%B6%E6%AE%B5%E8%A1%8C%E4%B8%BA",
+          "name": "Release 各阶段行为",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "package-lock-json-%E7%89%88%E6%9C%AC%E5%90%8C%E6%AD%A5",
+          "name": "package-lock.json 版本同步",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%AA%8C%E8%AF%81%E9%85%8D%E7%BD%AE",
+          "name": "验证配置",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98",
+          "name": "常见问题",
+          "level": 3,
+          "type": "h3"
+        }
+      ],
+      "contentPath": "docs/monorepo.html",
+      "originPath": "docs/monorepo.md"
+    },
+    {
+      "id": "publish",
+      "path": "publish",
+      "channelPath": "",
+      "title": "Publish",
+      "order": 40,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E",
+          "name": "使用说明",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%80%89%E4%B8%8B%E8%BF%87",
+          "name": "选下过",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--allow-branch-&lt;glob&gt;%3C/code%3E",
+          "name": "<code>--allow-branch &lt;glob&gt;</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--dry-run%3C/code%3E",
+          "name": "<code>--dry-run</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--skip%3C/code%3E",
+          "name": "<code>--skip</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--tag-prefix%3C/code%3E",
+          "name": "<code>--tag-prefix</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--hooks%3C/code%3E",
+          "name": "<code>--hooks</code>",
+          "level": 3,
+          "type": "h3"
+        }
+      ],
+      "contentPath": "docs/publish.html",
+      "originPath": "docs/publish.md"
+    },
+    {
+      "id": "release",
+      "path": "release",
+      "channelPath": "",
+      "title": "Release",
+      "order": 30,
+      "toc": "content",
+      "headings": [
+        {
+          "id": "%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E",
+          "name": "使用说明",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E8%AF%AD%E4%B9%89%E5%8C%96%E5%8D%87%E7%BA%A7%E7%89%88%E6%9C%AC-%3Ccode%3Ebump%3C/code%3E",
+          "name": "语义化升级版本 <code>bump</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%E9%80%89%E9%A1%B9",
+          "name": "选项",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--allow-branch-&lt;glob&gt;%3C/code%3E",
+          "name": "<code>--allow-branch &lt;glob&gt;</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--dry-run%3C/code%3E",
+          "name": "<code>--dry-run</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--skip%3C/code%3E",
+          "name": "<code>--skip</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--release-branch-format%3C/code%3E",
+          "name": "<code>--release-branch-format</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--tag-prefix%3C/code%3E",
+          "name": "<code>--tag-prefix</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--issue-url-format%3C/code%3E",
+          "name": "<code>--issue-url-format</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--bump-files%3C/code%3E",
+          "name": "<code>--bump-files</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--infile%3C/code%3E",
+          "name": "<code>--infile</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--preset%3C/code%3E",
+          "name": "<code>--preset</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--commit-all%3C/code%3E",
+          "name": "<code>--commit-all</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--hooks%3C/code%3E",
+          "name": "<code>--hooks</code>",
+          "level": 3,
+          "type": "h3"
+        },
+        {
+          "id": "%3Ccode%3E--packages%3C/code%3E",
+          "name": "<code>--packages</code>",
+          "level": 3,
+          "type": "h3"
+        }
+      ],
+      "contentPath": "docs/release.html",
+      "originPath": "docs/release.md"
+    }
+  ]
+}

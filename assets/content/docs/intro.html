@@ -1,57 +1,64 @@
-<p><code>@worktile/pkg-manager</code> 是一款简单实用的包管理工具，主要提供自动升级版本，并发布类库等功能。核心提供了 <code>wpm</code> 命令行，包含以下子命令：</p>
+<div class="dg-paragraph"><code>@worktile/pkg-manager</code> 是一款简单实用的包管理工具，主要提供自动升级版本，并发布类库等功能。核心提供了 <code>wpm</code> 命令行，包含以下子命令：</div>
 <ul>
 <li><code>wpm release</code>：修改版本号、生成更新日志、创建 Release 分支、提交代码到远程分支的功能</li>
 <li><code>wpm publish</code>：主要提供发布版本（只有类库项目才会需要）和创建Tag推送到远程仓储</li>
 <li><code>wpm git-publish</code>：主要提供发布代码到 GitHub 仓储的功能，目前推荐使用 GitHub Package 功能进行私有包管理</li>
 </ul>
+<p>从 <code>0.2.0-next.0</code> 开始，<code>wpm release</code> 支持 Monorepo 仓库：在配置中声明 <code>packages</code> 后，可以一次性完成多个子包的版本号更新、更新日志生成与提交；配合多份配置文件和 <code>--config</code>，还支持整仓发布、按包独立发布或自定义分组发布，详见 <a href="./monorepo">Monorepo 发布</a>。</p>
 
-        <h2 id="安装" class="docs-header-link">
-          <span header-link="安装"></span>
+        <h2 id="%E5%AE%89%E8%A3%85" class="docs-header-link">
+          <span header-link="%E5%AE%89%E8%A3%85"></span>
           安装
         </h2>
       <p>执行如下命令安装<code>pkg-manager</code></p>
-<pre class="language-bash"><code class="language-bash"><div>$ <span class="token function">npm</span> i @worktile/pkg-manager --save
-// or
-$ yarn add @worktile/pkg-manager</div></code></pre>
-<p>安装后在 package.json 中添加如下脚本：</p>
-<pre><code><div>{
-  scripts<span class="token punctuation">:</span> {
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token string">"release"</span><span class="token punctuation">:</span> <span class="token string">"wpm release"</span><span class="token punctuation">,</span>
-    <span class="token string">"pub"</span><span class="token punctuation">:</span> <span class="token string">"wpm publish"</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-  }  
-}</div></code></pre>
-        <h2 id="配置" class="docs-header-link">
-          <span header-link="配置"></span>
+<tabs mode="code-group"><tab label="npm"><pre class="language-base"><span class="code-block-actions"><span class="lang">base</span><code-copy></code-copy></span><code class="language-base"><div>npm i <span class="token variable">@worktile</span><span class="token operator">/</span>pkg<span class="token operator">-</span>manager <span class="token operator">-</span><span class="token operator">-</span>save<span class="token operator">-</span>dev</div></code></pre>
+</tab><tab label="yarn"><pre class="language-base"><span class="code-block-actions"><span class="lang">base</span><code-copy></code-copy></span><code class="language-base"><div>yarn add <span class="token variable">@worktile</span><span class="token operator">/</span>pkg<span class="token operator">-</span>manager <span class="token operator">-</span>D</div></code></pre>
+</tab><tab label="pnpm"><pre class="language-base"><span class="code-block-actions"><span class="lang">base</span><code-copy></code-copy></span><code class="language-base"><div>$ pnpm add <span class="token variable">@worktile</span><span class="token operator">/</span>pkg<span class="token operator">-</span>manager <span class="token operator">-</span>D</div></code></pre>
+</tab></tabs>
+<pre class="language-bash"><span class="code-block-actions"><span class="lang">bash</span><code-copy></code-copy></span><code class="language-bash"><div>
+
+安装后在 package.json 中添加如下脚本：
+
+```json
+<span class="token punctuation">{</span>
+  scripts: <span class="token punctuation">{</span>
+    <span class="token punctuation">..</span>.
+    <span class="token string">"release"</span><span class="token keyword">:</span> <span class="token string">"wpm release"</span>,
+    <span class="token string">"pub"</span><span class="token keyword">:</span> <span class="token string">"wpm publish"</span>
+    <span class="token punctuation">..</span>.
+  <span class="token punctuation">}</span>  
+<span class="token punctuation">}</span></div></code></pre>
+
+        <h2 id="%E9%85%8D%E7%BD%AE" class="docs-header-link">
+          <span header-link="%E9%85%8D%E7%BD%AE"></span>
           配置
         </h2>
       <p>每个子命令都会有不同的参数设置，可以执行命令的时候传参 <code>wpm release --skip.bump</code>，也可以在 .wpmrc 文件中配置。</p>
-<pre><code><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> {
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
     allowBranch<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'master'</span><span class="token punctuation">,</span> <span class="token string">'v0.*'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
     bumpFiles<span class="token punctuation">:</span> <span class="token punctuation">[</span>
         <span class="token string">'package.json'</span><span class="token punctuation">,</span>
         <span class="token string">'package-lock.json'</span><span class="token punctuation">,</span>
-        {
+        <span class="token punctuation">{</span>
             filename<span class="token punctuation">:</span> <span class="token string">'./VERSION.txt'</span><span class="token punctuation">,</span>
             type<span class="token punctuation">:</span> <span class="token string">'plain-text'</span>
-        }<span class="token punctuation">,</span>
-        {
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
             filename<span class="token punctuation">:</span> <span class="token string">'./src/version.json'</span><span class="token punctuation">,</span>
             type<span class="token punctuation">:</span> <span class="token string">'json'</span>
-        }<span class="token punctuation">,</span>
-        {
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
             filename<span class="token punctuation">:</span> <span class="token string">'./src/version.ts'</span><span class="token punctuation">,</span>
             type<span class="token punctuation">:</span> <span class="token string">'code'</span>
-        }
+        <span class="token punctuation">}</span>
     <span class="token punctuation">]</span><span class="token punctuation">,</span>
-    skip<span class="token punctuation">:</span> {
+    skip<span class="token punctuation">:</span> <span class="token punctuation">{</span>
         changelog<span class="token punctuation">:</span> <span class="token boolean">true</span>
-    }<span class="token punctuation">,</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
     commitAll<span class="token punctuation">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    hooks<span class="token punctuation">:</span> {
-        prepublish<span class="token punctuation">:</span> <span class="token string">'yarn workspaces run build'</span><span class="token punctuation">,</span>
+    hooks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        prepublish<span class="token punctuation">:</span> <span class="token string">'pnpm run -r build'</span><span class="token punctuation">,</span>
         postpublish<span class="token punctuation">:</span> <span class="token string">'lerna publish from-git'</span><span class="token punctuation">,</span>
         postreleaseBranch<span class="token punctuation">:</span> <span class="token string">'lerna version {{version}} &amp;&amp; git add .'</span>
-    }
-}<span class="token comment" spellcheck="true">;</span></div></code></pre>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></div></code></pre>

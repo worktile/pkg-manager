@@ -1,0 +1,239 @@
+<p>从 <code>0.2.0-next.0</code> 开始，<code>wpm release</code> 支持在 Monorepo 仓库中发布。你可以在配置文件中通过 <code>packages</code> 声明参与本次发布的子包。单次 <code>wpm release</code> 内的版本是统一的，但通过<strong>多个 wpm 配置文件 + <code>--config</code></strong>，可以实现整仓发布、独立发布或自定义分组发布。</p>
+
+        <h3 id="%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F" class="docs-header-link">
+          <span header-link="%E5%8F%91%E5%B8%83%E6%A8%A1%E5%BC%8F"></span>
+          发布模式
+        </h3>
+      <p>同一个仓库可以放多份 wpm 配置文件，每次命令通过 <code>--config &lt;file&gt;</code> 选择其中一份：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>配置方式</th>
+<th>版本表现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>整仓发布</td>
+<td>一份配置的 <code>packages</code> 列出所有子包</td>
+<td>根目录与所有子包共享同一版本</td>
+</tr>
+<tr>
+<td>独立发布</td>
+<td>每个包一份配置，<code>packageJsonPath</code> 指向该包 <code>package.json</code>，<code>packages</code> 只包含该包</td>
+<td>各包按自己的 <code>package.json</code> 版本独立递增</td>
+</tr>
+<tr>
+<td>自定义分组</td>
+<td>每组一份配置，<code>packages</code> 列出组内包，<code>packageJsonPath</code> 指向该组的版本来源</td>
+<td>组内共享版本，组与组之间独立</td>
+</tr>
+</tbody></table>
+<p>注意：<strong>单次 <code>wpm release</code> 只处理一份配置</strong>。因此一次调用内版本统一；跨配置、多次调用才能实现独立版本。Release 分支和 Tag 也按每次调用创建，独立发布时应使用不同的版本号，避免 <code>release-v{{version}}</code> 分支或 <code>v{{version}}</code> Tag 冲突。</p>
+
+        <h3 id="%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%A4%BA%E4%BE%8B" class="docs-header-link">
+          <span header-link="%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E7%A4%BA%E4%BE%8B"></span>
+          目录结构示例
+        </h3>
+      <pre class="language-text"><span class="code-block-actions"><span class="lang">text</span><code-copy></code-copy></span><code class="language-text"><div>repo<span class="token operator">/</span>
+├── package<span class="token punctuation">.</span>json
+├── package<span class="token operator">-</span>lock<span class="token punctuation">.</span>json             # 可选，用于同步 workspace 版本
+├── wpm<span class="token punctuation">.</span>all<span class="token punctuation">.</span>config<span class="token punctuation">.</span>js             # 整仓发布
+├── wpm<span class="token punctuation">.</span>core<span class="token punctuation">.</span>config<span class="token punctuation">.</span>js            # 独立发布 packages<span class="token operator">/</span>core
+├── wpm<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>config<span class="token punctuation">.</span>js              # 自定义分组：ui 相关包一起发布
+└── packages<span class="token operator">/</span>
+    ├── core<span class="token operator">/</span>
+    │   ├── package<span class="token punctuation">.</span>json
+    │   ├── CHANGELOG<span class="token punctuation">.</span>md
+    │   └── src<span class="token operator">/</span>version<span class="token punctuation">.</span>ts
+    ├── cli<span class="token operator">/</span>
+    │   └── package<span class="token punctuation">.</span>json
+    ├── ui<span class="token operator">/</span>
+    │   └── package<span class="token punctuation">.</span>json
+    └── ui<span class="token operator">-</span>icons<span class="token operator">/</span>
+        └── package<span class="token punctuation">.</span>json</div></code></pre>
+
+        <h3 id="%E9%85%8D%E7%BD%AE" class="docs-header-link">
+          <span header-link="%E9%85%8D%E7%BD%AE"></span>
+          配置
+        </h3>
+      <p>在配置文件中增加 <code>packages</code> 配置，并通过 <code>--config</code> 指定使用哪一份：</p>
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    allowBranch<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'master'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">// 根目录参与 bump 的文件，默认 ['package.json', 'package-lock.json', 'npm-shrinkwrap.json']</span>
+    bumpFiles<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'package.json'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    packages<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span>
+            path<span class="token punctuation">:</span> <span class="token string">'packages/core'</span><span class="token punctuation">,</span>
+            bumpFiles<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'package.json'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> filename<span class="token punctuation">:</span> <span class="token string">'src/version.ts'</span><span class="token punctuation">,</span> type<span class="token punctuation">:</span> <span class="token string">'code'</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+            path<span class="token punctuation">:</span> <span class="token string">'packages/cli'</span>
+        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span>
+            <span class="token comment" spellcheck="true">// 不生成该包的 CHANGELOG.md</span>
+            path<span class="token punctuation">:</span> <span class="token string">'packages/utils'</span><span class="token punctuation">,</span>
+            infile<span class="token punctuation">:</span> <span class="token string">''</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></div></code></pre>
+<div class="dg-paragraph"><code>packages</code> 中每一项支持以下字段：</div>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>path</code></td>
+<td>是</td>
+<td>子包目录，相对于 <code>cwd</code>（默认为执行命令的目录）</td>
+</tr>
+<tr>
+<td><code>bumpFiles</code></td>
+<td>否</td>
+<td>该包需要更新版本号的文件，路径相对于该包目录；未配置时继承根级 <code>bumpFiles</code></td>
+</tr>
+<tr>
+<td><code>infile</code></td>
+<td>否</td>
+<td>该包 CHANGELOG 的输出文件，相对于该包目录，默认为 <code>CHANGELOG.md</code>；设置为空字符串 <code>&#39;&#39;</code> 表示不生成该包的更新日志</td>
+</tr>
+</tbody></table>
+<div class="dg-paragraph"><code>bumpFiles</code> 的每一项可以是文件路径字符串，也可以是对象：</div>
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div><span class="token punctuation">{</span>
+    filename<span class="token punctuation">:</span> <span class="token string">'src/version.ts'</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">// json（默认）| plain-text | code</span>
+    type<span class="token punctuation">:</span> <span class="token string">'code'</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">// 自定义 updater，模块需导出 readVersion(contents) 和 writeVersion(contents, version)</span>
+    updater<span class="token punctuation">:</span> <span class="token string">'./scripts/my-updater.js'</span>
+<span class="token punctuation">}</span></div></code></pre>
+<blockquote>
+<div class="dg-paragraph"><code>type: &#39;code&#39;</code> 会用内置的正则匹配并替换文件中的第一个语义化版本号，适合 <code>src/version.ts</code> 这类源码中的版本常量。</div>
+</blockquote>
+<p>如果版本号不在根 <code>package.json</code> 中，可以用 <code>packageJsonPath</code> 指定读取版本号的文件。该字段通常通过配置文件设置：</p>
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    packageJsonPath<span class="token punctuation">:</span> <span class="token string">'packages/core/package.json'</span><span class="token punctuation">,</span>
+    packages<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/core'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/cli'</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></div></code></pre>
+<blockquote>
+<div class="dg-paragraph"><code>packageJsonPath</code> 只是版本号来源，不会自动更新该文件。确保它同时出现在对应层级的 <code>bumpFiles</code> 中，否则读取到的版本不会随发布递增。</div>
+</blockquote>
+
+        <h3 id="%E5%A4%9A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B" class="docs-header-link">
+          <span header-link="%E5%A4%9A%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B"></span>
+          多配置文件示例
+        </h3>
+      <div class="dg-paragraph"><strong>整仓发布</strong>（<code>wpm.all.config.js</code>）：所有子包共享根 <code>package.json</code> 的版本。</div>
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    allowBranch<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'master'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    packageJsonPath<span class="token punctuation">:</span> <span class="token string">'package.json'</span><span class="token punctuation">,</span>
+    packages<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/core'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/cli'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/ui'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/ui-icons'</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></div></code></pre>
+<div class="dg-paragraph"><strong>独立发布</strong>（<code>wpm.core.config.js</code>）：只发布 <code>packages/core</code>，使用该包自己的版本号。</div>
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    allowBranch<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'master'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    packageJsonPath<span class="token punctuation">:</span> <span class="token string">'packages/core/package.json'</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">// 不 bump 根目录文件，避免把根 package.json 也改成 core 的版本</span>
+    bumpFiles<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token comment" spellcheck="true">// 不生成根 CHANGELOG</span>
+    infile<span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+    packages<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/core'</span><span class="token punctuation">,</span> bumpFiles<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'package.json'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></div></code></pre>
+<div class="dg-paragraph"><strong>自定义分组</strong>（<code>wpm.ui.config.js</code>）：把 <code>ui</code> 和 <code>ui-icons</code> 作为一个整体发布，组内共享版本。</div>
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    allowBranch<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'master'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    packageJsonPath<span class="token punctuation">:</span> <span class="token string">'packages/ui/package.json'</span><span class="token punctuation">,</span>
+    bumpFiles<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    infile<span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">,</span>
+    packages<span class="token punctuation">:</span> <span class="token punctuation">[</span>
+        <span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/ui'</span><span class="token punctuation">,</span> bumpFiles<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'package.json'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+        <span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/ui-icons'</span><span class="token punctuation">,</span> bumpFiles<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">'package.json'</span><span class="token punctuation">]</span> <span class="token punctuation">}</span>
+    <span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></div></code></pre>
+<p>按需选择配置执行：</p>
+<pre class="language-sh"><span class="code-block-actions"><span class="lang">sh</span><code-copy></code-copy></span><code class="language-sh"><div>wpm release <span class="token operator">-</span><span class="token operator">-</span>config wpm<span class="token punctuation">.</span>all<span class="token punctuation">.</span>config<span class="token punctuation">.</span>js minor   # 整仓
+wpm release <span class="token operator">-</span><span class="token operator">-</span>config wpm<span class="token punctuation">.</span>core<span class="token punctuation">.</span>config<span class="token punctuation">.</span>js patch  # 只发 core
+wpm release <span class="token operator">-</span><span class="token operator">-</span>config wpm<span class="token punctuation">.</span>ui<span class="token punctuation">.</span>config<span class="token punctuation">.</span>js minor    # 发 ui 分组</div></code></pre>
+<p>使用多个配置文件时注意：</p>
+<ul>
+<li><strong>单次调用只处理一份配置</strong>，一次调用内根目录和所选子包共享同一个新版本；独立版本来自多次调用和各自的 <code>packageJsonPath</code>。</li>
+<li>各配置的 <code>packages</code> 应互不重叠，否则同一个包会在多次发布中被重复 bump。</li>
+<li>独立发布或分组发布时，建议用 <code>bumpFiles: []</code> 关闭根目录 bump，并用 <code>infile: &#39;&#39;</code> 关闭根 CHANGELOG；子包通过自己的 <code>bumpFiles</code> 更新版本。</li>
+<li>Release 分支和 Tag 由每次调用的版本号生成，独立发布时请确保不同包使用不同版本号，避免分支或 Tag 冲突。</li>
+<li><code>--config</code> 只决定读取哪份配置，Git 提交、分支和推送仍在当前仓库中执行。</li>
+</ul>
+
+        <h3 id="release-%E5%90%84%E9%98%B6%E6%AE%B5%E8%A1%8C%E4%B8%BA" class="docs-header-link">
+          <span header-link="release-%E5%90%84%E9%98%B6%E6%AE%B5%E8%A1%8C%E4%B8%BA"></span>
+          Release 各阶段行为
+        </h3>
+      <p>执行 <code>wpm release</code> 后，各个阶段在 Monorepo 下的行为如下：</p>
+<ol>
+<li><strong>选择版本</strong>：读取根 <code>package.json</code>（或 <code>packageJsonPath</code>）的 <code>version</code>，按交互提示或 <code>releaseAs</code> 参数计算下一个版本。</li>
+<li><strong>创建 Release 分支</strong>：按 <code>releaseBranchFormat</code> 创建一个仓库级的分支，例如 <code>release-v1.2.0</code>。</li>
+<li><strong>更新版本号（bump）</strong>：<ul>
+<li>更新根级 <code>bumpFiles</code> 中的文件</li>
+<li>依次更新每个 <code>packages</code> 中声明的子包：使用该包的 <code>bumpFiles</code>，未配置时继承根级配置，文件路径相对包目录解析</li>
+<li>同步 <code>package-lock.json</code> 中对应的 workspace 版本号（见下文）</li>
+</ul>
+</li>
+<li><strong>生成更新日志（changelog）</strong>：<ul>
+<li>为每个子包生成/合并各自的 <code>CHANGELOG.md</code>，只包含该包目录下的提交</li>
+<li>为根目录生成/合并根 <code>CHANGELOG.md</code>，汇总所有子包目录下的提交</li>
+<li>包级或根级的 <code>infile</code> 为空字符串时跳过对应更新日志</li>
+</ul>
+</li>
+<li><strong>提交</strong>：把根级与各子包的 <code>CHANGELOG.md</code>、<code>bumpFiles</code> 中实际存在的文件加入本次 Release 提交。</li>
+<li><strong>推送</strong>：推送 Release 分支到 <code>origin</code>，并按远程地址输出创建 PR 的链接。</li>
+</ol>
+
+        <h3 id="package-lock-json-%E7%89%88%E6%9C%AC%E5%90%8C%E6%AD%A5" class="docs-header-link">
+          <span header-link="package-lock-json-%E7%89%88%E6%9C%AC%E5%90%8C%E6%AD%A5"></span>
+          package-lock.json 版本同步
+        </h3>
+      <p>如果仓库中存在 <code>package-lock.json</code>（包含 <code>packages</code> 字段，即 lockfileVersion 2/3 的格式），<code>bump</code> 阶段会：</p>
+<ol>
+<li>从 <code>cwd</code> 逐级向上查找第一个带 <code>packages</code> 字段的 <code>package-lock.json</code></li>
+<li>根据本次被 bump 的 <code>package.json</code> 路径，更新 <code>packages[&quot;&quot;]</code>（根包）或 <code>packages[&quot;packages/core&quot;]</code>（子包）的 <code>version</code></li>
+<li>将 <code>package-lock.json</code> 自动加入待提交文件</li>
+</ol>
+<p>目前只同步 <code>package-lock.json</code>；<code>pnpm-lock.yaml</code>、<code>yarn.lock</code> 不会被修改，使用 pnpm/yarn 的仓库请在 <code>postbump</code> 钩子中自行同步，例如：</p>
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    hooks<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        postbump<span class="token punctuation">:</span> <span class="token string">'git add .'</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></div></code></pre>
+
+        <h3 id="%E9%AA%8C%E8%AF%81%E9%85%8D%E7%BD%AE" class="docs-header-link">
+          <span header-link="%E9%AA%8C%E8%AF%81%E9%85%8D%E7%BD%AE"></span>
+          验证配置
+        </h3>
+      <p>建议先用 <code>--dry-run</code> 检查参与 bump 和 changelog 的文件列表，不会修改文件或提交：</p>
+<pre class="language-sh"><span class="code-block-actions"><span class="lang">sh</span><code-copy></code-copy></span><code class="language-sh"><div>wpm release <span class="token operator">-</span><span class="token operator">-</span>dry<span class="token operator">-</span>run</div></code></pre>
+<p>确认无误后再执行正式发布：</p>
+<pre class="language-sh"><span class="code-block-actions"><span class="lang">sh</span><code-copy></code-copy></span><code class="language-sh"><div>wpm release patch</div></code></pre>
+
+        <h3 id="%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98" class="docs-header-link">
+          <span header-link="%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"></span>
+          常见问题
+        </h3>
+      <div class="dg-paragraph"><strong>子包没有生成 CHANGELOG</strong></div>
+<ul>
+<li>检查该包是否在 <code>packages</code> 中声明</li>
+<li>检查该包或根级的 <code>infile</code> 是否被设置为 <code>&#39;&#39;</code></li>
+<li>更新日志只包含该包目录下的提交，若该包在本次版本区间没有提交，会输出 <code>No changelog generated</code> 警告</li>
+</ul>
+<div class="dg-paragraph"><strong>根 CHANGELOG 没有包含根目录的改动</strong></div>
+<p>根 CHANGELOG 的提交范围按 <code>packages</code> 中的目录过滤，只汇总子包目录下的提交。根目录（如构建脚本、配置）的改动不会出现在根 CHANGELOG 中，需要时请手动补充。</p>
+<div class="dg-paragraph"><strong>子包版本号没有变化</strong></div>
+<ul>
+<li>确认该包的 <code>bumpFiles</code>（或继承的根级 <code>bumpFiles</code>）中包含对应文件</li>
+<li>文件不存在或未匹配到版本号时，<code>wpm</code> 会输出 <code>Skip (file not found)</code> 或 <code>Skip (no version)</code> 警告，不会中断发布</li>
+</ul>
+<div class="dg-paragraph"><strong>提交里缺少构建产物</strong></div>
+<p>Release 提交只包含 <code>wpm</code> 已知的 <code>CHANGELOG.md</code> 和 <code>bumpFiles</code>。如需提交其他生成文件，在 <code>postbump</code> 钩子中执行 <code>git add</code>。</p>
+<div class="dg-paragraph"><strong>能否只用命令行传 <code>packages</code></strong></div>
+<div class="dg-paragraph"><code>--packages</code> 是数组参数，元素为对象，不适合在命令行书写。推荐始终在 <code>.wpmrc.js</code>、<code>.wpmrc.json</code> 或 <code>package.json</code> 的 <code>wpm</code> 字段中配置。</div>

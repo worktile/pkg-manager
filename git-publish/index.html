@@ -1,0 +1,102 @@
+<!DOCTYPE html><html lang="en" data-beasties-container><head>
+    <meta charset="utf-8">
+    <title>Git Publish - pkg-manager</title>
+    <base href="/pkg-manager/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>@-webkit-keyframes sbx-reset-in{0%{-webkit-transform:translate3d(-20%,0,0);transform:translate3d(-20%,0,0);opacity:0}to{-webkit-transform:none;transform:none;opacity:1}}html,body{box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;margin:0;padding:0;height:100%}html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;-ms-overflow-style:scrollbar;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Helvetica Neue,Noto Sans,Noto Sans CJK SC,Microsoft Yahei,Arial,Hiragino Sans GB,sans-serif;font-size:.875rem;color:var(--dg-text-color);background-color:var(--dg-bg-color);line-height:1.5715}h3{margin:8px 0}p{margin:0}a,a:visited,a:hover{color:#6698ff;text-decoration:none}.dg-hidden{visibility:hidden!important}.dg-d-none{display:none!important}.dg-mt-4{margin-top:1.5rem!important}:root{--dg-gray-10: #fff;--dg-gray-80: #f3f3f3;--dg-gray-90: #f3f5f7;--dg-gray-100: #f6f8fa;--dg-gray-200: #eee;--dg-gray-300: #ddd;--dg-gray-400: #cacaca;--dg-gray-500: #aaa;--dg-gray-600: #999;--dg-gray-700: #666;--dg-gray-800: #333;--dg-bg-color: #fff;--dg-text-color: #333;--dg-hero-banner-bg-color: #dae6f3;--dg-hero-launch-title-color: #1e3042;--dg-navbar-box-shadow: 0 8px 24px -2px rgba(0, 0, 0, .05);--dg-dropdown-box-shadow: 0 4px 10px rgba(0, 0, 0, .1)}.dg-main{display:flex;flex-direction:column;position:absolute;inset:60px 0 0}.dg-scroll-container{overflow:auto}.dg-layout{display:flex;flex-direction:column;flex:auto}.dg-layout .dg-sidebar{flex:0 0 auto;width:300px;overflow:auto;padding-top:20px;border-right:1px solid var(--dg-gray-300);position:fixed;top:60px;bottom:0}.dg-layout .dg-doc-viewer{flex:auto;padding:30px 50px 0;margin-left:300px}.dg-layout .dg-doc-viewer-backdrop{position:absolute;transition:background-color .4s cubic-bezier(.25,.8,.25,1),z-index 0s .4s;background-color:transparent;z-index:-1;inset:0}@media(max-width:991.98px){.dg-layout .dg-sidebar{z-index:2;transition:left .4s cubic-bezier(.25,.8,.25,1),background .4s;left:-300px}.dg-layout .dg-doc-viewer{margin-left:0;padding:20px 15px;position:relative}}.dg-doc-viewer{display:flex;flex-direction:column}.dg-doc-viewer .dg-doc-header{display:flex;align-items:center}.dg-doc-viewer .dg-doc-header .sidebar-toggler{display:none;margin-right:10px;padding:4px 8px;border-radius:4px}.dg-doc-viewer .dg-doc-header .sidebar-toggler .dg-icon{font-size:14px}.dg-doc-viewer .dg-doc-header .sidebar-toggler:hover{background:#6698ff;color:#fff}@media(max-width:991.98px){.dg-doc-viewer .dg-doc-header .sidebar-toggler{display:block}}.dg-doc-viewer .dg-doc-header .title{font-size:1.5rem;font-weight:700}.dg-doc-viewer .dg-doc-viewer-inner{display:flex;flex:0 0 auto;align-items:flex-start}.dg-doc-viewer .dg-doc-viewer-inner-content{flex:auto;width:78%}@media(max-width:991.98px){.dg-doc-viewer .dg-doc-viewer-inner-content{width:100%;max-width:100%}}.dg-doc-viewer .dg-spring{flex:1 0 30px}.dg-doc-content{flex:1;display:block;padding:20px 0}.dg-doc-content>:first-child{margin-top:0!important}.dg-doc-content h3:not(.dg-example-viewer h3){font-size:18px;margin:20px 0 16px}.dg-doc-content ul:not(.dg-example-viewer ul){margin:10px 0 10px 32px;padding:0}.dg-doc-content ul:not(.dg-example-viewer ul) li{padding:3px 0}.dg-doc-content ol:not(.dg-example-viewer ol){margin:10px 0 10px 32px;padding:0}.dg-doc-content ol:not(.dg-example-viewer ol) li{padding:3px 0}.dg-doc-content code:not(.dg-example-viewer code){display:inline-block;padding:0 4px;margin:0 2px;background:var(--dg-gray-90);border-radius:4px;color:var(--dg-text-color)}.dg-doc-content pre:not(.dg-example-viewer pre){position:relative;padding:1em;color:var(--dg-gray-700);background:var(--dg-gray-100);border-radius:4px;overflow:auto}.dg-doc-content pre:not(.dg-example-viewer pre)>.code-block-actions{position:absolute;top:1em;right:1.1em;z-index:1;display:inline-flex;align-items:center;justify-content:flex-end;min-height:1.5em;pointer-events:none}.dg-doc-content pre:not(.dg-example-viewer pre)>.code-block-actions code-copy,.dg-doc-content pre:not(.dg-example-viewer pre)>.code-block-actions .dg-code-copy{position:absolute;align-items:center;justify-content:center;box-sizing:content-box;color:var(--dg-gray-500);cursor:pointer;opacity:0;pointer-events:none;padding:6px;margin:-6px;transition:opacity .15s ease,color .15s ease}.dg-doc-content pre:not(.dg-example-viewer pre)>.code-block-actions code-copy:hover,.dg-doc-content pre:not(.dg-example-viewer pre)>.code-block-actions .dg-code-copy:hover{color:#6698ff}.dg-doc-content pre:not(.dg-example-viewer pre)>.code-block-actions code-copy svg,.dg-doc-content pre:not(.dg-example-viewer pre)>.code-block-actions .dg-code-copy svg{width:1em;height:1em;fill:currentColor}.dg-doc-content pre:not(.dg-example-viewer pre):hover>.code-block-actions code-copy,.dg-doc-content pre:not(.dg-example-viewer pre):hover>.code-block-actions .dg-code-copy{opacity:1;pointer-events:auto}.dg-doc-content pre:not(.dg-example-viewer pre)>code{display:block;padding:0;background:transparent;font-size:.875rem}.dg-doc-content p:not(.dg-example-viewer p){line-height:26px;margin-top:0;margin-bottom:8px;font-size:1rem}.dg-doc-content p:not(.dg-example-viewer p) code{line-height:24px}.dg-doc-meta{display:flex;flex:0 0 auto;align-items:center;padding:25px 0;border-top:1px solid var(--dg-gray-200)}.dg-pages-link{display:flex}.dg-pages-link .dg-page-link{flex:1 1 0;width:100%;display:flex}.dg-pages-link .dg-page-link a{padding:16px;border-radius:3px;color:var(--dg-text-color);border:1px solid var(--dg-gray-200);box-shadow:0 0 4px #0000001a;width:100%;display:flex}.dg-pages-link .dg-page-link a:hover{text-decoration:none;color:#6698ff;border-color:#6698ff;cursor:pointer}.dg-pages-link .dg-page-link a:hover .dg-page-link-icon{color:#6698ff}.dg-pages-link .dg-page-link a .dg-page-link-icon{color:var(--dg-gray-500);flex:1 1 0;align-self:center}.dg-pages-link .dg-page-link a .dg-page-link-icon dg-icon{font-size:24px}.dg-pages-link .dg-page-link:first-child a{text-align:right}.dg-pages-link .dg-page-link:first-child:not(:last-child){margin-right:24px}.dg-pages-link .dg-page-link:first-child .dg-page-link-icon{text-align:left}.dg-pages-link .dg-page-link:last-child a{text-align:left;flex-direction:row-reverse}.dg-pages-link .dg-page-link:last-child .dg-page-link-icon{text-align:right}.dg-pages-link .dg-page-link .dg-page-link-label{font-size:12px;color:var(--dg-gray-600);font-weight:400;line-height:1.625}.dg-pages-link .dg-page-link .dg-page-link-title{font-size:16px;font-weight:500;line-height:1.5}.dg-icon{font-size:1rem;line-height:0}.dg-icon svg{width:1em;height:1em;fill:currentColor;vertical-align:-.16em;background-repeat:no-repeat}.dg-menu{overflow-x:hidden}.dg-menu .menu-item{display:block;padding:0 15px 0 30px}.dg-menu .menu-item.active{padding-right:12px}.dg-menu .menu-item.active{border-right:3px solid #6698ff}.dg-menu .menu-item.active .item-content{background:#6698ff0d;color:#6698ff}.dg-menu .menu-item.active:after{background-color:#6698ff;width:3px}.dg-menu .menu-item .item-content{display:flex;align-items:center;margin:0 -1000px;padding:9px 1000px;color:var(--dg-text-color)}.dg-menu .menu-item .item-content>.item-content-title{flex:1 1 0}.dg-menu .menu-item .item-content>.item-content-label{flex:0 0 auto;background-color:var(--dg-bg-color);display:flex;border-radius:4px}.dg-menu .menu-item:hover .item-content{color:#6698ff;text-decoration:none}.dg-sidebar .dg-sidebar-header{display:flex;flex-direction:column;align-items:center;padding:0 0 10px;border-bottom:1px solid var(--dg-gray-200)}.dg-sidebar .dg-sidebar-header .logo{width:80px;height:80px}.dg-sidebar .dg-sidebar-header .title{font-weight:500;color:var(--dg-text-color);font-size:1.25rem;padding:5px 0}.dg-sidebar .dg-sidebar-header .description{color:var(--dg-gray-700);padding:5px 10px}.dg-sidebar .dg-search-container{margin:10px}.dg-search-container{position:relative;line-height:.875rem;font-size:.875rem}.dg-search-container .search-icon{position:absolute;top:50%;left:10px;transform:translateY(-50%);z-index:1;color:var(--dg-gray-500);pointer-events:none;font-size:.875rem}.dg-search-container .search{padding:.532rem 10px .532rem 30px;width:100%;outline:none;color:var(--dg-text-color);background-color:var(--dg-bg-color);border:1px solid var(--dg-gray-200);border-radius:18px;-webkit-appearance:none;box-sizing:border-box}.dg-search-container .search-results-container{display:none;position:absolute;top:100%;left:0;right:0;margin:8px 0 0;min-width:200px;max-width:400px;max-height:230px;padding:6px 0;z-index:10;background-color:var(--dg-bg-color);border-radius:4px;border:1px solid var(--dg-gray-200);box-shadow:0 4px 10px #0000001a;box-sizing:border-box;overflow-y:auto}.dg-search-container .search-results-container.result-empty{text-align:center;padding:40px 0}.dg-footer{display:block;padding:20px;border-top:1px solid var(--dg-gray-200);text-align:center;color:var(--dg-gray-600)}
+</style><link rel="stylesheet" href="styles-CTDDQLYS.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-CTDDQLYS.css"></noscript><style ng-app-id="ng">.st0[_ngcontent-ng-c919729482]{fill:#00cc05}.st1[_ngcontent-ng-c919729482]{fill:#ffda00}.st2[_ngcontent-ng-c919729482]{fill:#246eff}.st3[_ngcontent-ng-c919729482]{fill:#004ab5}.st4[_ngcontent-ng-c919729482]{fill:#ff5050}</style></head>
+  <body>
+    <dg-root ng-version="21.2.14" ng-server-context="ssg"><router-outlet></router-outlet><dg-root-actual class="dg-main dg-layout dg-scroll-container"><!----><dg-sidebar class="dg-sidebar"><div class="dg-sidebar-header"><!----><svg _ngcontent-ng-c919729482="" version="1.1" id="docgeni-logo" data-name="docgeni-logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 30 30" xml:space="preserve" class="logo" style="enable-background: new 0 0 30 30;"><g _ngcontent-ng-c919729482=""><path _ngcontent-ng-c919729482="" d="M3.74,3.26h13.54c0,0,4.5,0,7.99,4.66c2.33,3.12,2.31,5.42,2.31,5.42s-0.88-2.44-7.04-2.41
+ c-7.43,0.04-10.59,0.04-10.59,0.04S3.23,11.28,3.74,3.26z" class="st0"/><path _ngcontent-ng-c919729482="" d="M6.37,3.26h10.92c0,0,4.5,0,7.99,4.66c2.33,3.12,2.31,5.42,2.31,5.42s-0.88-2.44-7.04-2.41
+ c-7.43,0.04-7.97,0.04-7.97,0.04S5.87,11.28,6.37,3.26z" class="st1"/><g _ngcontent-ng-c919729482=""><path _ngcontent-ng-c919729482="" d="M16.04,26.74H2.45L4.88,14.5h6.77l-1.02,5.15h5.4c2.52,0,4.58-2.06,4.58-4.58s-2.06-4.58-4.58-4.58h-1.98
+   v-7.1h1.98c6.44,0,11.68,5.24,11.68,11.68C27.72,21.5,22.48,26.74,16.04,26.74z" class="st2"/></g><path _ngcontent-ng-c919729482="" d="M27.64,13.61c0,0-3.95-0.9-7.06,0.88c0,0-0.31-2.39-2.47-3.55C18.11,10.95,27.32,8.46,27.64,13.61z" class="st3"/><path _ngcontent-ng-c919729482="" d="M8.99,3.26h8.68c0,0,3.92,0,7.6,4.66c2.24,2.84,2.38,5.92,2.38,5.92s0.06-2.89-4.48-2.9
+ c-7.4-0.02-7.97,0.04-7.97,0.04S8.49,11.28,8.99,3.26z" class="st4"/></g></svg><!----><!----><a class="title" href="/pkg-manager/">pkg-manager</a><span class="description">包管理工具提供 Release 和 Publish 功能</span><!----></div><!----><dg-search><div class="dg-search-container"><dg-icon iconname="search" class="dg-icon search-icon"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fit="" height="1em" width="1em" preserveAspectRatio="xMidYMid meet" focusable="false"><g id="oonormal/search" stroke-width="1" fill-rule="evenodd"><path d="M6.751 12.303A5.557 5.557 0 0 1 1.2 6.751C1.2 3.691 3.69 1.2 6.751 1.2a5.558 5.558 0 0 1 5.551 5.551 5.557 5.557 0 0 1-5.551 5.552M6.751 0a6.751 6.751 0 1 0 4.309 11.949l3.855 3.855a.6.6 0 1 0 .849-.849l-3.854-3.853A6.751 6.751 0 0 0 6.751 0" id="ooFill-1"/></g></svg></dg-icon><input id="inputSearch" class="search ng-untouched ng-pristine ng-valid" placeholder="搜索" value><div class="search-results-container result-empty"><!----><!----></div><!----></div></dg-search><!----><div class="dg-menu"><!----><!----><div routerlinkactive="active" class="menu-item"><a class="item-content" href="/pkg-manager/intro"><div class="item-content-title"> 介绍 <!----></div><div class="item-content-label"><!----></div></a></div><!----><!----><!----><!----><!----><!----><!----><div routerlinkactive="active" class="menu-item"><a class="item-content" href="/pkg-manager/release"><div class="item-content-title"> Release <!----></div><div class="item-content-label"><!----></div></a></div><!----><!----><!----><!----><!----><!----><!----><div routerlinkactive="active" class="menu-item"><a class="item-content" href="/pkg-manager/monorepo"><div class="item-content-title"> Monorepo 发布 <!----></div><div class="item-content-label"><!----></div></a></div><!----><!----><!----><!----><!----><!----><!----><div routerlinkactive="active" class="menu-item"><a class="item-content" href="/pkg-manager/publish"><div class="item-content-title"> Publish <!----></div><div class="item-content-label"><!----></div></a></div><!----><!----><!----><!----><!----><!----><!----><div routerlinkactive="active" class="menu-item active"><a class="item-content" href="/pkg-manager/git-publish"><div class="item-content-title"> Git Publish <!----></div><div class="item-content-label"><!----></div></a></div><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></div><!----></dg-sidebar><!----><router-outlet></router-outlet><dg-doc-viewer class="dg-doc-viewer"><!----><div class="dg-doc-viewer-inner"><div class="dg-doc-viewer-inner-content"><dg-doc-header><header class="dg-doc-header"><a href="javascript:;" class="sidebar-toggler"><dg-icon iconname="list" class="dg-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" id="align-justify">
+<g id="ageditor/align-justify" stroke-width="1" fill-rule="evenodd">
+  <path d="M0 1h16v1.2H0V1zm0 6.4h16v1.2H0V7.4zm0 6.4h16V15H0v-1.2z" id="ag合并形状"/>
+</g>
+</svg></dg-icon></a><!----><span class="title">Git Publish</span><!----></header></dg-doc-header><dg-content-viewer class="dg-doc-content">
+        <h3 id="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E" class="docs-header-link">
+          <span header-link="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E"></span>
+          使用说明
+        </h3>
+      <pre><span class="code-block-actions"><code-copy role="button" tabindex="0" class="dg-code-copy dg-icon" code-copy title="Copy" aria-label="Copy"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fit="" height="1em" width="1em" preserveAspectRatio="xMidYMid meet" focusable="false">
+<path d="M7.6 8.2V7h4.174v1.2H7.6zm0 3V10h4.174v1.2H7.6zm-4.4-10v10.074H2L2.003 2c0-1.088.895-2 1.997-2h7.585v1.2H3.2zM5 2h9a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm.2 1.2v11.6h8.6V3.2H5.2z"/>
+</svg></code-copy></span><code>wpm git-publish</code></pre>
+<p>运行以上命令，会执行以下步骤：</p>
+<ol>
+<li>创建临时文件夹并拷贝 artifacts 到临时文件夹</li>
+<li>初始化临时文件夹的 Git 并提交到本地 Git</li>
+<li>创建一个 Release Tag</li>
+<li>推送临时文件夹和 Tag 到远程分支</li>
+</ol>
+
+        <h3 id="%E9%80%89%E9%A1%B9" class="docs-header-link">
+          <span header-link="%E9%80%89%E9%A1%B9"></span>
+          选项
+        </h3>
+      <ul>
+<li><a href="#--source"><code>--source</code></a></li>
+<li><a href="#--name"><code>--name</code></a></li>
+<li><a href="#--protocol"><code>--protocol</code></a></li>
+<li><a href="#--provider"><code>--provider</code></a></li>
+<li><a href="#--organization"><code>--organization</code></a></li>
+<li><a href="#--dry-run"><code>--dry-run</code></a></li>
+</ul>
+
+        <h3 id="%3Ccode%3E--source%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--source%3C/code%3E"></span>
+          <code>--source</code>
+        </h3>
+      <p>需要同步到 Repo 的制品文件夹，一般是 built 文件夹</p>
+
+        <h3 id="%3Ccode%3E--name%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--name%3C/code%3E"></span>
+          <code>--name</code>
+        </h3>
+      <p>发布类库在git上仓储的名称，比如你发布的仓储叫 <code>example</code> ，那么 name 就需要传 <code>example</code></p>
+
+        <h3 id="%3Ccode%3E--protocol%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--protocol%3C/code%3E"></span>
+          <code>--protocol</code>
+        </h3>
+      <p>Git 传输协议，支持 <code>https</code> 和 <code>ssh</code>, 默认是 <code>ssh</code></p>
+
+        <h3 id="%3Ccode%3E--provider%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--provider%3C/code%3E"></span>
+          <code>--provider</code>
+        </h3>
+      <p>发布仓储的目标服务，目前支持 <code>git</code>、<code>github</code>、<code>gitlab</code></p>
+
+        <h3 id="%3Ccode%3E--organization%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--organization%3C/code%3E"></span>
+          <code>--organization</code>
+        </h3>
+      <p>组织或者用户在 provider 上的名称，会根据 <code>provider</code>、<code>protocol</code>、<code>name</code> 生成 Remote URL。</p>
+<pre><span class="code-block-actions"><code-copy role="button" tabindex="0" class="dg-code-copy dg-icon" code-copy title="Copy" aria-label="Copy"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fit="" height="1em" width="1em" preserveAspectRatio="xMidYMid meet" focusable="false">
+<path d="M7.6 8.2V7h4.174v1.2H7.6zm0 3V10h4.174v1.2H7.6zm-4.4-10v10.074H2L2.003 2c0-1.088.895-2 1.997-2h7.585v1.2H3.2zM5 2h9a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm.2 1.2v11.6h8.6V3.2H5.2z"/>
+</svg></code-copy></span><code>provider: github
+protocol: ssh
+name: example
+organization: worktile
+
+生成的 Remote URL: git@github.com:worktile/example.git</code></pre>
+<pre><span class="code-block-actions"><code-copy role="button" tabindex="0" class="dg-code-copy dg-icon" code-copy title="Copy" aria-label="Copy"><svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fit="" height="1em" width="1em" preserveAspectRatio="xMidYMid meet" focusable="false">
+<path d="M7.6 8.2V7h4.174v1.2H7.6zm0 3V10h4.174v1.2H7.6zm-4.4-10v10.074H2L2.003 2c0-1.088.895-2 1.997-2h7.585v1.2H3.2zM5 2h9a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm.2 1.2v11.6h8.6V3.2H5.2z"/>
+</svg></code-copy></span><code>provider: github
+protocol: https
+name: example
+organization: worktile
+
+生成的 Remote URL: https://github.com/worktile/example</code></pre>
+</dg-content-viewer><!----><dg-doc-pages-links class="dg-pages-link"><div class="dg-page-link"><a href="/pkg-manager/publish"><div class="dg-page-link-icon"><dg-icon iconname="arrowLeft" class="dg-icon"><svg width="1em" height="1em" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>navigation/arrow-left</title>
+    <desc>Created with Sketch.</desc>
+    <g id="navigation/arrow-left" stroke="none" stroke-width="1" fill-rule="evenodd">
+        <path d="M7.4,4.14955232 L4.4383,7.3151 C4.2123,7.5571 3.8323,7.5691 3.5903,7.3431 C3.3483,7.1161 3.3353,6.7371 3.5623,6.4951 L7.53151194,2.2516372 C7.55538364,2.21814642 7.58305703,2.18659454 7.6145,2.1576 C7.8585,1.9336 8.2375,1.9496 8.4615,2.1946 L12.4315,6.5176 C12.6565,6.7616 12.6395,7.1416 12.3955,7.3656 C12.1515,7.5896 11.7725,7.5736 11.5475,7.3296 L8.6,4.11846621 L8.6,13.2666667 C8.6,13.6712222 8.331,14 8,14 C7.668,14 7.4,13.6712222 7.4,13.2666667 L7.4,4.14955232 Z" id="形状结合" transform="translate(7.995013, 7.999832) rotate(-90.000000) translate(-7.995013, -7.999832) "/>
+    </g>
+</svg></dg-icon></div><div><div class="dg-page-link-label"> 上一篇 </div><div class="dg-page-link-title"> Publish </div></div></a></div><!----><!----></dg-doc-pages-links><!----><dg-doc-meta class="dg-doc-meta dg-mt-4 dg-d-none"><!----><!----></dg-doc-meta></div><!----></div><!----><div class="dg-spring"></div><dg-footer class="dg-footer dg-hidden"></dg-footer><!----><div class="dg-doc-viewer-backdrop"></div></dg-doc-viewer><!----></dg-root-actual><!----></dg-root>
+  <link rel="modulepreload" href="chunk-RNMDN42R.js"><script src="polyfills-X2TQPNDQ.js" type="module"></script><script src="main-T2CXYT5Z.js" type="module"></script>
+
+</body></html>

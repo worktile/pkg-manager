@@ -1,0 +1,16 @@
+{
+  "routes": {
+    "/pkg-manager": {},
+    "/pkg-manager/git-publish": {},
+    "/pkg-manager/intro": {},
+    "/pkg-manager/monorepo": {},
+    "/pkg-manager/publish": {},
+    "/pkg-manager/release": {},
+    "/pkg-manager/zh-CN": {},
+    "/pkg-manager/zh-CN/git-publish": {},
+    "/pkg-manager/zh-CN/intro": {},
+    "/pkg-manager/zh-CN/monorepo": {},
+    "/pkg-manager/zh-CN/publish": {},
+    "/pkg-manager/zh-CN/release": {}
+  }
+}

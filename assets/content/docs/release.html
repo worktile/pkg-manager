@@ -1,12 +1,13 @@
 <p>Release 提供修改版本号，创建 Release 分支，生成更新日志，提交到远程分支等功能。</p>
 
-        <h3 id="使用说明" class="docs-header-link">
-          <span header-link="使用说明"></span>
+        <h3 id="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E" class="docs-header-link">
+          <span header-link="%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E"></span>
           使用说明
         </h3>
-      <pre><code><div>wpm release <span class="token number">1.0</span><span class="token punctuation">.</span><span class="token number">1</span> # 明确版本号
-wpm release patch # 语义化版本关键字<span class="token punctuation">:</span> `patch`、`minor`、`major`
-wpm release       # 通过命令行提示选择版本</div></code></pre><p>运行以上命令，会执行以下步骤：</p>
+      <pre><span class="code-block-actions"><code-copy></code-copy></span><code>wpm release 1.0.1 # 明确版本号
+wpm release patch # 语义化版本关键字: `patch`、`minor`、`major`
+wpm release       # 通过命令行提示选择版本</code></pre>
+<p>运行以上命令，会执行以下步骤：</p>
 <ol>
 <li>切换到允许发布的分支，并列出当前版本和最后一次的 Tag</li>
 <li>提示你选择一个新版本</li>
@@ -16,142 +17,158 @@ wpm release       # 通过命令行提示选择版本</div></code></pre><p>运�
 <li>推送代码到远程分支</li>
 </ol>
 
-        <h3 id="语义化升级版本-<code>bump</code>" class="docs-header-link">
-          <span header-link="语义化升级版本-<code>bump</code>"></span>
+        <h3 id="%E8%AF%AD%E4%B9%89%E5%8C%96%E5%8D%87%E7%BA%A7%E7%89%88%E6%9C%AC-%3Ccode%3Ebump%3C/code%3E" class="docs-header-link">
+          <span header-link="%E8%AF%AD%E4%B9%89%E5%8C%96%E5%8D%87%E7%BA%A7%E7%89%88%E6%9C%AC-%3Ccode%3Ebump%3C/code%3E"></span>
           语义化升级版本 <code>bump</code>
         </h3>
-      <pre class="language-sh"><code class="language-sh"><div>wpm release <span class="token punctuation">[</span>major | minor | patch | premajor | preminor | prepatch | prerelease<span class="token punctuation">]</span>
+      <pre class="language-sh"><span class="code-block-actions"><span class="lang">sh</span><code-copy></code-copy></span><code class="language-sh"><div>wpm release <span class="token punctuation">[</span>major | minor | patch | premajor | preminor | prepatch | prerelease<span class="token punctuation">]</span>
 # uses the <span class="token keyword">next</span> semantic <span class="token function">version</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span> value <span class="token operator">and</span> this skips `<span class="token keyword">Select</span> a new version <span class="token keyword">for</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>` prompt</div></code></pre>
-<p>当指定了语义化升级版本后，<code>wpm release</code> 命令会忽略选择版本的步骤并且通过指定关键字<a target="_blank"href="https://github.com/npm/node-semver#functions">升级版本</a></p>
+<p>当指定了语义化升级版本后，<code>wpm release</code> 命令会忽略选择版本的步骤并且通过指定关键字<a target="_blank" href="https://github.com/npm/node-semver#functions">升级版本</a></p>
 
-        <h3 id="选项" class="docs-header-link">
-          <span header-link="选项"></span>
+        <h3 id="%E9%80%89%E9%A1%B9" class="docs-header-link">
+          <span header-link="%E9%80%89%E9%A1%B9"></span>
           选项
         </h3>
       <ul>
-<li>  <code>--allow-branch</code></li>
-<li>  <code>--dry-run</code></li>
-<li>  <code>--skip</code></li>
-<li>  <code>--release-branch-format</code></li>
-<li>  <code>--issue-url-format</code></li>
-<li>  <code>--bump-files</code></li>
-<li>  <code>--infile</code></li>
-<li>  <code>--preset</code></li>
-<li>  <code>--commit-all</code></li>
-<li>  <code>--hooks</code></li>
+<li><code>--allow-branch</code></li>
+<li><code>--dry-run</code></li>
+<li><code>--skip</code></li>
+<li><code>--release-branch-format</code></li>
+<li><code>--issue-url-format</code></li>
+<li><code>--bump-files</code></li>
+<li><code>--infile</code></li>
+<li><code>--preset</code></li>
+<li><code>--commit-all</code></li>
+<li><code>--hooks</code></li>
+<li><code>--packages</code></li>
 </ul>
 
-        <h3 id="<code>--allow-branch-&lt;glob&gt;</code>" class="docs-header-link">
-          <span header-link="<code>--allow-branch-&lt;glob&gt;</code>"></span>
+        <h3 id="%3Ccode%3E--allow-branch-&lt;glob&gt;%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--allow-branch-&lt;glob&gt;%3C/code%3E"></span>
           <code>--allow-branch &lt;glob&gt;</code>
         </h3>
       <p>允许执行 Release 的分支白名单，通过 glob 规则配置，默认为：<code>[&quot;master&quot;, &quot;develop&quot;]</code>，最简单也是推荐的做法是在<code>.wpmrc.js</code>配置文件中配置，但是通过 CLI 选项可以覆盖。</p>
-<pre class="language-json"><code class="language-json"><div><span class="token punctuation">{</span>
+<pre class="language-json"><span class="code-block-actions"><span class="lang">json</span><code-copy></code-copy></span><code class="language-json"><div><span class="token punctuation">{</span>
   <span class="token property">"allowBranch"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"master"</span><span class="token punctuation">,</span> <span class="token string">"feature/*"</span><span class="token punctuation">]</span>
 <span class="token punctuation">}</span></div></code></pre>
 
-        <h3 id="<code>--dry-run</code>" class="docs-header-link">
-          <span header-link="<code>--dry-run</code>"></span>
+        <h3 id="%3Ccode%3E--dry-run%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--dry-run%3C/code%3E"></span>
           <code>--dry-run</code>
         </h3>
-      <pre class="language-sh"><code class="language-sh"><div>wpm release <span class="token operator">-</span><span class="token operator">-</span>dry<span class="token operator">-</span>run
+      <pre class="language-sh"><span class="code-block-actions"><span class="lang">sh</span><code-copy></code-copy></span><code class="language-sh"><div>wpm release <span class="token operator">-</span><span class="token operator">-</span>dry<span class="token operator">-</span>run
 wpm publish <span class="token operator">-</span><span class="token operator">-</span>dry<span class="token operator">-</span>run</div></code></pre>
 <p>通过 <code>--dry-run</code> 执行会让我们看到命令行的执行情况，但是不会修改文件和提交到 Git，主要供测试配置是否正确使用。 </p>
 
-        <h3 id="<code>--skip</code>" class="docs-header-link">
-          <span header-link="<code>--skip</code>"></span>
+        <h3 id="%3Ccode%3E--skip%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--skip%3C/code%3E"></span>
           <code>--skip</code>
         </h3>
       <p>跳过内置的生命周期步骤 (branch, bump, changelog, commit, push, tag)，也可以通过在 package.json 和 .rc 配置文件中设置。</p>
-<p><code>release</code> 命令包含: branch, bump, changelog, commit, push
-<code>publish</code> 包含: tag, push</p>
-<p><code>--skip.branch --skip.bump</code></p>
-<pre><code><div><span class="token operator">/</span><span class="token operator">/</span> package<span class="token punctuation">.</span>json
+<div class="dg-paragraph"><code>release</code> 命令包含: branch, bump, changelog, commit, push
+<code>publish</code> 包含: tag, push</div>
+<div class="dg-paragraph"><code>--skip.branch --skip.bump</code></div>
+<pre><span class="code-block-actions"><code-copy></code-copy></span><code>// package.json
 {
-  <span class="token string">"wpm"</span><span class="token punctuation">:</span> {
-    <span class="token string">"skip"</span><span class="token punctuation">:</span> {
-      <span class="token string">"bump"</span><span class="token punctuation">:</span> <span class="token boolean">true</span>
+  &quot;wpm&quot;: {
+    &quot;skip&quot;: {
+      &quot;bump&quot;: true
     }
   }
-}</div></code></pre><pre><code><div><span class="token operator">/</span><span class="token operator">/</span> <span class="token punctuation">.</span>wtpmrc<span class="token punctuation">.</span>js
-module<span class="token punctuation">.</span>exports <span class="token operator">=</span> {
-   <span class="token string">"skip"</span><span class="token punctuation">:</span> {
-      <span class="token string">"bump"</span><span class="token punctuation">:</span> <span class="token boolean">true</span>
+}</code></pre>
+<pre><span class="code-block-actions"><code-copy></code-copy></span><code>// .wtpmrc.js
+module.exports = {
+   &quot;skip&quot;: {
+      &quot;bump&quot;: true
     }
-}</div></code></pre>
-        <h3 id="<code>--release-branch-format</code>" class="docs-header-link">
-          <span header-link="<code>--release-branch-format</code>"></span>
+}</code></pre>
+
+        <h3 id="%3Ccode%3E--release-branch-format%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--release-branch-format%3C/code%3E"></span>
           <code>--release-branch-format</code>
         </h3>
       <p>创建 Release 分支的命名格式，默认：<code>release-v{{version}}</code></p>
 
-        <h3 id="<code>--tag-prefix</code>" class="docs-header-link">
-          <span header-link="<code>--tag-prefix</code>"></span>
+        <h3 id="%3Ccode%3E--tag-prefix%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--tag-prefix%3C/code%3E"></span>
           <code>--tag-prefix</code>
         </h3>
       <p>设置 Git Tag 的自定义前缀，默认为<code>v</code>.
 如果你的项目之前是不带前缀(v)创建 Tag 的，你需要手动设置为空，否则更新日志会重新生成，将会丢失之前版本的更新日志。</p>
-<p><code>--tag-prefix=</code></p>
-<pre><code><div>{
-    tagPrefix<span class="token punctuation">:</span> <span class="token string">""</span>
-}</div></code></pre>
-        <h3 id="<code>--issue-url-format</code>" class="docs-header-link">
-          <span header-link="<code>--issue-url-format</code>"></span>
+<div class="dg-paragraph"><code>--tag-prefix=</code></div>
+<pre><span class="code-block-actions"><code-copy></code-copy></span><code>{
+    tagPrefix: &quot;&quot;
+}</code></pre>
+
+        <h3 id="%3Ccode%3E--issue-url-format%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--issue-url-format%3C/code%3E"></span>
           <code>--issue-url-format</code>
         </h3>
       <p>Issue 格式化 URL，可以设置成 Github, Gitlab, Bitbucket等等，取决于你想要 #工作项编号 的 Issue URL，我们目前都是 #工作项 编号，那么我们肯定希望生成 PingCode 的工作项地址</p>
 <p>默认： <code>https//at.pingcode.com/agile/items/{{id}}</code></p>
 
-        <h3 id="<code>--bump-files</code>" class="docs-header-link">
-          <span header-link="<code>--bump-files</code>"></span>
+        <h3 id="%3Ccode%3E--bump-files%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--bump-files%3C/code%3E"></span>
           <code>--bump-files</code>
         </h3>
       
-        <h3 id="<code>--infile</code>" class="docs-header-link">
-          <span header-link="<code>--infile</code>"></span>
+        <h3 id="%3Ccode%3E--infile%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--infile%3C/code%3E"></span>
           <code>--infile</code>
         </h3>
       <p>更新日志读取和生成的文件，默认是<code>CHANGELOG.md</code></p>
 
-        <h3 id="<code>--preset</code>" class="docs-header-link">
-          <span header-link="<code>--preset</code>"></span>
+        <h3 id="%3Ccode%3E--preset%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--preset%3C/code%3E"></span>
           <code>--preset</code>
         </h3>
-      <p>List of preset see <a target="_blank"href="https://github.com/conventional-changelog/conventional-changelog">conventional-changelog</a>, by default, release use <a target="_blank"href="https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/conventional-changelog-angular/README.md">angular preset</a></p>
+      <p>List of preset see <a target="_blank" href="https://github.com/conventional-changelog/conventional-changelog">conventional-changelog</a>, by default, release use <a target="_blank" href="https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/conventional-changelog-angular/README.md">angular preset</a></p>
 
-        <h3 id="<code>--commit-all</code>" class="docs-header-link">
-          <span header-link="<code>--commit-all</code>"></span>
+        <h3 id="%3Ccode%3E--commit-all%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--commit-all%3C/code%3E"></span>
           <code>--commit-all</code>
         </h3>
       <p>If you want to commit generated artifacts in the release commit, you can use the <code>--commit-all</code> or <code>-a</code> flag. You will need to stage the artifacts you want to commit, so your release command could look like this:</p>
-<pre><code><div><span class="token string">"prerelease"</span><span class="token punctuation">:</span> <span class="token string">"npm run build-docs"</span><span class="token punctuation">,</span>
-<span class="token string">"release"</span><span class="token punctuation">:</span> <span class="token string">"git add &lt;file(s) to commit> &amp;&amp; wpm release -commit-all"</span></div></code></pre>
-        <h3 id="<code>--hooks</code>" class="docs-header-link">
-          <span header-link="<code>--hooks</code>"></span>
+<pre><span class="code-block-actions"><code-copy></code-copy></span><code>&quot;prerelease&quot;: &quot;npm run build-docs&quot;,
+&quot;release&quot;: &quot;git add &lt;file(s) to commit&gt; &amp;&amp; wpm release -commit-all&quot;</code></pre>
+
+        <h3 id="%3Ccode%3E--hooks%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--hooks%3C/code%3E"></span>
           <code>--hooks</code>
         </h3>
       <p>wpm supports lifecycle hooks. These allow you to execute your own supplementary commands during the release or publish. The following hooks are available and execute in the order documented:</p>
 <ul>
-<li>  prerelease/postrelease: executed before/after anything happens. If the prerelease script returns a non-zero exit code, versioning will be aborted, but it has no other effect on the process.</li>
-<li>  prebump/postbump: executed before and after the version is bumped. If the prebump script returns a version #, it will be used rather than the version calculated by standard-version.</li>
-<li>  prechangelog/postchangelog: executes before and after the CHANGELOG is generated.</li>
-<li>  precommit/postcommit: called before and after the commit step.</li>
-<li>  pretag/posttag: called before and after the tagging step.</li>
+<li>prerelease/postrelease: executed before/after anything happens. If the prerelease script returns a non-zero exit code, versioning will be aborted, but it has no other effect on the process.</li>
+<li>prebump/postbump: executed before and after the version is bumped. If the prebump script returns a version #, it will be used rather than the version calculated by commit-and-tag-version.</li>
+<li>prechangelog/postchangelog: executes before and after the CHANGELOG is generated.</li>
+<li>precommit/postcommit: called before and after the commit step.</li>
+<li>pretag/posttag: called before and after the tagging step.</li>
 </ul>
 <p>Simply add the following to your package.json or .wtpmrc file to configure lifecycle hooks:</p>
-<pre><code><div>{
-  <span class="token string">"wpm"</span><span class="token punctuation">:</span> {
-    <span class="token string">"hooks"</span><span class="token punctuation">:</span> {
-      <span class="token string">"prebump"</span><span class="token punctuation">:</span> <span class="token string">"echo 9.9.9"</span>
+<pre><span class="code-block-actions"><code-copy></code-copy></span><code>{
+  &quot;wpm&quot;: {
+    &quot;hooks&quot;: {
+      &quot;prebump&quot;: &quot;echo 9.9.9&quot;
     }
   }
-}</div></code></pre><p>As an example to build artifacts before publish, publish artifacts to npm after created tag.</p>
-<pre><code><div>{
-  <span class="token string">"wpm"</span><span class="token punctuation">:</span> {
-    <span class="token string">"hooks"</span><span class="token punctuation">:</span>
+}</code></pre>
+<p>As an example to build artifacts before publish, publish artifacts to npm after created tag.</p>
+<pre><span class="code-block-actions"><code-copy></code-copy></span><code>{
+  &quot;wpm&quot;: {
+    &quot;hooks&quot;:
     {
-      <span class="token string">"prepublish"</span><span class="token punctuation">:</span> <span class="token string">"npm run build"</span><span class="token punctuation">,</span>
-      <span class="token string">"postpublish"</span><span class="token punctuation">:</span> <span class="token string">"cd built &amp;&amp; npm publish"</span>
+      &quot;prepublish&quot;: &quot;npm run build&quot;,
+      &quot;postpublish&quot;: &quot;cd built &amp;&amp; npm publish&quot;
    }
   }
-}</div></code></pre>
+}</code></pre>
+
+        <h3 id="%3Ccode%3E--packages%3C/code%3E" class="docs-header-link">
+          <span header-link="%3Ccode%3E--packages%3C/code%3E"></span>
+          <code>--packages</code>
+        </h3>
+      <p>Monorepo 仓库中需要参与本次 Release 的子包列表，每个元素为 <code>{ path, bumpFiles?, infile? }</code>。开启后，<code>wpm release</code> 会同时更新所选子包的版本号、生成各自的更新日志并一起提交。单次调用内版本统一；通过多份配置文件和 <code>--config</code>，可以实现整仓发布、按包独立发布或自定义分组发布。</p>
+<p>由于参数元素是对象，推荐在 <code>.wpmrc.js</code> 等配置文件中配置，不要通过命令行传入。完整的配置说明、各阶段行为与限制见 <a href="./monorepo">Monorepo 发布</a>。</p>
+<pre class="language-js"><span class="code-block-actions"><span class="lang">js</span><code-copy></code-copy></span><code class="language-js"><div>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+    packages<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/core'</span> <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span> path<span class="token punctuation">:</span> <span class="token string">'packages/cli'</span> <span class="token punctuation">}</span><span class="token punctuation">]</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></div></code></pre>
