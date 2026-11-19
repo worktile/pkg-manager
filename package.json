@@ -48,7 +48,7 @@
   },
   "homepage": "https://github.com/worktile/pkg-manager#readme",
   "dependencies": {
-    "@docgeni/toolkit": "^2.8.0-next.6",
+    "@docgeni/toolkit": "^3.0.1",
     "commit-and-tag-version": "^12.4.0",
     "conventional-changelog": "^7.2.0",
     "conventional-changelog-angular": "^8.3.1",
@@ -68,8 +68,8 @@
   },
   "devDependencies": {
     "@docgeni/angular": "21.0.1",
-    "@docgeni/cli": "2.8.0-next.8",
-    "@docgeni/template": "2.8.0-next.8",
+    "@docgeni/cli": "^3.0.1",
+    "@docgeni/template": "^3.0.1",
     "zone.js": "0.16.2",
     "@types/chai": "^4.2.19",
     "@types/shelljs": "^0.8.8",
