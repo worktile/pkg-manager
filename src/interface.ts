@@ -13,6 +13,8 @@ export interface Skip {
     pull?: boolean;
     // bump version
     bump?: boolean;
+    // require the target release version to be greater than the current version
+    versionCheck?: boolean;
     // generate changelog
     changelog?: boolean;
     // commit
@@ -92,7 +94,7 @@ export interface CommandOptions extends Config {
      */
     packageDir?: string;
     /**
-     * Map of steps in the release process that should be skipped.
+     * Map of steps and checks in the release process that should be skipped.
      *
      * @default
      * {}
