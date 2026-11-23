@@ -16,7 +16,8 @@ import { ValidationError, CommandTerminationError } from '../errors';
 const RELEASE_TYPES: ReleaseType[] = ['patch', 'minor', 'major', 'prepatch', 'preminor', 'premajor', 'prerelease'];
 
 export class SelectVersionLifecycle extends Lifecycle {
-    private async typingReleaseVersion(version: string): Promise<string> {
+    private async typingReleaseVersion(context: CommandContext): Promise<string> {
+        const version = context.versions!.current;
         const { newVersion } = await inquirer.prompt({
             name: 'newVersion',
             type: 'input',
@@ -25,15 +26,15 @@ export class SelectVersionLifecycle extends Lifecycle {
         });
         if (newVersion) {
             if (semver.valid(newVersion)) {
-                if (semver.lte(newVersion, version)) {
+                if (!context.options.skip?.versionCheck && semver.lte(newVersion, version)) {
                     this.logger.warn(`input version: ${chalk.red(newVersion)} is lte ${version}, please re-typing`);
-                    return await this.typingReleaseVersion(version);
+                    return await this.typingReleaseVersion(context);
                 } else {
                     return newVersion;
                 }
             } else {
                 this.logger.warn(`input version: ${chalk.red(newVersion)} is invalid, please re-typing`);
-                return await this.typingReleaseVersion(version);
+                return await this.typingReleaseVersion(context);
             }
         } else {
             throw new ValidationError('E_NO_VERSION', `release has been cancelled`);
@@ -53,7 +54,7 @@ export class SelectVersionLifecycle extends Lifecycle {
                 }
                 nextVersion = semver.inc(version, releaseType);
             }
-            if (!nextVersion || semver.lte(nextVersion, version)) {
+            if (!nextVersion || (!context.options.skip?.versionCheck && semver.lte(nextVersion, version))) {
                 throw new ValidationError(
                     'E_INVALID_RELEASE',
                     `input releaseAs(${context.options.releaseAs}) is lte ${version}, please re-typing`
@@ -90,7 +91,7 @@ export class SelectVersionLifecycle extends Lifecycle {
         const { releaseAs } = await inquirer.prompt(releaseQuestions);
         if (releaseAs) {
             if (releaseAs === 'typing') {
-                return await this.typingReleaseVersion(version);
+                return await this.typingReleaseVersion(context);
             } else {
                 const next = semver.inc(version, releaseAs);
                 if (!next) {

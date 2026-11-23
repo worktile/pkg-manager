@@ -33,6 +33,7 @@ wpm release [major | minor | patch | premajor | preminor | prepatch | prerelease
 -   `--allow-branch`
 -   `--dry-run`
 -   `--skip`
+-   `--skip.versionCheck`
 -   `--release-branch-format`
 -   `--issue-url-format`
 -   `--bump-files`
@@ -85,6 +86,26 @@ module.exports = {
       "bump": true
     }
 }
+```
+
+### `--skip.versionCheck`
+
+默认要求目标版本大于当前版本。启用此选项后，命令行指定和交互手填的目标版本都可以低于或等于当前版本，仍须是合法的 SemVer。
+
+例如，当前版本为 `1.0.0-rc.0` 时，可以指定 `1.0.0-next.5`：
+
+```sh
+wpm release 1.0.0-next.5 --skip.versionCheck
+```
+
+也可以在 `.wpmrc.js` 中配置：
+
+```js
+module.exports = {
+    skip: {
+        versionCheck: true
+    }
+};
 ```
 
 ### `--release-branch-format`

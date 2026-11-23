@@ -16,7 +16,11 @@ import { gitPublishCommand } from './git-publish';
 
 const args = hideBin(process.argv);
 
-const { config: configPath } = yargs(args).option('config', { alias: 'c', type: 'string' }).parseSync();
+const { config: configPath } = yargs(args)
+    .help(false)
+    .version(false)
+    .option('config', { alias: 'c', type: 'string' })
+    .parseSync();
 
 const argv = yargs(args)
     .scriptName('wpm')

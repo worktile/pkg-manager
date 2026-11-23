@@ -21,7 +21,7 @@ export const releaseCommand: CommandModule = {
             .option('skip', {
                 alias: 's',
                 // choices: ['bump', 'changelog', 'commit', 'branch', 'push'],
-                desc: `Map of steps in the release process that should be skipped`,
+                desc: `Map of steps and checks in the release process that should be skipped`,
                 default: defaults.skip
             })
             .option('release-branch-format', {
@@ -59,6 +59,10 @@ export const releaseCommand: CommandModule = {
             })
             .option('skip.confirm', {
                 desc: `Skip confirmation prompt`,
+                boolean: true
+            })
+            .option('skip.versionCheck', {
+                desc: 'Skip the requirement that the target version must be greater than the current version. The target must still be valid SemVer.',
                 boolean: true
             });
 
