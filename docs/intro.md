@@ -73,6 +73,10 @@ module.exports = {
         changelog: true
     },
     commitAll: true,
+    // Release 提交信息格式，{{currentTag}} 会被换成本次版本号
+    releaseCommitMessageFormat: 'build: release {{currentTag}}',
+    // Release 分支命名格式
+    releaseBranchFormat: 'release-v{{version}}',
     hooks: {
         prepublish: 'pnpm run -r build',
         postpublish: 'lerna publish from-git',
