@@ -30,18 +30,47 @@ wpm release [major | minor | patch | premajor | preminor | prepatch | prerelease
 
 ### 选项
 
+全局选项（`release` 与 `publish` 共用）：
+
+-   `--config` / `-c`
+-   `--default-branch` / `-b`
 -   `--allow-branch`
 -   `--dry-run`
--   `--skip`
+-   `--force` / `-f`
+-   `--tag-prefix` / `-t`
+-   `--hooks`
+-   `--issue-url-format`
+
+`release` 专属选项：
+
+-   `--skip` / `-s`
+-   `--skip.confirm`
 -   `--skip.versionCheck`
 -   `--release-branch-format`
--   `--issue-url-format`
+-   `--release-commit-message-format`
 -   `--bump-files`
--   `--infile`
+-   `--infile` / `-i`
 -   `--preset`
--   `--commit-all`
--   `--hooks`
+-   `--commit-all` / `-a`
 -   `--packages`
+
+> 除命令行参数外，以上选项都可以写在 `.wpmrc.js`、`.wpmrc.json`、`package.json` 的 `wpm` 字段等配置文件中（使用 camelCase 名称，如 `releaseCommitMessageFormat`）。命令行参数优先级更高。
+
+### `--config <path>`
+
+指定本次命令读取的 wpm 配置文件，用于一个仓库维护多份配置（如 Monorepo 整仓发布 / 独立发布 / 分组发布）：
+
+```sh
+wpm release --config wpm.all.config.js minor
+```
+
+未指定时按 `package.json` 的 `wpm` 字段、`.wpmrc*`、`wpm.config.js` 的顺序自动查找。详见 [Monorepo 发布](./monorepo)。
+
+### `--default-branch`
+
+系统保留的基础分支配置，默认 `master`，可选 `master`、`develop`。
+
+> 当前版本的目标分支由 `--allow-branch` 白名单加交互选择决定，该参数仅作为配置项保留。
 
 ### `--allow-branch <glob>`
 允许执行 Release 的分支白名单，通过 glob 规则配置，默认为：`["master", "develop"]`，最简单也是推荐的做法是在`.wpmrc.js`配置文件中配置，但是通过 CLI 选项可以覆盖。
@@ -65,6 +94,22 @@ wpm publish --dry-run
 
 `release` 命令包含: branch, bump, changelog, commit, push
 `publish` 包含: tag, push
+
+可用跳过项一览：
+
+| 跳过项            | 适用命令          | 说明                                                                 |
+| ----------------- | ----------------- | -------------------------------------------------------------------- |
+| `branch`          | release           | 不创建 Release 分支，直接在当前分支上提交                            |
+| `bump`            | release           | 不修改版本号文件                                                     |
+| `versionCheck`    | release           | 允许目标版本 ≤ 当前版本（见下方 `--skip.versionCheck`）              |
+| `changelog`       | release           | 不生成/合并 CHANGELOG                                                |
+| `changelogLink`   | release           | 生成 CHANGELOG 时不输出 commit 与 issue 链接                         |
+| `commit`          | release           | 不执行 git commit                                                    |
+| `push`            | release / publish | release 不推送分支；publish 不推送 Tag                               |
+| `tag`             | publish           | 不创建 Tag（此时 `push` 也会失败，因为无 Tag 可推）                  |
+| `confirm`         | release / publish | 跳过分支确认交互，直接在当前分支执行                                 |
+
+> `Skip` 类型中还声明了 `pull`、`pr`，当前版本尚未实现对应生命周期，配置后不会产生效果。
 
 `--skip.branch --skip.bump`
 
@@ -108,12 +153,50 @@ module.exports = {
 };
 ```
 
+### `--skip.confirm`
+
+跳过分支确认交互。默认情况下，若当前分支命中 `--allow-branch` 白名单，会提示确认；未命中则提示从白名单分支中选择。启用后不再询问，直接在当前分支执行（当前分支不在白名单时会给出警告并终止）。
+
+```sh
+wpm release --skip.confirm
+```
+
 ### `--release-branch-format`
 
-创建 Release 分支的命名格式，默认：`release-v{{version}}`
+创建 Release 分支的命名格式，默认：`release-v{{version}}`，`{{version}}` 会被替换为本次新版本号（不含 `tagPrefix` 前缀）。
+
+例如配置为 `release/{{version}}`，发布 `1.0.1` 时分支名为 `release/1.0.1`。
+
+### `--release-commit-message-format`
+
+Release 提交（commit 阶段）使用的提交信息格式，默认：`build: release {{currentTag}}`。
+
+-   仅支持一个占位符 `{{currentTag}}`，会被替换为本次发布的目标版本号（不含 `tagPrefix` 的 `v` 前缀），例如 `build: release 1.0.1`。
+-   占位符可重复使用，也可完全不写占位符。
+-   该消息与 Tag 的附注消息无关，Tag 附注固定为 `build: create release v{{version}}`。
+-   如果项目需要 conventional commits 结构，请保证格式里的 `type(scope):` 前缀合法，否则 changelog 生成时该提交可能无法被正确归类。
+
+```js
+// .wpmrc.js
+module.exports = {
+    releaseCommitMessageFormat: 'chore(release): publish v{{currentTag}}'
+};
+```
+
+```sh
+wpm release patch --release-commit-message-format "chore(release): {{currentTag}}"
+```
+
+> 生成 commit 消息只在 `commit` 阶段生效，`--skip.commit` 时不会产生任何提交。
+
+### `--force`
+
+忽略工作区未提交改动的检查。
+
+`release` 命令本身不做 dirty 校验，该参数主要供 `publish` 使用（`publish` 默认要求工作区干净）。
 
 ### `--tag-prefix`
-设置 Git Tag 的自定义前缀，默认为`v`.
+设置 Git Tag 的自定义前缀，默认为`v`。Tag 名为 `{{tagPrefix}}{{version}}`，例如默认配置下发布 `1.0.1` 会创建 Tag `v1.0.1`。
 如果你的项目之前是不带前缀(v)创建 Tag 的，你需要手动设置为空，否则更新日志会重新生成，将会丢失之前版本的更新日志。
 
 `--tag-prefix=`
@@ -129,10 +212,42 @@ Issue 格式化 URL，可以设置成 Github, Gitlab, Bitbucket等等，取决�
 
 默认： `https//at.pingcode.com/agile/items/{{id}}`
 
+> 注意：当前版本 changelog 生成走 `conventional-changelog` 的 preset 配置，该参数会被解析但不参与实际输出；如需关闭链接请使用 `--skip.changelogLink`。
+
 ### `--bump-files`
 
+需要更新版本号的文件列表，默认：`['package.json', 'package-lock.json', 'npm-shrinkwrap.json']`。
+
+数组的每一项可以是字符串，也可以是带 `type` / `updater` 的对象：
+
+-   `type: 'json'`（默认）：按 JSON 解析并替换 `version` 字段。
+-   `type: 'plain-text'`：整个文件内容就是一个版本号，如 `VERSION.txt`。
+-   `type: 'code'`：用内置正则把源码中第一个语义化版本号替换掉，适合 `src/version.ts`。
+-   `updater`: 自定义 updater 模块路径，模块需导出 `readVersion(contents)` 与 `writeVersion(contents, version)`。
+
+```js
+module.exports = {
+    bumpFiles: [
+        'package.json',
+        { filename: './VERSION.txt', type: 'plain-text' },
+        { filename: './src/version.ts', type: 'code' },
+        { filename: './scripts/version.js', updater: './scripts/my-updater.js' }
+    ]
+};
+```
+
+文件不存在时会打印 warning 并跳过（不会报错）。Monorepo 下子包可以各自覆盖 `bumpFiles`，见 [Monorepo 发布](./monorepo)。
+
 ### `--infile`
-更新日志读取和生成的文件，默认是`CHANGELOG.md`
+更新日志读取和生成的文件，默认是`CHANGELOG.md`。
+
+设置为空字符串 `''` 时既不生成也不提交 CHANGELOG（Monorepo 独立发布时常配合 `bumpFiles: []` 使用）：
+
+```js
+module.exports = {
+    infile: ''
+};
+```
 
 ### `--preset`
 
@@ -152,10 +267,20 @@ If you want to commit generated artifacts in the release commit, you can use the
 wpm supports lifecycle hooks. These allow you to execute your own supplementary commands during the release or publish. The following hooks are available and execute in the order documented:
 
 -   prerelease/postrelease: executed before/after anything happens. If the prerelease script returns a non-zero exit code, versioning will be aborted, but it has no other effect on the process.
--   prebump/postbump: executed before and after the version is bumped. If the prebump script returns a version #, it will be used rather than the version calculated by commit-and-tag-version.
+-   prereleaseBranch/postreleaseBranch: executed before and after the release branch is created.
+-   prebump/postbump: executed before and after the version is bumped.
 -   prechangelog/postchangelog: executes before and after the CHANGELOG is generated.
 -   precommit/postcommit: called before and after the commit step.
 -   pretag/posttag: called before and after the tagging step.
+
+各命令实际会触发的钩子：
+
+| 命令      | 钩子                                                                                                      |
+| --------- | --------------------------------------------------------------------------------------------------------- |
+| `release` | `prerelease`、`prereleaseBranch`、`prebump`、`prechangelog`、`precommit`、对应 `post*`、`postrelease`     |
+| `publish` | `prepublish`、`pretag`、`posttag`、`postpublish`                                                          |
+
+钩子命令中的 `{{version}}` 会被替换为本次发布的目标版本号（`prerelease` 阶段尚未计算版本，不会替换）。钩子通过 shell 同步执行，除 `prerelease` 外其他钩子失败不会中断流程，需要在脚本内部自行控制。
 
 Simply add the following to your package.json or .wtpmrc file to configure lifecycle hooks:
 
